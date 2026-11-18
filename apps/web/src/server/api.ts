@@ -13,38 +13,23 @@ export function api<Args extends unknown[]>(handler: (...args: Args) => Promise<
     } catch (e) {
       if (e instanceof ZodError) {
         return NextResponse.json(
-          {
-            error: "Validation failed",
-            issues: e.issues.map((i) => ({ path: i.path.join("."), message: i.message })),
-          },
+          { error: "Validation failed", issues: e.issues.map((i) => ({ path: i.path.join("."), message: i.message })) },
           { status: 422 },
         );
       }
       if (e instanceof AppError) {
-        return NextResponse.json(
-          { error: e.message, code: e.code, messageKey: e.messageKey },
-          { status: httpStatus(e) },
-        );
+        return NextResponse.json({ error: e.message, code: e.code, messageKey: e.messageKey }, { status: httpStatus(e) });
       }
       // Next.js redirect()/notFound() thrown from shared helpers
-      const digest =
-        e && typeof e === "object" && "digest" in e
-          ? String((e as { digest: unknown }).digest)
-          : "";
+      const digest = e && typeof e === "object" && "digest" in e ? String((e as { digest: unknown }).digest) : "";
       if (digest.startsWith("NEXT_REDIRECT")) {
         if (digest.includes("/select-context")) {
           return NextResponse.json(
-            {
-              error: "Choose a workspace first (POST /api/v1/me/context).",
-              code: "CONTEXT_REQUIRED",
-            },
+            { error: "Choose a workspace first (POST /api/v1/me/context).", code: "CONTEXT_REQUIRED" },
             { status: 409 },
           );
         }
-        return NextResponse.json(
-          { error: "Please sign in again.", code: "UNAUTHENTICATED" },
-          { status: 401 },
-        );
+        return NextResponse.json({ error: "Please sign in again.", code: "UNAUTHENTICATED" }, { status: 401 });
       }
       if (digest.startsWith("NEXT_HTTP_ERROR_FALLBACK;404")) {
         return NextResponse.json({ error: "Not found", code: "NOT_FOUND" }, { status: 404 });
@@ -59,7 +44,9 @@ export function api<Args extends unknown[]>(handler: (...args: Args) => Promise<
 export function requireInternalToken(request: Request) {
   const header = request.headers.get("authorization") ?? "";
   const token = header.startsWith("Bearer ") ? header.slice(7) : "";
-  if (!token || !safeEqual(token, env().INTERNAL_API_TOKEN)) {
+  // Vercel Cron sends "Authorization: Bearer $CRON_SECRET"; the worker sends INTERNAL_API_TOKEN.
+  const cron = process.env.CRON_SECRET;
+  if (!token || !(safeEqual(token, env().INTERNAL_API_TOKEN) || (!!cron && cron.length >= 16 && safeEqual(token, cron)))) {
     throw new AppError("UNAUTHENTICATED", "Invalid internal token.");
   }
 }

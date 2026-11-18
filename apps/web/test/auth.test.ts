@@ -1,12 +1,6 @@
 import { afterAll, beforeEach, describe, expect, it } from "vitest";
 import { prisma } from "@agripay/db";
-import {
-  devFixedOtp,
-  OTP_MAX_ATTEMPTS,
-  OTP_MAX_SENDS,
-  requestOtp,
-  verifyOtp,
-} from "@/server/auth/otp";
+import { devFixedOtp, OTP_MAX_ATTEMPTS, OTP_MAX_SENDS, requestOtp, verifyOtp } from "@/server/auth/otp";
 import { PIN_LOCK_MS, setPin, verifyPinForUser } from "@/server/auth/pin";
 import { INACTIVITY_TIMEOUT_MS, isSessionValid } from "@/server/auth/session";
 import { acceptInvitation, getInvitationByToken, inviteMember } from "@/server/auth/invitations";
@@ -72,13 +66,8 @@ describe("OTP", () => {
     const user = await prisma.user.create({ data: { phone: nextPhone() } });
     await requestOtp(user.phone);
     const code = lastCode(user.phone);
-    await prisma.otpCode.updateMany({
-      where: { phone: user.phone },
-      data: { expiresAt: new Date(Date.now() - 1000) },
-    });
-    await expect(verifyOtp(user.phone, code)).rejects.toMatchObject({
-      messageKey: "auth.errors.invalidCode",
-    });
+    await prisma.otpCode.updateMany({ where: { phone: user.phone }, data: { expiresAt: new Date(Date.now() - 1000) } });
+    await expect(verifyOtp(user.phone, code)).rejects.toMatchObject({ messageKey: "auth.errors.invalidCode" });
   });
 
   it(`rate-limits to ${OTP_MAX_SENDS} sends per window`, async () => {
@@ -104,6 +93,14 @@ describe("DEV_OTP_CODE", () => {
     env.NODE_ENV = "development";
     env.DEV_OTP_CODE = "12ab";
     expect(devFixedOtp()).toBeNull();
+    // A demo deployment runs as production and must opt in explicitly.
+    env.DEV_OTP_CODE = "123456";
+    env.NODE_ENV = "production";
+    env.DEMO_MODE = "true";
+    expect(devFixedOtp()).toBe("123456");
+    env.DEMO_MODE = "false";
+    expect(devFixedOtp()).toBeNull();
+    delete env.DEMO_MODE;
     Object.assign(env, saved);
   });
 });
@@ -114,23 +111,13 @@ describe("PIN", () => {
     await setPin(user.id, "4826");
     expect((await verifyPinForUser(user.id, "4826")).ok).toBe(true);
 
-    expect(await verifyPinForUser(user.id, "1111")).toMatchObject({
-      ok: false,
-      locked: false,
-      remaining: 2,
-    });
-    expect(await verifyPinForUser(user.id, "1111")).toMatchObject({
-      ok: false,
-      locked: false,
-      remaining: 1,
-    });
+    expect(await verifyPinForUser(user.id, "1111")).toMatchObject({ ok: false, locked: false, remaining: 2 });
+    expect(await verifyPinForUser(user.id, "1111")).toMatchObject({ ok: false, locked: false, remaining: 1 });
     expect(await verifyPinForUser(user.id, "1111")).toMatchObject({ ok: false, locked: true });
     // even the right PIN is refused while locked
     expect(await verifyPinForUser(user.id, "4826")).toMatchObject({ ok: false, locked: true });
     // after the lock window it works again
-    expect(
-      (await verifyPinForUser(user.id, "4826", new Date(Date.now() + PIN_LOCK_MS + 1000))).ok,
-    ).toBe(true);
+    expect((await verifyPinForUser(user.id, "4826", new Date(Date.now() + PIN_LOCK_MS + 1000))).ok).toBe(true);
   });
 
   it("requires the current PIN to change it and rejects weak PINs", async () => {
@@ -146,17 +133,10 @@ describe("PIN", () => {
 });
 
 describe("sessions", () => {
-  const base = {
-    revokedAt: null,
-    createdAt: new Date(),
-    lastSeenAt: new Date(),
-    expiresAt: new Date(Date.now() + 3600_000),
-  };
+  const base = { revokedAt: null, createdAt: new Date(), lastSeenAt: new Date(), expiresAt: new Date(Date.now() + 3600_000) };
   it("rejects expired and revoked sessions", () => {
     expect(isSessionValid({ ...base, activeRole: "AGENT" })).toBe(true);
-    expect(
-      isSessionValid({ ...base, activeRole: "AGENT", expiresAt: new Date(Date.now() - 1) }),
-    ).toBe(false);
+    expect(isSessionValid({ ...base, activeRole: "AGENT", expiresAt: new Date(Date.now() - 1) })).toBe(false);
     expect(isSessionValid({ ...base, activeRole: "AGENT", revokedAt: new Date() })).toBe(false);
   });
   it("applies the 30-minute inactivity timeout to lender/admin roles only", () => {
@@ -186,53 +166,34 @@ describe("invitations", () => {
 
     const invited = await prisma.user.findUniqueOrThrow({ where: { phone } });
     expect(invited.status).toBe("INVITED");
-    await expect(acceptInvitation(token, invited.id)).resolves.toEqual({
-      orgId: org.id,
-      role: "AGENT",
-    });
+    await expect(acceptInvitation(token, invited.id)).resolves.toEqual({ orgId: org.id, role: "AGENT" });
     expect((await prisma.user.findUniqueOrThrow({ where: { phone } })).status).toBe("ACTIVE");
     await expect(acceptInvitation(token, invited.id)).rejects.toThrow(); // single use
   });
 
   it("blocks inviting roles the inviter may not grant", async () => {
     const { actor } = await makeOrgWithMember("COOPERATIVE", "COOP_ADMIN");
-    await expect(
-      inviteMember(actor, { phone: nextPhone(), role: "SUPER_ADMIN" }),
-    ).rejects.toMatchObject({ code: "FORBIDDEN" });
+    await expect(inviteMember(actor, { phone: nextPhone(), role: "SUPER_ADMIN" })).rejects.toMatchObject({ code: "FORBIDDEN" });
   });
 });
 
 describe("audit log", () => {
   it("masks secrets and keeps a verifiable hash chain", async () => {
-    expect(
-      maskForAudit({
-        pin: "1234",
-        phone: "+23276123456",
-        nin: "AB123456",
-        nested: { codeHash: "x" },
-      }),
-    ).toEqual({
+    expect(maskForAudit({ pin: "1234", phone: "+23276123456", nin: "AB123456", nested: { codeHash: "x" } })).toEqual({
       pin: "***",
       phone: "+23276***456",
       nin: "***456",
       nested: { codeHash: "***" },
     });
     for (let i = 0; i < 5; i++) {
-      await audit(prisma, {
-        action: "test.event",
-        entity: "Test",
-        entityId: String(i),
-        after: { b: i, a: { z: 1, y: [2, 1] } },
-      });
+      await audit(prisma, { action: "test.event", entity: "Test", entityId: String(i), after: { b: i, a: { z: 1, y: [2, 1] } } });
     }
     expect(await verifyAuditChain()).toMatchObject({ ok: true, checked: 5 });
   });
 
   it("is append-only at the database level", async () => {
     await audit(prisma, { action: "test.event", entity: "Test", entityId: "x" });
-    await expect(prisma.auditLog.updateMany({ data: { action: "tampered" } })).rejects.toThrow(
-      /append-only/,
-    );
+    await expect(prisma.auditLog.updateMany({ data: { action: "tampered" } })).rejects.toThrow(/append-only/);
     await expect(prisma.auditLog.deleteMany({})).rejects.toThrow(/append-only/);
   });
 });

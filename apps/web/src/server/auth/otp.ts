@@ -13,12 +13,15 @@ export const OTP_MAX_SENDS = 3; // per phone per window
 export const OTP_SEND_WINDOW_SEC = 15 * 60;
 export const OTP_MAX_SENDS_PER_IP = 20;
 
+/** True on a public demo deployment (DEMO_MODE=true). Never set this where real farmers' data lives. */
+export const isDemoMode = () => process.env.DEMO_MODE === "true" && process.env.NODE_ENV !== "test";
+
 /**
- * Fixed login code for local development only (DEV_OTP_CODE in .env).
- * Ignored unless NODE_ENV is exactly "development" — never active in tests or production.
+ * Fixed login code (DEV_OTP_CODE) for local development, or for a demo deployment with DEMO_MODE=true.
+ * Never active in tests, and never in production unless DEMO_MODE is explicitly switched on.
  */
 export function devFixedOtp(): string | null {
-  if (process.env.NODE_ENV !== "development") return null;
+  if (process.env.NODE_ENV !== "development" && !isDemoMode()) return null;
   const code = process.env.DEV_OTP_CODE?.trim();
   return code && new RegExp(`^\\d{${OTP_LENGTH}}$`).test(code) ? code : null;
 }
@@ -62,17 +65,10 @@ export async function requestOtp(
     ? await hitRateLimit(`otp:ip:${opts.ip}`, OTP_MAX_SENDS_PER_IP, OTP_SEND_WINDOW_SEC)
     : { allowed: true };
   if (!perPhone.allowed || !perIp.allowed) {
-    throw new AppError(
-      "RATE_LIMITED",
-      "Too many code requests. Try again later.",
-      "auth.errors.rateLimited",
-    );
+    throw new AppError("RATE_LIMITED", "Too many code requests. Try again later.", "auth.errors.rateLimited");
   }
 
-  const user = await prisma.user.findUnique({
-    where: { phone },
-    select: { id: true, status: true, locale: true },
-  });
+  const user = await prisma.user.findUnique({ where: { phone }, select: { id: true, status: true, locale: true } });
   if (!user || user.status === "SUSPENDED") {
     return { sent: false, expiresInSec: OTP_TTL_MS / 1000 };
   }
@@ -92,28 +88,16 @@ export async function requestOtp(
 }
 
 /** Check a code; consumes it on success. Throws AppError on failure. */
-export async function verifyOtp(
-  phone: string,
-  code: string,
-  purpose: OtpPurpose = "LOGIN",
-): Promise<void> {
+export async function verifyOtp(phone: string, code: string, purpose: OtpPurpose = "LOGIN"): Promise<void> {
   const otp = await prisma.otpCode.findFirst({
     where: { phone, purpose, usedAt: null },
     orderBy: { createdAt: "desc" },
   });
   if (!otp || otp.expiresAt < new Date()) {
-    throw new AppError(
-      "VALIDATION",
-      "That code is wrong or has expired.",
-      "auth.errors.invalidCode",
-    );
+    throw new AppError("VALIDATION", "That code is wrong or has expired.", "auth.errors.invalidCode");
   }
   if (otp.attempts >= OTP_MAX_ATTEMPTS) {
-    throw new AppError(
-      "LOCKED",
-      "Too many wrong codes. Request a new code.",
-      "auth.errors.tooManyAttempts",
-    );
+    throw new AppError("LOCKED", "Too many wrong codes. Request a new code.", "auth.errors.tooManyAttempts");
   }
   if (!safeEqual(otp.codeHash, codeHash(phone, purpose, code))) {
     const updated = await prisma.otpCode.update({
@@ -122,17 +106,9 @@ export async function verifyOtp(
     });
     if (updated.attempts >= OTP_MAX_ATTEMPTS) {
       await prisma.otpCode.update({ where: { id: otp.id }, data: { usedAt: new Date() } });
-      throw new AppError(
-        "LOCKED",
-        "Too many wrong codes. Request a new code.",
-        "auth.errors.tooManyAttempts",
-      );
+      throw new AppError("LOCKED", "Too many wrong codes. Request a new code.", "auth.errors.tooManyAttempts");
     }
-    throw new AppError(
-      "VALIDATION",
-      "That code is wrong or has expired.",
-      "auth.errors.invalidCode",
-    );
+    throw new AppError("VALIDATION", "That code is wrong or has expired.", "auth.errors.invalidCode");
   }
   // Consume atomically (guards against double submit).
   const consumed = await prisma.otpCode.updateMany({
@@ -140,10 +116,6 @@ export async function verifyOtp(
     data: { usedAt: new Date() },
   });
   if (consumed.count !== 1) {
-    throw new AppError(
-      "VALIDATION",
-      "That code is wrong or has expired.",
-      "auth.errors.invalidCode",
-    );
+    throw new AppError("VALIDATION", "That code is wrong or has expired.", "auth.errors.invalidCode");
   }
 }

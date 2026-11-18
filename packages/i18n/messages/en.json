@@ -105,7 +105,8 @@
     "selectContextTitle": "Choose how to continue",
     "selectContextSubtitle": "You have access to more than one workspace.",
     "asFarmer": "My farm",
-    "switchWorkspace": "Switch workspace"
+    "switchWorkspace": "Switch workspace",
+    "demoHint": "Demo site: enter the code {code}. No real SMS is sent."
   },
   "security": {
     "title": "Security",

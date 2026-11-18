@@ -27,26 +27,14 @@ function smsQueue(): Queue {
   if (!queue) {
     const url = new URL(env().REDIS_URL);
     queue = new Queue("sms", {
-      connection: {
-        host: url.hostname,
-        port: Number(url.port || 6379),
-        password: url.password || undefined,
-      },
-      defaultJobOptions: {
-        attempts: 3,
-        backoff: { type: "exponential", delay: 10_000 },
-        removeOnComplete: 1000,
-      },
+      connection: { host: url.hostname, port: Number(url.port || 6379), password: url.password || undefined },
+      defaultJobOptions: { attempts: 3, backoff: { type: "exponential", delay: 10_000 }, removeOnComplete: 1000 },
     });
   }
   return queue;
 }
 
-export async function sendSms(
-  to: string,
-  body: string,
-  kind: OutboundSms["kind"] = "general",
-): Promise<void> {
+export async function sendSms(to: string, body: string, kind: OutboundSms["kind"] = "general"): Promise<void> {
   const msg: OutboundSms = { to, body, kind, at: new Date() };
   const provider = env().SMS_PROVIDER;
 
@@ -63,10 +51,9 @@ export async function sendSms(
     }
   }
   // console provider
-  const safeBody = kind === "otp" && process.env.NODE_ENV === "production" ? "<otp hidden>" : body;
-  console.info(
-    `\n📱 [SMS → ${process.env.NODE_ENV === "production" ? maskPhone(to) : to}] ${safeBody}\n`,
-  );
+  const hide = process.env.NODE_ENV === "production" && process.env.DEMO_MODE !== "true";
+  const safeBody = kind === "otp" && hide ? "<otp hidden>" : body;
+  console.info(`\n📱 [SMS → ${process.env.NODE_ENV === "production" ? maskPhone(to) : to}] ${safeBody}\n`);
 }
 
 /** Test helpers */

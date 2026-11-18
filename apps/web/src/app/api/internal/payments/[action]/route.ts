@@ -19,3 +19,11 @@ export const POST = api(async (request: Request, ctx: { params: Promise<{ action
   }
   throw notFound("Action");
 });
+
+/** Vercel Cron / external scheduler: GET /api/internal/payments/tick (retries and status polls). */
+export const GET = api(async (request: Request, ctx: { params: Promise<{ action: string }> }) => {
+  requireInternalToken(request);
+  const { action } = await ctx.params;
+  if (action === "tick") return NextResponse.json(await processDueInstructions());
+  throw notFound("Action");
+});
