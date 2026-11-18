@@ -1,0 +1,27 @@
+{
+  "name": "@agripay/validation",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./permissions": "./src/permissions.ts"
+  },
+  "scripts": {
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@agripay/db": "workspace:*",
+    "decimal.js": "^10.6.0",
+    "zod": "^4.1.0"
+  },
+  "devDependencies": {
+    "@agripay/config": "workspace:*",
+    "@types/node": "^22.18.0",
+    "eslint": "^9.36.0",
+    "typescript": "~5.9.3",
+    "vitest": "^4.0.0"
+  }
+}

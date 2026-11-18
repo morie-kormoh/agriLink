@@ -1,0 +1,156 @@
+// Module 03 — Cooperatives, Buyers & Purchases
+
+enum BuyerType {
+  AGGREGATOR
+  PROCESSOR
+  EXPORTER
+  TRADER
+  INSTITUTION
+}
+
+enum BatchStatus {
+  OPEN
+  SUBMITTED
+  APPROVED
+  CANCELLED
+}
+
+enum PurchaseStatus {
+  RECORDED // weighed and saved, waiting for approval
+  APPROVED // approved by a second person, payment being created
+  PAYMENT_PENDING // payment sent to provider(s)
+  PAID
+  PAYMENT_FAILED
+  DISPUTED // farmer replied "2" — frozen until resolved
+  CANCELLED
+}
+
+/// Co-op details & settings (1:1 with Organization of type COOPERATIVE).
+model Cooperative {
+  orgId               String               @id
+  org                 Organization         @relation(fields: [orgId], references: [id], onDelete: Cascade)
+  registrationNo      String?
+  mainCrops           String[]
+  /// Optional levy on each member sale, paid to the co-op through the waterfall
+  duesPct             Decimal?             @db.Decimal(5, 2)
+  duesFlatLe          Decimal?             @db.Decimal(14, 2)
+  /// Purchases above this net value must be approved one by one (not in bulk)
+  approvalThresholdLe Decimal?             @db.Decimal(14, 2)
+  fundingProvider     MobileMoneyProvider?
+  fundingAccount      String? // co-op disbursement wallet / account at the provider
+  updatedAt           DateTime             @updatedAt
+}
+
+/// Buyer details (1:1 with Organization of type BUYER).
+model Buyer {
+  orgId               String               @id
+  org                 Organization         @relation(fields: [orgId], references: [id], onDelete: Cascade)
+  type                BuyerType            @default(AGGREGATOR)
+  crops               String[]
+  approvalThresholdLe Decimal?             @db.Decimal(14, 2)
+  fundingProvider     MobileMoneyProvider?
+  fundingAccount      String?
+  updatedAt           DateTime             @updatedAt
+}
+
+model CollectionPoint {
+  id         String          @id @default(cuid())
+  ownerOrgId String
+  owner      Organization    @relation(fields: [ownerOrgId], references: [id], onDelete: Cascade)
+  name       String
+  community  String
+  districtId String?
+  latitude   Float?
+  longitude  Float?
+  active     Boolean         @default(true)
+  createdAt  DateTime        @default(now())
+  batches    PurchaseBatch[]
+
+  @@unique([ownerOrgId, name])
+}
+
+model PriceList {
+  id          String       @id @default(cuid())
+  ownerOrgId  String
+  owner       Organization @relation(fields: [ownerOrgId], references: [id], onDelete: Cascade)
+  cropId      String
+  crop        Crop         @relation(fields: [cropId], references: [id])
+  grade       String? // null = any grade
+  unit        String       @default("kg")
+  priceLe     Decimal      @db.Decimal(14, 2)
+  validFrom   DateTime     @default(now())
+  validTo     DateTime?
+  createdById String
+  createdAt   DateTime     @default(now())
+
+  @@index([ownerOrgId, cropId, validFrom])
+}
+
+model PurchaseBatch {
+  id                String           @id @default(cuid())
+  ref               String           @unique // BAT-000123
+  ownerOrgId        String
+  owner             Organization     @relation(fields: [ownerOrgId], references: [id], onDelete: Cascade)
+  collectionPointId String?
+  collectionPoint   CollectionPoint? @relation(fields: [collectionPointId], references: [id])
+  status            BatchStatus      @default(OPEN)
+  createdById       String
+  submittedById     String?
+  submittedAt       DateTime?
+  approvedById      String?
+  approvedAt        DateTime?
+  createdAt         DateTime         @default(now())
+  purchases         Purchase[]
+
+  @@index([ownerOrgId, status])
+}
+
+model Purchase {
+  id                   String         @id @default(cuid())
+  ref                  String         @unique // PUR-000123
+  clientRef            String?        @unique // offline/mobile idempotency
+  farmerId             String
+  farmer               Farmer         @relation(fields: [farmerId], references: [id])
+  /// Organisation that pays (co-op or buyer)
+  buyerOrgId           String
+  buyerOrg             Organization   @relation("PurchaseBuyer", fields: [buyerOrgId], references: [id])
+  /// Farmer's co-op at the time of purchase (for dues and reporting)
+  cooperativeId        String?
+  batchId              String
+  batch                PurchaseBatch  @relation(fields: [batchId], references: [id])
+  cropId               String
+  crop                 Crop           @relation(fields: [cropId], references: [id])
+  cropCycleId          String?
+  grade                String?
+  quantity             Decimal        @db.Decimal(12, 2)
+  unit                 String         @default("kg")
+  bags                 Int?
+  unitPriceLe          Decimal        @db.Decimal(14, 2)
+  listPriceLe          Decimal?       @db.Decimal(14, 2)
+  priceOverrideReason  String?
+  grossLe              Decimal        @db.Decimal(14, 2)
+  /// Itemised deductions [{ type, amountLe, note }]
+  deductions           Json           @default("[]")
+  deductionsLe         Decimal        @default(0) @db.Decimal(14, 2)
+  netLe                Decimal        @db.Decimal(14, 2)
+  status               PurchaseStatus @default(RECORDED)
+  recordedById         String
+  recordedAt           DateTime       @default(now())
+  latitude             Float?
+  longitude            Float?
+  ackDeadline          DateTime
+  farmerAcknowledgedAt DateTime?
+  disputedAt           DateTime?
+  disputeReason        String?
+  disputeResolvedAt    DateTime?
+  disputeResolution    String?
+  approvedById         String?
+  approvedAt           DateTime?
+  cancelledAt          DateTime?
+  cancelReason         String?
+  payment              Payment?
+
+  @@index([farmerId])
+  @@index([buyerOrgId, status])
+  @@index([batchId])
+}

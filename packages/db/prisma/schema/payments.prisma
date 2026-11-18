@@ -1,0 +1,189 @@
+// Module 04 — Payments Orchestrator & Ledger
+// AgriPay never holds customer funds: it instructs licensed providers and mirrors confirmed movements.
+
+enum PaymentStatus {
+  PENDING
+  PROCESSING
+  SUCCESS
+  PARTIAL // some splits succeeded, others still retrying / failed
+  FAILED
+  CANCELLED
+}
+
+enum TransferStatus {
+  PENDING
+  PROCESSING
+  SUCCESS
+  FAILED
+  CANCELLED
+}
+
+enum PaymentType {
+  BUYER_TO_FARMER
+  LOAN_DISBURSEMENT
+  VOUCHER_SETTLEMENT
+  SAVINGS_RELEASE
+  PROGRAMME_DISBURSEMENT
+}
+
+enum SplitType {
+  LOAN_REPAYMENT
+  SAVINGS
+  COOP_DUES
+  INSURANCE_PREMIUM
+  FARMER_WALLET
+  DEALER_SETTLEMENT
+}
+
+enum SplitMode {
+  PERCENT
+  FIXED
+  OUTSTANDING_BALANCE
+}
+
+enum ProviderCode {
+  MOCK
+  ORANGE_MONEY
+  AFRIMONEY
+  QMONEY
+  SAPS
+  BANK
+}
+
+model Payment {
+  id                String         @id @default(cuid())
+  ref               String         @unique // PAY-000123
+  type              PaymentType
+  purchaseId        String?        @unique
+  purchase          Purchase?      @relation(fields: [purchaseId], references: [id])
+  payerOrgId        String?
+  farmerId          String?
+  grossLe           Decimal        @db.Decimal(14, 2)
+  status            PaymentStatus  @default(PENDING)
+  idempotencyKey    String         @unique
+  approvedById      String?
+  explanation       Json? // waterfall explanation shown in previews & SMS
+  /// Ledger account debited instead of the payer's funding account (e.g. SAVINGS:{id} for a release)
+  sourceAccountCode String?
+  /// Links back to the business object: { savingsAccountId, feeLe, redemptionId, loanId, … }
+  context           Json?
+  receiptSentAt     DateTime?
+  createdAt         DateTime       @default(now())
+  completedAt       DateTime?
+  splits            PaymentSplit[]
+
+  @@index([payerOrgId, status])
+  @@index([farmerId])
+}
+
+model PaymentSplit {
+  id           String                @id @default(cuid())
+  paymentId    String
+  payment      Payment               @relation(fields: [paymentId], references: [id], onDelete: Cascade)
+  order        Int
+  type         SplitType
+  amountLe     Decimal               @db.Decimal(14, 2)
+  targetType   String // WALLET, COOPERATIVE, LOAN, SAVINGS_ACCOUNT, POLICY
+  targetId     String
+  status       TransferStatus        @default(PENDING)
+  instructions ProviderInstruction[]
+
+  @@index([paymentId])
+}
+
+model ProviderInstruction {
+  id              String         @id @default(cuid())
+  splitId         String
+  split           PaymentSplit   @relation(fields: [splitId], references: [id], onDelete: Cascade)
+  provider        ProviderCode
+  fromAccount     String
+  toAccount       String
+  amountLe        Decimal        @db.Decimal(14, 2)
+  narration       String
+  idempotencyKey  String         @unique
+  providerRef     String?        @unique
+  status          TransferStatus @default(PENDING)
+  attempts        Int            @default(0)
+  lastError       String?
+  retryable       Boolean        @default(true)
+  requestPayload  Json?
+  responsePayload Json?
+  nextAttemptAt   DateTime       @default(now())
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
+
+  @@index([status, nextAttemptAt])
+}
+
+/// Deduction rules applied to a farmer's incoming payments (registered by savings / credit / co-op modules).
+model SplitRule {
+  id         String    @id @default(cuid())
+  farmerId   String
+  farmer     Farmer    @relation(fields: [farmerId], references: [id], onDelete: Cascade)
+  type       SplitType
+  priority   Int // 1 = first
+  mode       SplitMode
+  value      Decimal?  @db.Decimal(14, 2) // percent or fixed amount
+  /// Percent of what? true = of gross, false = of the amount remaining after higher-priority rules
+  ofGross    Boolean   @default(false)
+  capLe      Decimal?  @db.Decimal(14, 2)
+  targetType String
+  targetId   String
+  active     Boolean   @default(true)
+  consentRef String? // farmer PIN-confirmed consent (module 06/08)
+  validFrom  DateTime  @default(now())
+  validTo    DateTime?
+  createdAt  DateTime  @default(now())
+
+  @@index([farmerId, active])
+}
+
+model LedgerAccount {
+  id        String        @id @default(cuid())
+  code      String        @unique // e.g. FARMER:AP-BOM-000123:WALLET
+  ownerType String
+  ownerId   String
+  name      String
+  createdAt DateTime      @default(now())
+  entries   LedgerEntry[]
+}
+
+model LedgerEntry {
+  id        String        @id @default(cuid())
+  journalId String
+  accountId String
+  account   LedgerAccount @relation(fields: [accountId], references: [id])
+  debitLe   Decimal       @default(0) @db.Decimal(14, 2)
+  creditLe  Decimal       @default(0) @db.Decimal(14, 2)
+  paymentId String?
+  memo      String?
+  createdAt DateTime      @default(now())
+
+  @@index([accountId])
+  @@index([journalId])
+  @@index([paymentId])
+}
+
+model ProviderCallback {
+  id          String       @id @default(cuid())
+  provider    ProviderCode
+  headers     Json
+  body        String
+  signatureOk Boolean
+  processedAt DateTime?
+  error       String?
+  receivedAt  DateTime     @default(now())
+}
+
+model ReconciliationRun {
+  id          String       @id @default(cuid())
+  provider    ProviderCode
+  periodFrom  DateTime
+  periodTo    DateTime
+  matched     Int
+  mismatched  Int
+  missing     Int
+  report      Json
+  createdById String
+  createdAt   DateTime     @default(now())
+}

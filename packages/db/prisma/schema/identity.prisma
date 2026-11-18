@@ -1,0 +1,178 @@
+// Module 01 — Identity, Authentication & Access Control
+
+enum Role {
+  FARMER
+  AGENT
+  COOP_ADMIN
+  COOP_STAFF
+  BUYER_ADMIN
+  BUYER_STAFF
+  LENDER_ADMIN
+  LENDER_OFFICER
+  AGRO_DEALER
+  PROGRAMME_OFFICER
+  SUPER_ADMIN
+}
+
+enum OrgType {
+  COOPERATIVE
+  BUYER
+  LENDER
+  AGRO_DEALER
+  PROGRAMME
+  PLATFORM
+}
+
+enum UserStatus {
+  INVITED
+  ACTIVE
+  SUSPENDED
+  LOCKED
+}
+
+enum SessionKind {
+  WEB // httpOnly cookie
+  MOBILE // bearer access token + rotating refresh token
+}
+
+enum OtpPurpose {
+  LOGIN
+  VERIFY_PHONE
+  RESET_PIN
+  VOUCHER_REDEEM // farmer confirms an agro-dealer redemption (module 08)
+}
+
+model User {
+  id             String     @id @default(cuid())
+  phone          String     @unique // E.164, e.g. +23276123456
+  phoneVerified  Boolean    @default(false)
+  name           String?
+  email          String?    @unique
+  locale         String     @default("en")
+  status         UserStatus @default(ACTIVE)
+  pinHash        String?
+  pinFailedCount Int        @default(0)
+  pinLockedUntil DateTime?
+  kycTier        Int        @default(1)
+  lastLoginAt    DateTime?
+  createdAt      DateTime   @default(now())
+  updatedAt      DateTime   @updatedAt
+
+  memberships       Membership[]
+  sessions          Session[]
+  farmer            Farmer?      @relation("FarmerUser")
+  registeredFarmers Farmer[]     @relation("RegisteredBy")
+  invitationsSent   Invitation[] @relation("InvitedBy")
+}
+
+model Organization {
+  id         String    @id @default(cuid())
+  type       OrgType
+  name       String
+  districtId String?
+  district   District? @relation(fields: [districtId], references: [id])
+  phone      String?
+  active     Boolean   @default(true)
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+
+  memberships Membership[]
+  invitations Invitation[]
+  members     Farmer[]     @relation("CoopMembers")
+
+  // Module 03
+  cooperative      Cooperative?
+  buyer            Buyer?
+  collectionPoints CollectionPoint[]
+  priceLists       PriceList[]
+  purchaseBatches  PurchaseBatch[]
+  purchases        Purchase[]        @relation("PurchaseBuyer")
+
+  // Modules 06–08
+  financialInstitution FinancialInstitution?
+  savingsProducts      SavingsProduct[]      @relation("SavingsCustodian")
+  savingsGroups        SavingsGroup[]        @relation("CoopSavingsGroups")
+  consentRequests      ConsentRequest[]      @relation("ConsentRequester")
+  loanProducts         LoanProduct[]         @relation("LenderProducts")
+  loans                Loan[]                @relation("LenderLoans")
+  agroDealer           AgroDealer?
+
+  @@index([type])
+}
+
+model Membership {
+  id        String       @id @default(cuid())
+  userId    String
+  orgId     String
+  role      Role
+  active    Boolean      @default(true)
+  createdAt DateTime     @default(now())
+  user      User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  org       Organization @relation(fields: [orgId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, orgId, role])
+  @@index([orgId, role])
+}
+
+model Session {
+  id            String         @id @default(cuid())
+  userId        String
+  user          User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  kind          SessionKind    @default(WEB)
+  tokenHash     String         @unique // WEB: sha256 of the cookie token. MOBILE: sha256 of a random id (access tokens are signed)
+  deviceName    String?
+  activeOrgId   String?
+  activeRole    Role?
+  expiresAt     DateTime
+  lastSeenAt    DateTime       @default(now())
+  ip            String?
+  userAgent     String?
+  revokedAt     DateTime?
+  createdAt     DateTime       @default(now())
+  refreshTokens RefreshToken[]
+
+  @@index([userId])
+}
+
+/// Mobile refresh tokens: single use, rotated on every refresh; re-use of an old token revokes the session.
+model RefreshToken {
+  id        String    @id @default(cuid())
+  sessionId String
+  session   Session   @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  tokenHash String    @unique
+  expiresAt DateTime
+  usedAt    DateTime?
+  createdAt DateTime  @default(now())
+
+  @@index([sessionId])
+}
+
+model OtpCode {
+  id        String     @id @default(cuid())
+  phone     String
+  codeHash  String
+  purpose   OtpPurpose
+  attempts  Int        @default(0)
+  expiresAt DateTime
+  usedAt    DateTime?
+  createdAt DateTime   @default(now())
+
+  @@index([phone, purpose])
+}
+
+model Invitation {
+  id         String       @id @default(cuid())
+  phone      String
+  orgId      String
+  org        Organization @relation(fields: [orgId], references: [id], onDelete: Cascade)
+  role       Role
+  tokenHash  String       @unique
+  invitedBy  String
+  inviter    User         @relation("InvitedBy", fields: [invitedBy], references: [id])
+  acceptedAt DateTime?
+  revokedAt  DateTime?
+  expiresAt  DateTime
+  createdAt  DateTime     @default(now())
+
+  @@index([phone])
+}

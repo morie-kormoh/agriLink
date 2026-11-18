@@ -1,0 +1,149 @@
+// Module 02 — Farmer Registry
+
+enum Gender {
+  FEMALE
+  MALE
+  OTHER
+  UNDISCLOSED
+}
+
+enum MobileMoneyProvider {
+  ORANGE_MONEY
+  AFRIMONEY
+  QMONEY
+}
+
+enum FarmerStatus {
+  DRAFT
+  ACTIVE
+  INACTIVE
+  DUPLICATE_SUSPECTED
+}
+
+enum RegistrationChannel {
+  AGENT_APP
+  USSD
+  CSV
+  COOP_PORTAL
+}
+
+enum LandTenure {
+  OWNED
+  FAMILY
+  RENTED
+  SHARECROP
+  COMMUNITY
+}
+
+model Farmer {
+  id              String              @id @default(cuid())
+  agripayId       String              @unique // AP-BOM-000123
+  // A farmer has a login only when their phone isn't already used by someone else.
+  userId          String?             @unique
+  user            User?               @relation("FarmerUser", fields: [userId], references: [id])
+  phone           String // E.164; may be shared with a family member
+  sharedPhone     Boolean             @default(false)
+  fullName        String
+  gender          Gender
+  dateOfBirth     DateTime?           @db.Date
+  nin             String?             @unique // National Identification Number (tier 3)
+  hasDisability   Boolean             @default(false)
+  householdSize   Int?
+  isHouseholdHead Boolean?
+  districtId      String
+  district        District            @relation(fields: [districtId], references: [id])
+  chiefdomId      String
+  chiefdom        Chiefdom            @relation(fields: [chiefdomId], references: [id])
+  community       String
+  photoKey        String? // S3 object key
+  status          FarmerStatus        @default(ACTIVE)
+  duplicateOfId   String? // suspected original record
+  duplicateNote   String?
+  kycTier         Int                 @default(1)
+  // Cooperative = Organization of type COOPERATIVE (module 03 adds trade details)
+  cooperativeId   String?
+  cooperative     Organization?       @relation("CoopMembers", fields: [cooperativeId], references: [id])
+  registeredById  String?
+  registeredBy    User?               @relation("RegisteredBy", fields: [registeredById], references: [id])
+  registeredVia   RegistrationChannel
+  clientRef       String?             @unique // offline client UUID for idempotent sync
+  createdAt       DateTime            @default(now())
+  updatedAt       DateTime            @updatedAt
+
+  wallets Wallet[]
+  plots   FarmPlot[]
+
+  purchases       Purchase[]
+  splitRules      SplitRule[]
+  records         FarmRecord[]
+  seasonSummaries SeasonSummary[]
+
+  savingsAccounts    SavingsAccount[]
+  groupMemberships   SavingsGroupMember[]
+  groupContributions GroupContribution[]
+  groupPayouts       GroupPayout[]
+  creditScores       CreditScore[]
+  consentRequests    ConsentRequest[]
+  loans              Loan[]
+  vouchers           InputVoucher[]
+
+  @@index([districtId, chiefdomId])
+  @@index([cooperativeId])
+  @@index([phone])
+  @@index([registeredById])
+  @@index([status])
+  // Fuzzy name search & duplicate detection (pg_trgm)
+  @@index([fullName(ops: raw("gin_trgm_ops"))], type: Gin, map: "Farmer_fullName_trgm_idx")
+}
+
+model Wallet {
+  id          String              @id @default(cuid())
+  farmerId    String
+  farmer      Farmer              @relation(fields: [farmerId], references: [id], onDelete: Cascade)
+  provider    MobileMoneyProvider
+  msisdn      String // E.164
+  accountName String? // name returned by provider lookup (module 04)
+  verified    Boolean             @default(false)
+  isPrimary   Boolean             @default(false)
+  createdAt   DateTime            @default(now())
+
+  @@unique([provider, msisdn])
+  @@index([farmerId])
+}
+
+model FarmPlot {
+  id           String                                   @id @default(cuid())
+  farmerId     String
+  farmer       Farmer                                   @relation(fields: [farmerId], references: [id], onDelete: Cascade)
+  name         String?
+  sizeAcres    Decimal                                  @db.Decimal(8, 2)
+  tenure       LandTenure?
+  latitude     Float?
+  longitude    Float?
+  gpsAccuracyM Float?
+  // PostGIS geometry kept in sync from lat/lng by a DB trigger (see migration)
+  geom         Unsupported("geometry(Geometry, 4326)")?
+  createdAt    DateTime                                 @default(now())
+  cropCycles   CropCycle[]
+
+  @@index([farmerId])
+  @@index([geom], type: Gist)
+}
+
+model CropCycle {
+  id              String    @id @default(cuid())
+  plotId          String
+  plot            FarmPlot  @relation(fields: [plotId], references: [id], onDelete: Cascade)
+  cropId          String
+  crop            Crop      @relation(fields: [cropId], references: [id])
+  season          String // 2027-MAIN, 2027-DRY
+  plantedAt       DateTime? @db.Date
+  expectedHarvest DateTime? @db.Date
+  harvestedAt     DateTime? @db.Date
+  expectedYieldKg Decimal?  @db.Decimal(12, 2)
+  actualYieldKg   Decimal?  @db.Decimal(12, 2)
+  createdAt       DateTime  @default(now())
+
+  @@index([plotId])
+  @@index([cropId, season])
+}

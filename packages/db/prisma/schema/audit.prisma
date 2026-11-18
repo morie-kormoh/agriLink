@@ -1,0 +1,23 @@
+// Module 13 (core, built in Sprint 1) — append-only, hash-chained audit trail
+
+model AuditLog {
+  id          String   @id @default(cuid())
+  actorUserId String?
+  actorRole   String?
+  actorOrgId  String?
+  action      String // e.g. "auth.login", "farmer.registered"
+  entity      String // e.g. "Farmer"
+  entityId    String
+  before      Json?
+  after       Json?
+  ip          String?
+  userAgent   String?
+  requestId   String?
+  prevHash    String?
+  hash        String
+  createdAt   DateTime @default(now())
+
+  @@index([entity, entityId])
+  @@index([actorUserId])
+  @@index([action, createdAt])
+}

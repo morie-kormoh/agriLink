@@ -1,0 +1,84 @@
+{
+  "_note": "DRAFT Krio translations — must be reviewed by native Krio speakers during accelerator user testing. Missing keys fall back to English.",
+  "common": {
+    "continue": "Go bifo",
+    "back": "Go bak",
+    "next": "Nɛks",
+    "save": "Sev",
+    "cancel": "Kansul",
+    "confirm": "Kɔnfɔm",
+    "search": "Luk fɔ",
+    "loading": "I de lod…",
+    "retry": "Tray bak",
+    "yes": "Yɛs",
+    "no": "Nɔ",
+    "signOut": "Kɔmɔt",
+    "language": "Langwej",
+    "online": "Ɔnlayn",
+    "offline": "Ɔflayn"
+  },
+  "gender": {
+    "FEMALE": "Uman",
+    "MALE": "Man"
+  },
+  "landing": {
+    "signIn": "Sayn in"
+  },
+  "auth": {
+    "loginTitle": "Sayn in na AgriPay",
+    "loginSubtitle": "Put yu fon nɔmba. Wi go sɛn yu 6 nɔmba kod na SMS.",
+    "phoneLabel": "Fon nɔmba",
+    "sendCode": "Sɛn di kod",
+    "codeTitle": "Put di kod",
+    "codeSubtitle": "Wi dɔn sɛn 6 nɔmba kod to {phone}.",
+    "verify": "Chɛk ɛn sayn in",
+    "resend": "Sɛn di kod bak",
+    "changeNumber": "Yuz ɔda nɔmba"
+  },
+  "farmer": {
+    "registerTitle": "Rejista fama",
+    "consentLabel": "Di fama gri fɔ rejista",
+    "fields": {
+      "fullName": "Ful nem",
+      "gender": "Man ɔ uman",
+      "phone": "Fon nɔmba",
+      "community": "Kɔmyuniti / vilej",
+      "crop": "Men krɔp",
+      "sizeAcres": "Aw di fam big (eka)"
+    }
+  },
+  "trade": {
+    "save": "Sev di bay",
+    "net": "Wetin fɔ pe",
+    "farmer": "Fama",
+    "crop": "Krɔp",
+    "quantity": "Aw bɔku"
+  },
+  "records": {
+    "title": "Fam rɛkɔd",
+    "spent": "Wetin yu spɛn",
+    "sold": "Wetin yu sɛl",
+    "add": "Ad rɛkɔd"
+  },
+  "sales": {
+    "title": "Mi sɛl dɛn",
+    "confirm": "Kɔnfɔm",
+    "report": "Ripɔt prɔblɛm"
+  },
+  "nav": {
+    "savings": "Sev mɔni",
+    "passport": "Mi AgriPay paspɔt",
+    "loans": "Lɔn"
+  },
+  "finance": {
+    "pin": "Yu PIN",
+    "confirmWithPin": "Kɔnfam wit PIN"
+  },
+  "savings": {
+    "title": "Sev mɔni",
+    "harvestLock": "Avest Lɔk"
+  },
+  "credit": {
+    "title": "Lɔn fɔ input"
+  }
+}

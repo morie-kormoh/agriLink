@@ -1,0 +1,192 @@
+// Module 08 — Credit & input vouchers. Lenders fund loans; AgriPay originates, issues vouchers and services repayments.
+
+enum LoanStatus {
+  APPLIED
+  OFFERED
+  ACCEPTED
+  APPROVED
+  DISBURSED
+  REPAYING
+  REPAID
+  LATE
+  DEFAULTED
+  RESTRUCTURED
+  WRITTEN_OFF
+  CANCELLED
+  DECLINED
+}
+
+enum VoucherStatus {
+  ISSUED
+  PARTIALLY_REDEEMED
+  REDEEMED
+  EXPIRED
+  CANCELLED
+}
+
+model LoanProduct {
+  id                     String       @id @default(cuid())
+  lenderOrgId            String
+  lenderOrg              Organization @relation("LenderProducts", fields: [lenderOrgId], references: [id])
+  name                   String
+  description            String?
+  purpose                String // INPUTS, EQUIPMENT, IRRIGATION
+  cropIds                String[] // empty = any crop
+  districtIds            String[] // empty = anywhere
+  minAmountLe            Decimal      @db.Decimal(14, 2)
+  maxAmountLe            Decimal      @db.Decimal(14, 2)
+  firstCycleMaxLe        Decimal      @db.Decimal(14, 2)
+  graduationPct          Decimal      @default(50) @db.Decimal(5, 2)
+  flatFeePct             Decimal      @db.Decimal(5, 2)
+  minBand                ScoreBand
+  maxDebtToIncomePct     Decimal      @db.Decimal(5, 2)
+  repaymentMode          String       @default("HARVEST_DEDUCTION")
+  dueMonthDay            String?
+  maxRepaymentPctPerSale Decimal      @default(60) @db.Decimal(5, 2)
+  requiresGroupGuarantee Boolean      @default(false)
+  voucherOnly            Boolean      @default(true)
+  voucherValidDays       Int          @default(60)
+  allowedCategories      String[] // SEED, FERTILISER, AGROCHEM, TOOLS — empty = any
+  eligibleDealerIds      String[] // AgroDealer ids — empty = any verified dealer
+  active                 Boolean      @default(true)
+  createdAt              DateTime     @default(now())
+  updatedAt              DateTime     @updatedAt
+  loans                  Loan[]
+
+  @@index([lenderOrgId, active])
+}
+
+model Loan {
+  id                   String          @id @default(cuid())
+  ref                  String          @unique // LN-000123
+  farmerId             String
+  farmer               Farmer          @relation(fields: [farmerId], references: [id])
+  productId            String
+  product              LoanProduct     @relation(fields: [productId], references: [id])
+  lenderOrgId          String
+  lenderOrg            Organization    @relation("LenderLoans", fields: [lenderOrgId], references: [id])
+  status               LoanStatus      @default(APPLIED)
+  requestedLe          Decimal         @db.Decimal(14, 2)
+  approvedLe           Decimal?        @db.Decimal(14, 2)
+  feeLe                Decimal?        @db.Decimal(14, 2)
+  totalDueLe           Decimal?        @db.Decimal(14, 2)
+  repaidLe             Decimal         @default(0) @db.Decimal(14, 2)
+  season               String
+  dueDate              DateTime?
+  scoreAtApplication   Int?
+  bandAtApplication    ScoreBand?
+  affordability        Json?
+  disclosure           Json?
+  disclosureAcceptedAt DateTime?
+  acceptedVia          String? // APP, USSD, AGENT_ASSISTED
+  appliedVia           String // FARMER_APPLICATION, LENDER_OFFER
+  offeredById          String?
+  approvedById         String?
+  approvedAt           DateTime?
+  disbursedAt          DateTime?
+  coolingOffUntil      DateTime?
+  repaidAt             DateTime?
+  lateAt               DateTime?
+  defaultedAt          DateTime?
+  cancelledAt          DateTime?
+  declineReason        String?
+  lastReminderAt       DateTime?
+  /// Lender-proposed new terms awaiting the farmer's PIN: { dueDate, reason, proposedById }
+  pendingRestructure   Json?
+  splitRuleId          String?         @unique
+  consentId            String?
+  groupId              String?
+  group                SavingsGroup?   @relation(fields: [groupId], references: [id])
+  voucher              InputVoucher?
+  repayments           LoanRepayment[]
+  createdAt            DateTime        @default(now())
+  updatedAt            DateTime        @updatedAt
+
+  @@index([lenderOrgId, status])
+  @@index([farmerId, status])
+}
+
+model LoanRepayment {
+  id        String   @id @default(cuid())
+  loanId    String
+  loan      Loan     @relation(fields: [loanId], references: [id])
+  amountLe  Decimal  @db.Decimal(14, 2)
+  source    String // HARVEST_SPLIT, MANUAL_MOBILE_MONEY, GROUP
+  paymentId String?
+  splitId   String?  @unique
+  reference String?
+  createdAt DateTime @default(now())
+
+  @@index([loanId])
+}
+
+model AgroDealer {
+  id             String              @id @default(cuid())
+  orgId          String              @unique
+  org            Organization        @relation(fields: [orgId], references: [id], onDelete: Cascade)
+  districtId     String
+  district       District            @relation(fields: [districtId], references: [id])
+  payoutMsisdn   String
+  payoutProvider MobileMoneyProvider
+  verified       Boolean             @default(false)
+  verifiedAt     DateTime?
+  catalogue      DealerItem[]
+  redemptions    VoucherRedemption[]
+}
+
+model DealerItem {
+  id          String     @id @default(cuid())
+  dealerId    String
+  dealer      AgroDealer @relation(fields: [dealerId], references: [id], onDelete: Cascade)
+  name        String
+  category    String // SEED, FERTILISER, AGROCHEM, TOOLS
+  unit        String     @default("each")
+  unitPriceLe Decimal    @db.Decimal(14, 2)
+  active      Boolean    @default(true)
+  createdAt   DateTime   @default(now())
+
+  @@index([dealerId, active])
+}
+
+model InputVoucher {
+  id                String              @id @default(cuid())
+  code              String              @unique // 8 Crockford base-32 chars incl. check digit
+  loanId            String?             @unique
+  loan              Loan?               @relation(fields: [loanId], references: [id])
+  farmerId          String
+  farmer            Farmer              @relation(fields: [farmerId], references: [id])
+  /// Organisation that pays dealers for this voucher (the lender)
+  funderOrgId       String
+  valueLe           Decimal             @db.Decimal(14, 2)
+  remainingLe       Decimal             @db.Decimal(14, 2)
+  allowedCategories String[]
+  allowedDealerIds  String[]
+  status            VoucherStatus       @default(ISSUED)
+  issuedAt          DateTime            @default(now())
+  expiresAt         DateTime
+  closedAt          DateTime?
+  redemptions       VoucherRedemption[]
+
+  @@index([farmerId, status])
+  @@index([status, expiresAt])
+}
+
+model VoucherRedemption {
+  id                  String       @id @default(cuid())
+  ref                 String       @unique // RDM-000123
+  voucherId           String
+  voucher             InputVoucher @relation(fields: [voucherId], references: [id])
+  dealerId            String
+  dealer              AgroDealer   @relation(fields: [dealerId], references: [id])
+  items               Json // [{itemId, name, category, qty, unitPriceLe, totalLe}]
+  amountLe            Decimal      @db.Decimal(14, 2)
+  farmerOtpVerified   Boolean
+  clientRef           String?      @unique
+  redeemedById        String
+  settlementPaymentId String?      @unique
+  settledAt           DateTime?
+  createdAt           DateTime     @default(now())
+
+  @@index([dealerId, createdAt])
+  @@index([voucherId])
+}

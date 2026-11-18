@@ -1,0 +1,79 @@
+// Module 07 — Farm Financial Passport & consent
+
+enum ScoreBand {
+  BUILDING
+  FAIR
+  GOOD
+  STRONG
+}
+
+/// Ordered: RECORDS_FULL includes PASSPORT_DETAILED includes PASSPORT_SUMMARY.
+enum ConsentScope {
+  PASSPORT_SUMMARY
+  PASSPORT_DETAILED
+  RECORDS_FULL
+}
+
+enum ConsentStatus {
+  REQUESTED
+  GRANTED
+  DECLINED
+  REVOKED
+  EXPIRED
+}
+
+model CreditScore {
+  id           String    @id @default(cuid())
+  farmerId     String
+  farmer       Farmer    @relation(fields: [farmerId], references: [id], onDelete: Cascade)
+  score        Int // 0–100
+  band         ScoreBand
+  factors      Json // [{key, points, max, evidence, tip}]
+  flags        String[]
+  modelVersion String // "rules-v1.0"
+  inputsHash   String // sha256(modelVersion + canonical inputs) — reproducibility
+  inputs       Json
+  computedAt   DateTime  @default(now())
+  isCurrent    Boolean   @default(true)
+
+  @@index([farmerId, isCurrent])
+  @@index([isCurrent, band])
+}
+
+model ConsentRequest {
+  id             String              @id @default(cuid())
+  ref            String              @unique // CON-000045
+  farmerId       String
+  farmer         Farmer              @relation(fields: [farmerId], references: [id], onDelete: Cascade)
+  requesterOrgId String
+  requesterOrg   Organization        @relation("ConsentRequester", fields: [requesterOrgId], references: [id])
+  requestedById  String
+  scope          ConsentScope
+  purpose        String
+  durationMonths Int                 @default(12)
+  status         ConsentStatus       @default(REQUESTED)
+  /// Grant validity end (set when granted)
+  expiresAt      DateTime?
+  respondedAt    DateTime?
+  grantedAt      DateTime?
+  revokedAt      DateTime?
+  channel        String? // APP, USSD, AGENT_ASSISTED, LOAN_APPLICATION
+  createdAt      DateTime            @default(now())
+  accessLogs     PassportAccessLog[]
+
+  @@index([farmerId, status])
+  @@index([requesterOrgId, status])
+}
+
+model PassportAccessLog {
+  id           String         @id @default(cuid())
+  consentId    String
+  consent      ConsentRequest @relation(fields: [consentId], references: [id], onDelete: Cascade)
+  viewerUserId String
+  viewerOrgId  String
+  farmerId     String
+  scope        ConsentScope
+  viewedAt     DateTime       @default(now())
+
+  @@index([farmerId, viewedAt])
+}

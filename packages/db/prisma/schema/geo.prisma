@@ -1,0 +1,40 @@
+// Module 00 — reference data: geography and crops
+
+model Region {
+  id        String     @id @default(cuid())
+  name      String     @unique
+  districts District[]
+}
+
+model District {
+  id            String         @id @default(cuid())
+  code          String         @unique // 3-letter code used in AgriPay IDs, e.g. BOM
+  name          String
+  regionId      String
+  region        Region         @relation(fields: [regionId], references: [id])
+  chiefdoms     Chiefdom[]
+  farmers       Farmer[]
+  organizations Organization[]
+  agroDealers   AgroDealer[]
+}
+
+model Chiefdom {
+  id         String   @id @default(cuid())
+  name       String
+  districtId String
+  district   District @relation(fields: [districtId], references: [id])
+  farmers    Farmer[]
+
+  @@unique([districtId, name])
+}
+
+model Crop {
+  id          String      @id @default(cuid())
+  code        String      @unique // RICE, CASSAVA, COCOA ...
+  name        String
+  unitDefault String      @default("kg")
+  active      Boolean     @default(true)
+  cropCycles  CropCycle[]
+  priceLists  PriceList[]
+  purchases   Purchase[]
+}

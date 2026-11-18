@@ -1,0 +1,185 @@
+// Module 06 — Savings (Harvest Lock, goals & group savings)
+// Funds are held by a licensed custodian (bank, community bank, FSA, MFI or MMO savings product).
+// AgriPay records instructions and mirrors balances in the ledger (SAVINGS:{accountId}).
+
+enum SavingsType {
+  HARVEST_LOCK
+  GOAL
+  GROUP
+}
+
+enum SavingsStatus {
+  ACTIVE
+  LOCKED
+  RELEASED
+  CLOSED
+}
+
+enum SavingsReleaseRule {
+  FIXED_DATE
+  SEASON_START
+  GOAL_REACHED
+}
+
+enum SavingsTxnType {
+  CREDIT_AUTO
+  CREDIT_MANUAL
+  RELEASE
+  EARLY_WITHDRAWAL
+  FEE
+  INTEREST
+}
+
+/// Licensed partner details for LENDER organisations (lenders and savings custodians).
+model FinancialInstitution {
+  orgId               String               @id
+  org                 Organization         @relation(fields: [orgId], references: [id], onDelete: Cascade)
+  licenceNo           String?
+  /// Account loans are disbursed / dealers are settled from
+  fundingProvider     MobileMoneyProvider?
+  fundingAccount      String?
+  /// Account loan repayments are paid into
+  collectionAccount   String?
+  /// Pooled custodial savings account (individual sub-accounts referenced per SavingsAccount)
+  savingsAccount      String?
+  /// Loans above this amount need a LENDER_ADMIN (checker) to approve
+  approvalThresholdLe Decimal              @default(5000) @db.Decimal(14, 2)
+  updatedAt           DateTime             @updatedAt
+}
+
+model SavingsProduct {
+  id                     String             @id @default(cuid())
+  custodianOrgId         String
+  custodian              Organization       @relation("SavingsCustodian", fields: [custodianOrgId], references: [id])
+  name                   String
+  type                   SavingsType
+  defaultPct             Decimal?           @db.Decimal(5, 2)
+  minPct                 Decimal?           @db.Decimal(5, 2)
+  maxPct                 Decimal?           @db.Decimal(5, 2)
+  releaseRule            SavingsReleaseRule
+  releaseMonthDay        String? // "04-01" = start of rainy-season planting
+  earlyWithdrawalAllowed Boolean            @default(true)
+  earlyWithdrawalFeePct  Decimal?           @db.Decimal(5, 2)
+  interestNote           String?
+  active                 Boolean            @default(true)
+  createdAt              DateTime           @default(now())
+  accounts               SavingsAccount[]
+
+  @@index([custodianOrgId])
+}
+
+model SavingsAccount {
+  id                    String               @id @default(cuid())
+  ref                   String               @unique // SAV-000123
+  farmerId              String?
+  farmer                Farmer?              @relation(fields: [farmerId], references: [id])
+  productId             String
+  product               SavingsProduct       @relation(fields: [productId], references: [id])
+  custodianAccountRef   String?
+  status                SavingsStatus        @default(ACTIVE)
+  autoSavePct           Decimal?             @db.Decimal(5, 2)
+  autoSavePaused        Boolean              @default(false)
+  goalLe                Decimal?             @db.Decimal(14, 2)
+  goalLabel             String?
+  lockedUntil           DateTime?
+  splitRuleId           String?              @unique
+  /// Mirror of the ledger balance (credits − releases − withdrawals − fees), updated in the same transaction.
+  balanceLe             Decimal              @default(0) @db.Decimal(14, 2)
+  openedVia             String? // APP, AGENT_ASSISTED, USSD
+  /// Season of the last early withdrawal (limit: one per season)
+  earlyWithdrawalSeason String?
+  /// Release date for which the 7-day notice was sent
+  releaseNoticeFor      DateTime?
+  createdAt             DateTime             @default(now())
+  updatedAt             DateTime             @updatedAt
+  transactions          SavingsTransaction[]
+
+  @@unique([farmerId, productId])
+  @@index([status, lockedUntil])
+}
+
+model SavingsTransaction {
+  id             String         @id @default(cuid())
+  accountId      String
+  account        SavingsAccount @relation(fields: [accountId], references: [id])
+  type           SavingsTxnType
+  amountLe       Decimal        @db.Decimal(14, 2)
+  balanceAfterLe Decimal        @db.Decimal(14, 2)
+  paymentId      String?
+  /// Payment split that produced this movement (idempotency: one transaction per split and type)
+  splitId        String?
+  note           String?
+  createdAt      DateTime       @default(now())
+
+  @@unique([splitId, type])
+  @@index([accountId, createdAt])
+}
+
+model SavingsGroup {
+  id             String               @id @default(cuid())
+  ref            String               @unique // GRP-000012
+  name           String
+  cooperativeId  String
+  cooperative    Organization         @relation("CoopSavingsGroups", fields: [cooperativeId], references: [id])
+  type           String // VSLA, OSUSU_ROTATING, GOAL
+  contributionLe Decimal              @db.Decimal(14, 2)
+  frequency      String // WEEKLY, MONTHLY
+  cycleStart     DateTime
+  cycleEnd       DateTime
+  active         Boolean              @default(true)
+  createdById    String
+  createdAt      DateTime             @default(now())
+  members        SavingsGroupMember[]
+  contributions  GroupContribution[]
+  payouts        GroupPayout[]
+  loans          Loan[]
+
+  @@index([cooperativeId])
+}
+
+model SavingsGroupMember {
+  id          String       @id @default(cuid())
+  groupId     String
+  group       SavingsGroup @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  farmerId    String
+  farmer      Farmer       @relation(fields: [farmerId], references: [id])
+  role        String       @default("MEMBER") // CHAIR, TREASURER, SECRETARY, MEMBER
+  payoutOrder Int?
+  /// Agreed to co-guarantee group loans (module 08)
+  guarantor   Boolean      @default(false)
+  joinedAt    DateTime     @default(now())
+
+  @@unique([groupId, farmerId])
+  @@index([farmerId])
+}
+
+model GroupContribution {
+  id           String       @id @default(cuid())
+  groupId      String
+  group        SavingsGroup @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  farmerId     String
+  farmer       Farmer       @relation(fields: [farmerId], references: [id])
+  periodNo     Int
+  amountLe     Decimal      @db.Decimal(14, 2)
+  method       String // MOBILE_MONEY, CASH_RECORDED
+  reference    String? // mobile money transaction id
+  recordedById String
+  createdAt    DateTime     @default(now())
+
+  @@unique([groupId, farmerId, periodNo])
+}
+
+model GroupPayout {
+  id           String       @id @default(cuid())
+  groupId      String
+  group        SavingsGroup @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  farmerId     String
+  farmer       Farmer       @relation(fields: [farmerId], references: [id])
+  periodNo     Int
+  amountLe     Decimal      @db.Decimal(14, 2)
+  method       String
+  recordedById String
+  createdAt    DateTime     @default(now())
+
+  @@unique([groupId, periodNo])
+}

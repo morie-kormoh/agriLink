@@ -1,0 +1,16 @@
+packages:
+  - "apps/*"
+  - "packages/*"
+
+onlyBuiltDependencies:
+  - "@prisma/engines"
+  - "prisma"
+  - "esbuild"
+  - "sharp"
+  - "@node-rs/argon2"
+  - "msgpackr-extract"
+  - "unrs-resolver"
+
+ignoredBuiltDependencies:
+  - "@parcel/watcher"
+  - "@swc/core"

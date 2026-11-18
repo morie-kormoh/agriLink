@@ -1,0 +1,19 @@
+// AgriPay Salone — Prisma multi-file schema.
+// One .prisma file per module lives in this folder.
+
+generator client {
+  provider        = "prisma-client"
+  output          = "../../src/generated/prisma"
+  previewFeatures = ["postgresqlExtensions"]
+}
+
+datasource db {
+  provider   = "postgresql"
+  extensions = [postgis, pg_trgm]
+}
+
+// Atomic counters for human-readable IDs (AP-BOM-000123, PUR-..., etc.)
+model IdSequence {
+  key   String @id
+  value Int    @default(0)
+}

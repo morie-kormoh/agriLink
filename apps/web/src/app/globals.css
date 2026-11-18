@@ -1,0 +1,11 @@
+@import "@agripay/ui/globals.css";
+
+/* Scan this app and the shared UI package for Tailwind classes */
+@source "../";
+@source "../../../../packages/ui/src";
+
+@media print {
+  .no-print {
+    display: none !important;
+  }
+}

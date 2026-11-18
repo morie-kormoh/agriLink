@@ -1,0 +1,25 @@
+{
+  "name": "@agripay/i18n",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./messages/*": "./messages/*"
+  },
+  "scripts": {
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "intl-messageformat": "^10.7.16"
+  },
+  "devDependencies": {
+    "@agripay/config": "workspace:*",
+    "@types/node": "^22.18.0",
+    "eslint": "^9.36.0",
+    "typescript": "~5.9.3",
+    "vitest": "^4.0.0"
+  }
+}
