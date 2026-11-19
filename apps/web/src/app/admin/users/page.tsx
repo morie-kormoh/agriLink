@@ -79,7 +79,7 @@ export default async function AdminUsersPage({
                       >
                         {u.status}
                       </Badge>
-                      {locked ? <Badge variant="warning">PIN locked</Badge> : null}
+                      {locked ? <Badge variant="warning">{t("admin.pinLocked")}</Badge> : null}
                     </div>
                   </TableCell>
                   <TableCell>{formatDateTime(u.lastLoginAt)}</TableCell>

@@ -23,7 +23,7 @@ export default async function Page() {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>Ref</TableHead>
+              <TableHead>{t("common.ref")}</TableHead>
               <TableHead>{t("lender.farmer")}</TableHead>
               <TableHead>{t("lender.scope")}</TableHead>
               <TableHead>{t("lender.purpose2")}</TableHead>

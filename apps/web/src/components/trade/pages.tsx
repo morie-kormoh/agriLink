@@ -319,7 +319,7 @@ export async function PaymentDetailPage({
           <CardContent>
             {p.purchase ? (
               <dl className="grid gap-3">
-                <Field label="Ref">{p.purchase.ref}</Field>
+                <Field label={t("common.ref")}>{p.purchase.ref}</Field>
                 <Field label={t("trade.farmer")}>
                   {p.purchase.farmer.fullName} · {p.purchase.farmer.agrilinkId}
                 </Field>

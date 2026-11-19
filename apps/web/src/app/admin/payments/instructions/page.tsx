@@ -27,14 +27,14 @@ export default async function InstructionsPage() {
         description="Failed, retrying and in-flight transfers to mobile money providers."
       />
       {rows.length === 0 ? (
-        <EmptyState icon={CheckCircle2Icon} title="Nothing pending or failed." />
+        <EmptyState icon={CheckCircle2Icon} title={t("admin.nothingPending")} />
       ) : (
         <div className="bg-card overflow-hidden rounded-xl border">
           <Table>
             <TableHeader>
               <TableRow>
                 <TableHead>{t("payments.ref")}</TableHead>
-                <TableHead>Provider</TableHead>
+                <TableHead>{t("common.provider")}</TableHead>
                 <TableHead>To</TableHead>
                 <TableHead className="text-right">{t("payments.amount")}</TableHead>
                 <TableHead>{t("payments.status")}</TableHead>

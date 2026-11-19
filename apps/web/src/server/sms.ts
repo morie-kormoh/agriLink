@@ -1,5 +1,7 @@
 import "server-only";
 import { Queue } from "bullmq";
+import { prisma } from "@agrilink/db";
+import { translateSms } from "@agrilink/i18n";
 import { maskPhone } from "@agrilink/validation";
 import { logDemoSms } from "./demo/sms-log";
 import { env } from "./env";
@@ -43,11 +45,22 @@ function smsQueue(): Queue {
   return queue;
 }
 
+async function recipientLocale(phone: string): Promise<string | undefined> {
+  try {
+    const user = await prisma.user.findUnique({ where: { phone }, select: { locale: true } });
+    return user?.locale;
+  } catch {
+    return undefined;
+  }
+}
+
 export async function sendSms(
   to: string,
   body: string,
   kind: OutboundSms["kind"] = "general",
 ): Promise<void> {
+  // Send in the language the person chose in AgriLink (English or Krio).
+  body = translateSms(await recipientLocale(to), body);
   const msg: OutboundSms = { to, body, kind, at: new Date() };
   const provider = env().SMS_PROVIDER;
   // Demo only: show it in the on-screen phone panel too.

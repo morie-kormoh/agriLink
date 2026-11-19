@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { getTranslations } from "next-intl/server";
+import { getLocale, getTranslations } from "next-intl/server";
+import { translateEvidence } from "@agrilink/i18n/text";
 import { ArrowLeftIcon } from "lucide-react";
 import type { Factor } from "@agrilink/finance";
 import { Card, CardContent, CardHeader, CardTitle } from "@agrilink/ui/components/card";
@@ -23,6 +24,7 @@ import { getPassportForLender } from "@/server/passport/service";
 export default async function Page({ params }: { params: Promise<{ id: string }> }) {
   const { actor, user, context } = await requirePortal("/lender");
   const t = await getTranslations();
+  const locale = await getLocale();
   const { id } = await params;
   const p = await notFoundOn404(() => getPassportForLender(actor, id));
   const factors = p.score.factors as unknown as Factor[];
@@ -72,7 +74,9 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
               <dl className="w-full space-y-2 text-sm">
                 <Field label={t("lender.scope")}>{t(`consentScope.${p.consent.scope}`)}</Field>
                 <Field label={t("lender.purpose2")}>{p.consent.purpose}</Field>
-                <Field label="Ref">{`${p.consent.ref} → ${p.consent.expiresAt?.toLocaleDateString("en-GB")}`}</Field>
+                <Field
+                  label={t("common.ref")}
+                >{`${p.consent.ref} → ${p.consent.expiresAt?.toLocaleDateString("en-GB")}`}</Field>
               </dl>
             </CardContent>
           </Card>
@@ -91,7 +95,9 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                       </span>
                     </div>
                     <Progress value={(f.points / f.max) * 100} />
-                    <p className="text-muted-foreground text-xs">{f.evidence}</p>
+                    <p className="text-muted-foreground text-xs">
+                      {translateEvidence(locale, f.evidence)}
+                    </p>
                   </div>
                 ))}
               </CardContent>

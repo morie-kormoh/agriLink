@@ -16,6 +16,7 @@ import { ReconcileForm } from "./reconcile-form";
 export default async function ReconciliationPage() {
   await requirePortal("/admin");
   const t = await getTranslations("payments");
+  const tg = await getTranslations();
   const runs = await prisma.reconciliationRun.findMany({
     orderBy: { createdAt: "desc" },
     take: 20,
@@ -24,14 +25,14 @@ export default async function ReconciliationPage() {
     <>
       <PageHeader title={t("reconTitle")} description={t("reconSubtitle")} />
       <ReconcileForm />
-      <h2 className="mt-8 mb-3 font-semibold">History</h2>
+      <h2 className="mt-8 mb-3 font-semibold">{tg("common.history")}</h2>
       <div className="bg-card overflow-hidden rounded-xl border">
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>When</TableHead>
-              <TableHead>Provider</TableHead>
-              <TableHead>Period</TableHead>
+              <TableHead>{tg("common.when")}</TableHead>
+              <TableHead>{tg("common.provider")}</TableHead>
+              <TableHead>{tg("common.period")}</TableHead>
               <TableHead className="text-right">{t("matched")}</TableHead>
               <TableHead className="text-right">{t("mismatched")}</TableHead>
               <TableHead className="text-right">{t("missing")}</TableHead>

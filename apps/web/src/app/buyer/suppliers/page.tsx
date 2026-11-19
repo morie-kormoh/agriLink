@@ -42,7 +42,7 @@ export default async function SuppliersPage() {
               <TableHead className="text-right">{t("trade.purchases")}</TableHead>
               <TableHead className="text-right">{t("trade.quantity")}</TableHead>
               <TableHead className="text-right">{t("trade.total")}</TableHead>
-              <TableHead>Last</TableHead>
+              <TableHead>{t("common.last")}</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>

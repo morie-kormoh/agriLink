@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { MessageSquareTextIcon, SmartphoneIcon } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { Button } from "@agrilink/ui/components/button";
 import {
   Sheet,
@@ -25,6 +26,7 @@ interface Sms {
  * confirmation codes), because the audience cannot see feature phones or server logs.
  */
 export function PhonePanel() {
+  const t = useTranslations("demo");
   const [open, setOpen] = useState(false);
   const [messages, setMessages] = useState<Sms[]>([]);
   const [seen, setSeen] = useState<string | null>(null);
@@ -57,7 +59,7 @@ export function PhonePanel() {
           setSeen(latest);
         }}
         className="fixed right-4 bottom-24 z-40 h-12 gap-2 rounded-full shadow-[var(--shadow-float)] md:bottom-6"
-        aria-label="Open demo phone (SMS)"
+        aria-label={t("phone")}
       >
         <SmartphoneIcon /> SMS
         {unread ? (
@@ -76,20 +78,18 @@ export function PhonePanel() {
         <SheetContent className="flex w-full flex-col sm:max-w-md">
           <SheetHeader>
             <SheetTitle className="flex items-center gap-2">
-              <MessageSquareTextIcon className="size-4" /> SMS sent by AgriLink
+              <MessageSquareTextIcon className="size-4" /> {t("phoneTitle")}
             </SheetTitle>
-            <SheetDescription>
-              Demo only: what each person received on their phone, newest first.
-            </SheetDescription>
+            <SheetDescription>{t("phoneBody")}</SheetDescription>
           </SheetHeader>
           <div className="flex-1 space-y-3 overflow-y-auto px-4">
             {messages.length === 0 ? (
-              <p className="text-muted-foreground text-sm">No SMS yet.</p>
+              <p className="text-muted-foreground text-sm">{t("noSms")}</p>
             ) : null}
             {messages.map((m, i) => (
               <div key={`${m.at}-${i}`} className="bg-muted rounded-2xl rounded-tl-sm p-3">
                 <div className="mb-1 flex items-baseline justify-between gap-2">
-                  <span className="text-xs font-semibold">To {m.name}</span>
+                  <span className="text-xs font-semibold">{t("to", { name: m.name })}</span>
                   <span className="text-muted-foreground text-[11px]">
                     {new Date(m.at).toLocaleTimeString("en-GB", {
                       hour: "2-digit",

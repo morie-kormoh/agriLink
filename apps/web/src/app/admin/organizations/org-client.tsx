@@ -162,12 +162,13 @@ export function NewOrganizationDialog({
 
 export function OrgActiveToggle({ orgId, active }: { orgId: string; active: boolean }) {
   const router = useRouter();
+  const t = useTranslations();
   const [pending, startTransition] = useTransition();
   return (
     <Switch
       checked={active}
       disabled={pending}
-      aria-label="Active"
+      aria-label={t("common.active")}
       onCheckedChange={(v) =>
         startTransition(async () => {
           const res = await setOrganizationActiveAction(orgId, v);

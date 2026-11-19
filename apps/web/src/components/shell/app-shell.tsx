@@ -101,7 +101,7 @@ export async function AppShell({
           {children}
         </main>
       </div>
-      {tabs ? <BottomTabs items={tabs} /> : null}
+      {tabs ? <BottomTabs items={tabs} label={t("common.mainMenu")} /> : null}
     </div>
   );
 }

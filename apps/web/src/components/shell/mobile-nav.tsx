@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { MenuIcon } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { Button } from "@agrilink/ui/components/button";
 import {
   Sheet,
@@ -20,11 +21,12 @@ export interface NavItem {
 }
 
 export function MobileNav({ items, title }: { items: NavItem[]; title: string }) {
+  const t = useTranslations("common");
   const [open, setOpen] = useState(false);
   return (
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger asChild>
-        <Button variant="ghost" size="icon" className="md:hidden" aria-label="Open menu">
+        <Button variant="ghost" size="icon" className="md:hidden" aria-label={t("openMenu")}>
           <MenuIcon />
         </Button>
       </SheetTrigger>

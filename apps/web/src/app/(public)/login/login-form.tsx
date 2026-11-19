@@ -56,11 +56,7 @@ export function LoginForm({
   function sendCode() {
     setError(null);
     if (!normalizeSlPhone(phoneInput)) {
-      setError(
-        t.has("validation.phone")
-          ? t("validation.phone")
-          : "Enter a valid Sierra Leone phone number",
-      );
+      setError(t("validation.phone"));
       return;
     }
     startTransition(async () => {
@@ -100,7 +96,7 @@ export function LoginForm({
               <div className="mb-6 border-b pb-6">
                 <PersonaSwitcher personas={personas} />
                 <p className="text-muted-foreground mt-5 text-center text-sm">
-                  or sign in with your phone number
+                  {t("auth.orPhone")}
                 </p>
               </div>
             ) : null}

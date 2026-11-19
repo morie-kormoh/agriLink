@@ -1,6 +1,7 @@
 "use client";
 
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
+import { translateText } from "@agrilink/i18n/text";
 import { useLiveQuery } from "dexie-react-hooks";
 import { CloudOffIcon, RefreshCwIcon, Trash2Icon } from "lucide-react";
 import { Badge } from "@agrilink/ui/components/badge";
@@ -12,6 +13,7 @@ import { offlineDb } from "@/lib/offline/db";
 /** Registrations on this device that haven't reached the server yet (or failed). */
 export function PendingList({ showSynced = false }: { showSynced?: boolean }) {
   const t = useTranslations();
+  const locale = useLocale();
   const { ownerUserId, syncNow, syncing } = useSync();
   const rows = useLiveQuery(
     () =>
@@ -47,12 +49,12 @@ export function PendingList({ showSynced = false }: { showSynced?: boolean }) {
                   {r.agrilinkId ?? r.phone} · {new Date(r.createdAt).toLocaleString("en-GB")}
                 </p>
                 {r.error && r.status !== "synced" ? (
-                  <p className="text-destructive text-xs">{r.error}</p>
+                  <p className="text-destructive text-xs">{translateText(locale, r.error)}</p>
                 ) : null}
                 {r.fieldErrors
                   ? Object.entries(r.fieldErrors).map(([k, v]) => (
                       <p key={k} className="text-destructive text-xs">
-                        {k}: {v.join(", ")}
+                        {k}: {v.map((m) => translateText(locale, m)).join(", ")}
                       </p>
                     ))
                   : null}

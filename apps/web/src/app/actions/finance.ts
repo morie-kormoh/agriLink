@@ -1,5 +1,6 @@
 "use server";
 
+import { getLocale } from "next-intl/server";
 import { revalidatePath } from "next/cache";
 import type {
   CreateGroupInput,
@@ -167,13 +168,11 @@ export async function requestConsentAction(input: RequestConsentInput) {
 export async function saveLoanProductAction(input: LoanProductInput, id?: string) {
   return run((a) => saveLoanProduct(a, input, id).then((p) => ({ id: p.id })));
 }
-export async function disclosureAction(
-  productId: string,
-  amountLe: string,
-  locale: "en" | "kri" = "en",
-) {
+export async function disclosureAction(productId: string, amountLe: string, locale?: "en" | "kri") {
+  // Loan terms in the language the person is using (cookie), unless asked for one.
+  const lang = locale ?? ((await getLocale()) === "kri" ? "kri" : "en");
   return run(async () => {
-    const d = await disclosureFor(productId, amountLe, locale);
+    const d = await disclosureFor(productId, amountLe, lang);
     return { lines: d.lines, feeLe: d.feeLe, totalLe: d.totalLe, dueDate: d.dueDate };
   });
 }

@@ -16,12 +16,13 @@ type Items = Awaited<ReturnType<typeof dealerRedemptions>>["items"];
 
 export async function SettlementsTable({ items }: { items: Items }) {
   const t = await getTranslations("dealer");
+  const tg = await getTranslations();
   return (
     <div className="bg-card overflow-x-auto rounded-xl border">
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead>Ref</TableHead>
+            <TableHead>{tg("common.ref")}</TableHead>
             <TableHead>{t("farmer")}</TableHead>
             <TableHead>{t("items")}</TableHead>
             <TableHead className="text-right">Le</TableHead>

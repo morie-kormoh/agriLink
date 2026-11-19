@@ -34,9 +34,7 @@ export default async function SelectContextPage({
       <CardContent className="space-y-4">
         {denied ? (
           <Alert variant="warning">
-            <AlertDescription>
-              That page belongs to a different workspace. Choose one below.
-            </AlertDescription>
+            <AlertDescription>{t("auth.otherWorkspace")}</AlertDescription>
           </Alert>
         ) : null}
         {contexts.length === 0 ? (

@@ -318,7 +318,7 @@ export function RecordsPanel({
                       </SelectTrigger>
                       <SelectContent>
                         <SelectItem value="kg">kg</SelectItem>
-                        <SelectItem value="bag">bag</SelectItem>
+                        <SelectItem value="bag">{t("units.bag")}</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>

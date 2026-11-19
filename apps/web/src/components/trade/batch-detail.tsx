@@ -92,7 +92,7 @@ export async function BatchDetail({
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>Ref</TableHead>
+              <TableHead>{t("common.ref")}</TableHead>
               <TableHead>{t("trade.farmer")}</TableHead>
               <TableHead>{t("trade.crop")}</TableHead>
               <TableHead className="text-right">{t("trade.quantity")}</TableHead>

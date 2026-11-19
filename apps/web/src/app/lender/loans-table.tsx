@@ -23,7 +23,7 @@ export async function LoansTable({ items, decisions }: { items: Item[]; decision
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead>Ref</TableHead>
+            <TableHead>{t("common.ref")}</TableHead>
             <TableHead>{t("lender.farmer")}</TableHead>
             <TableHead>{t("lender.product")}</TableHead>
             <TableHead>{t("lender.band")}</TableHead>

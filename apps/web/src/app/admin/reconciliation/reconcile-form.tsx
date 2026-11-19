@@ -29,6 +29,7 @@ type Report = {
 
 export function ReconcileForm() {
   const t = useTranslations("payments");
+  const tg = useTranslations();
   const router = useRouter();
   const today = new Date().toISOString().slice(0, 10);
   const [provider, setProvider] = useState("MOCK");
@@ -45,9 +46,9 @@ export function ReconcileForm() {
       <CardContent className="space-y-4">
         <div className="grid gap-4 sm:grid-cols-4 sm:items-end">
           <div className="space-y-2">
-            <Label>Provider</Label>
+            <Label>{tg("common.provider")}</Label>
             <Select value={provider} onValueChange={setProvider}>
-              <SelectTrigger aria-label="Provider">
+              <SelectTrigger aria-label={tg("common.provider")}>
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -60,7 +61,7 @@ export function ReconcileForm() {
             </Select>
           </div>
           <div className="space-y-2">
-            <Label htmlFor="rfrom">From</Label>
+            <Label htmlFor="rfrom">{tg("common.from")}</Label>
             <Input id="rfrom" type="date" value={from} onChange={(e) => setFrom(e.target.value)} />
           </div>
           <div className="space-y-2">

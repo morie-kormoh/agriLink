@@ -461,7 +461,7 @@ export function ServicingForms({
                 go(() => proposeRestructureAction(loanId, rs.dueDate, rs.reason), t("restructure"));
               }}
             >
-              <F id="rs-date" label="Due">
+              <F id="rs-date" label={t("dueDate")}>
                 <Input
                   id="rs-date"
                   type="date"
@@ -567,7 +567,7 @@ export function ConsentRequestForm() {
         <Input
           id="cr-purpose"
           required
-          placeholder="assess a fertiliser loan"
+          placeholder={t("lender.purposePlaceholder")}
           value={f.purpose}
           onChange={(e) => setF({ ...f, purpose: e.target.value })}
         />

@@ -24,6 +24,7 @@ export function UserActions({
   pinLocked: boolean;
 }) {
   const t = useTranslations("admin");
+  const tg = useTranslations();
   const router = useRouter();
   const [pending, startTransition] = useTransition();
   const run = (fn: () => Promise<{ ok: boolean; error?: string }>) =>
@@ -36,7 +37,7 @@ export function UserActions({
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button size="icon" variant="ghost" aria-label="Actions" disabled={pending}>
+        <Button size="icon" variant="ghost" aria-label={tg("common.actions")} disabled={pending}>
           {pending ? <Loader2Icon className="animate-spin" /> : <MoreHorizontalIcon />}
         </Button>
       </DropdownMenuTrigger>

@@ -49,11 +49,11 @@ export default async function AuditPage({
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>Time</TableHead>
-              <TableHead>Action</TableHead>
-              <TableHead>Entity</TableHead>
-              <TableHead>Actor</TableHead>
-              <TableHead>Details</TableHead>
+              <TableHead>{t("common.time")}</TableHead>
+              <TableHead>{t("audit.action")}</TableHead>
+              <TableHead>{t("audit.entity")}</TableHead>
+              <TableHead>{t("audit.actor")}</TableHead>
+              <TableHead>{t("common.details")}</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>

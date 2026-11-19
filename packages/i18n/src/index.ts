@@ -61,4 +61,7 @@ export function t(locale: string, key: string, vars?: Record<string, string | nu
   return String(new IntlMessageFormat(template, loc === "kri" ? "en" : loc).format(vars));
 }
 
+export { translateText } from "./text";
+export { translateSms } from "./sms";
+
 export { en as enMessages };

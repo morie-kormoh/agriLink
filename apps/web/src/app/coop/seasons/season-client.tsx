@@ -17,10 +17,11 @@ import { closeSeasonAction } from "@/app/actions/records";
 
 export function SeasonPicker({ season, seasons }: { season: string; seasons: string[] }) {
   const router = useRouter();
+  const t = useTranslations("records");
   const pathname = usePathname();
   return (
     <Select value={season} onValueChange={(v) => router.replace(`${pathname}?season=${v}`)}>
-      <SelectTrigger className="w-36" aria-label="Season">
+      <SelectTrigger className="w-36" aria-label={t("season")}>
         <SelectValue />
       </SelectTrigger>
       <SelectContent>

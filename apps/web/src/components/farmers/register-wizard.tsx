@@ -2,7 +2,8 @@
 
 import { useMemo, useRef, useState, useTransition } from "react";
 import Link from "next/link";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
+import { translateText } from "@agrilink/i18n/text";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -111,6 +112,7 @@ export function RegisterWizard({
   profileBase: string;
 }) {
   const t = useTranslations();
+  const locale = useLocale();
   const sync = useOptionalSync();
   const [step, setStep] = useState(0);
   const [photo, setPhoto] = useState<Blob | null>(null);
@@ -215,7 +217,7 @@ export function RegisterWizard({
             }
           : { fullName: String(values.fullName), offline: true };
       if (rec?.status === "invalid") {
-        toast.error(rec.error ?? t("common.somethingWrong"));
+        toast.error(rec.error ? translateText(locale, rec.error) : t("common.somethingWrong"));
       } else if (result.offline) {
         toast.info(t("farmer.savedOffline"));
       } else {
@@ -288,7 +290,9 @@ export function RegisterWizard({
 
   const err = (name: FieldName) =>
     errors[name]?.message ? (
-      <p className="text-destructive text-sm">{errors[name]?.message}</p>
+      <p className="text-destructive text-sm">
+        {translateText(locale, String(errors[name]?.message))}
+      </p>
     ) : null;
   const values = watch();
 

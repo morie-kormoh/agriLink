@@ -47,7 +47,7 @@ export default async function Page({
           <div className="flex flex-wrap items-center gap-2 text-sm">
             <span className="text-muted-foreground">{t("lender.product")}:</span>
             <Button size="sm" variant={!productId ? "default" : "outline"} asChild>
-              <Link href="/lender/farmers">All</Link>
+              <Link href="/lender/farmers">{t("common.all")}</Link>
             </Button>
             {products.map((p) => (
               <Button

@@ -248,7 +248,9 @@ export function PurchaseForm({
                               {h.agrilinkId} · {h.community}
                             </span>
                           </span>
-                          {!h.hasWallet ? <Badge variant="warning">no wallet</Badge> : null}
+                          {!h.hasWallet ? (
+                            <Badge variant="warning">{t("trade.noWalletBadge")}</Badge>
+                          ) : null}
                         </button>
                       </li>
                     ))}
@@ -312,8 +314,8 @@ export function PurchaseForm({
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="kg">kg</SelectItem>
-                    <SelectItem value="bag">bag</SelectItem>
-                    <SelectItem value="tonne">tonne</SelectItem>
+                    <SelectItem value="bag">{t("units.bag")}</SelectItem>
+                    <SelectItem value="tonne">{t("units.tonne")}</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -427,7 +429,7 @@ export function PurchaseForm({
                   type="button"
                   variant="ghost"
                   size="icon"
-                  aria-label="Remove"
+                  aria-label={t("common.remove")}
                   onClick={() => setDeductions((all) => all.filter((_, j) => j !== i))}
                 >
                   <Trash2Icon />

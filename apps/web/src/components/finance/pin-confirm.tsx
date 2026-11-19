@@ -122,7 +122,7 @@ export function PinConfirm({
             <div
               className="mx-auto grid max-w-72 grid-cols-3 gap-2 pt-1"
               role="group"
-              aria-label="Keypad"
+              aria-label={t("finance.keypad")}
             >
               {["1", "2", "3", "4", "5", "6", "7", "8", "9", "", "0", "del"].map((k, i) =>
                 k === "" ? (
@@ -132,7 +132,7 @@ export function PinConfirm({
                     key={i}
                     type="button"
                     tabIndex={-1}
-                    aria-label={k === "del" ? "Delete" : k}
+                    aria-label={k === "del" ? t("finance.delete") : k}
                     onClick={() =>
                       setPin((p) => (k === "del" ? p.slice(0, -1) : (p + k).slice(0, 5)))
                     }

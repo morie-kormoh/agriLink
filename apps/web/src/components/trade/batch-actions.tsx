@@ -118,6 +118,7 @@ export function PurchaseRowActions({
   canApprove: boolean;
   canCancel: boolean;
 }) {
+  const tg = useTranslations();
   const t = useTranslations("trade");
   const router = useRouter();
   const [pending, start] = useTransition();
@@ -128,7 +129,7 @@ export function PurchaseRowActions({
     <>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant="ghost" size="icon" aria-label="Actions" disabled={pending}>
+          <Button variant="ghost" size="icon" aria-label={tg("common.actions")} disabled={pending}>
             {pending ? <Loader2Icon className="animate-spin" /> : <MoreHorizontalIcon />}
           </Button>
         </DropdownMenuTrigger>

@@ -103,7 +103,7 @@ export function TradeSettingsForm({
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="regno">Registration no.</Label>
+                <Label htmlFor="regno">{t("trade.registrationNo")}</Label>
                 <Input
                   id="regno"
                   value={f.registrationNo ?? ""}

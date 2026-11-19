@@ -1,4 +1,5 @@
-import { getTranslations } from "next-intl/server";
+import { getLocale, getTranslations } from "next-intl/server";
+import { translateEvidence } from "@agrilink/i18n/text";
 import { EyeIcon, LightbulbIcon, ShieldCheckIcon, ShieldOffIcon } from "lucide-react";
 import type { Factor } from "@agrilink/finance";
 import {
@@ -21,6 +22,7 @@ const fmt = (d: Date | null) =>
 
 export async function PassportPage({ actor }: { actor: Actor }) {
   const t = await getTranslations();
+  const locale = await getLocale();
   const p = await getMyPassport(actor);
   const factors = p.score.factors as unknown as Factor[];
   const tips = factors.filter((f) => f.tip).sort((a, b) => b.max - b.points - (a.max - a.points));
@@ -111,7 +113,9 @@ export async function PassportPage({ actor }: { actor: Actor }) {
                     </span>
                   </div>
                   <Progress value={(f.points / f.max) * 100} />
-                  <p className="text-muted-foreground text-xs">{f.evidence}</p>
+                  <p className="text-muted-foreground text-xs">
+                    {translateEvidence(locale, f.evidence)}
+                  </p>
                 </div>
               ))}
             </CardContent>

@@ -18,6 +18,7 @@ import { PinForm, SignOutOthersButton } from "./security-client";
 export default async function SecurityPage() {
   const { user, sessionId } = await getCurrentUser();
   const t = await getTranslations("security");
+  const tg = await getTranslations();
   const [sessions, record] = await Promise.all([
     listActiveSessions(user.id),
     prisma.user.findUniqueOrThrow({ where: { id: user.id }, select: { pinLockedUntil: true } }),
@@ -60,7 +61,7 @@ export default async function SecurityPage() {
                 <li key={s.id} className="flex items-center gap-3 py-2 text-sm">
                   <MonitorSmartphoneIcon className="text-muted-foreground size-4" />
                   <div className="min-w-0 flex-1">
-                    <p className="truncate">{s.userAgent ?? "Unknown device"}</p>
+                    <p className="truncate">{s.userAgent ?? tg("common.unknownDevice")}</p>
                     <p className="text-muted-foreground text-xs">
                       {t("lastSeen", { time: formatDateTime(s.lastSeenAt) })}
                       {s.ip ? ` · ${s.ip}` : ""}

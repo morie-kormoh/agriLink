@@ -31,7 +31,25 @@
     "online": "Online",
     "offline": "Offline",
     "comingSoon": "Coming soon",
-    "comingSoonBody": "This portal is part of module {module}. It will be available in a later release."
+    "comingSoonBody": "This portal is part of module {module}. It will be available in a later release.",
+    "ref": "Ref",
+    "all": "All",
+    "when": "When",
+    "time": "Time",
+    "from": "From",
+    "to": "To",
+    "history": "History",
+    "period": "Period",
+    "provider": "Provider",
+    "last": "Last",
+    "details": "Details",
+    "remove": "Remove",
+    "openMenu": "Open menu",
+    "mainMenu": "Main",
+    "active": "Active",
+    "unknownDevice": "Unknown device",
+    "last7Days": "Last 7 days",
+    "due": "Due"
   },
   "roles": {
     "FARMER": "Farmer",
@@ -128,7 +146,9 @@
     "selectContextSubtitle": "You have access to more than one workspace.",
     "asFarmer": "My farm",
     "switchWorkspace": "Switch workspace",
-    "demoHint": "Demo site: enter the code {code}. No real SMS is sent."
+    "demoHint": "Demo site: enter the code {code}. No real SMS is sent.",
+    "otherWorkspace": "That page belongs to a different workspace. Choose one below.",
+    "orPhone": "or sign in with your phone number"
   },
   "security": {
     "title": "Security",
@@ -293,7 +313,9 @@
     "idCardTitle": "AgriLink Farmer ID",
     "registeredBy": "Registered by",
     "export": "Export CSV",
-    "viewRecords": "Farm records"
+    "viewRecords": "Farm records",
+    "walletMatch": "Wallet name matches · KYC tier {tier}",
+    "walletNoMatch": "The wallet name does not match the farmer's name."
   },
   "sync": {
     "title": "Sync",
@@ -346,7 +368,9 @@
     "pipeline": "Payments pipeline",
     "pipelineHint": "Every payment, by where it is now. Failed and partial payments need a look.",
     "needsAttention": "Needs attention",
-    "paidOut": "Paid out"
+    "paidOut": "Paid out",
+    "pinLocked": "PIN locked",
+    "nothingPending": "Nothing pending or failed."
   },
   "validation": {
     "phone": "Enter a valid Sierra Leone phone number"
@@ -480,7 +504,9 @@
     "suppliersTitle": "Suppliers",
     "suppliersSubtitle": "Farmers you bought from — for traceability.",
     "makerNote": "You recorded or submitted this batch — a different person must approve and pay it.",
-    "paidToFarmers": "Paid to farmers"
+    "paidToFarmers": "Paid to farmers",
+    "noWalletBadge": "no wallet",
+    "registrationNo": "Registration no."
   },
   "payments": {
     "title": "Payments",
@@ -610,7 +636,9 @@
     "noPinTitle": "Set your PIN first",
     "noPinBody": "You need an AgriLink PIN to confirm savings, loans and permissions.",
     "setPin": "Set PIN",
-    "assisted": "Helping a farmer? They must type their own PIN — never ask for it or write it down."
+    "assisted": "Helping a farmer? They must type their own PIN — never ask for it or write it down.",
+    "keypad": "Keypad",
+    "delete": "Delete"
   },
   "savings": {
     "title": "Savings",
@@ -906,7 +934,9 @@
     "outstandingNow": "Outstanding",
     "farmer": "Farmer",
     "product": "Product",
-    "band": "Band"
+    "band": "Band",
+    "purposePlaceholder": "assess a fertiliser loan",
+    "dueDate": "Due date"
   },
   "dealer": {
     "title": "Agro-dealer",
@@ -980,5 +1010,53 @@
   "login": {
     "panelTitle": "Your harvest, paid properly.",
     "panelBody": "Sign in with your phone number. We send a 6-digit code by SMS."
+  },
+  "audit": {
+    "action": "Action",
+    "entity": "Entity",
+    "actor": "Actor"
+  },
+  "units": {
+    "kg": "kg",
+    "bag": "bag",
+    "tonne": "tonne"
+  },
+  "offline": {
+    "title": "You are offline",
+    "body": "This page has not been saved on this device yet. Farmer registration still works offline — open it from the menu. Your saved registrations will sync when you are back online.",
+    "register": "Register a farmer"
+  },
+  "demo": {
+    "signInAs": "Demo — sign in as",
+    "reset": "Reset demo",
+    "resetConfirm": "Reset the demo to the start of the story? Aminata's loans, vouchers and extra sales are removed.",
+    "resetDone": "Demo reset — Aminata's score {score} ({band})",
+    "phone": "Open demo phone (SMS)",
+    "phoneTitle": "SMS sent by AgriLink",
+    "phoneBody": "Demo only: what each person received on their phone, newest first.",
+    "noSms": "No SMS yet.",
+    "to": "To {name}",
+    "personas": {
+      "coopStaff": {
+        "name": "Co-op staff",
+        "description": "Weighs and records the harvest"
+      },
+      "coopManager": {
+        "name": "Co-op manager",
+        "description": "Approves payments"
+      },
+      "farmer": {
+        "description": "Rice farmer, Bombali · PIN {pin}"
+      },
+      "lender": {
+        "description": "Approves input loans"
+      },
+      "dealer": {
+        "description": "Redeems vouchers"
+      }
+    }
+  },
+  "programme": {
+    "title": "Programme dashboard"
   }
 }

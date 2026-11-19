@@ -31,7 +31,7 @@ export default async function AgentHome() {
       />
       <div className="mb-6 grid gap-4 sm:grid-cols-3">
         <StatCard label={t("farmer.registered")} value={mine} icon={UsersIcon} />
-        <StatCard label="Last 7 days" value={thisWeek} icon={CalendarIcon} />
+        <StatCard label={t("common.last7Days")} value={thisWeek} icon={CalendarIcon} />
         <StatCard
           label={t("admin.women")}
           value={mine ? `${Math.round((women / mine) * 100)}%` : "—"}

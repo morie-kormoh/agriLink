@@ -22,7 +22,9 @@ describe("i18n", () => {
 
   it("uses Krio where translated and falls back to English otherwise", () => {
     expect(t("kri", "auth.sendCode")).toBe("Sɛn di kod");
-    expect(t("kri", "auth.devHint")).toBe(t("en", "auth.devHint"));
+    // Every key now has Krio; an unknown key still falls back to the key itself.
+    expect(t("kri", "auth.devHint")).not.toBe(t("en", "auth.devHint"));
+    expect(t("kri", "no.such.key")).toBe("no.such.key");
   });
 
   it("returns the key for unknown messages and unknown locales fall back to English", () => {

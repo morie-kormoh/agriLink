@@ -15,11 +15,11 @@ export interface TabItem {
  * Farmer bottom tab bar on phones (docs/ui §6.1): five tabs, icon + word, active tab is indigo
  * with a gold bar on top. Hidden from md up, where the sidebar shows.
  */
-export function BottomTabs({ items }: { items: TabItem[] }) {
+export function BottomTabs({ items, label }: { items: TabItem[]; label?: string }) {
   const pathname = usePathname();
   return (
     <nav
-      aria-label="Main"
+      aria-label={label ?? "Main"}
       className="no-print bg-card fixed inset-x-0 bottom-0 z-40 border-t pb-[env(safe-area-inset-bottom)] md:hidden"
     >
       <ul className="mx-auto grid max-w-lg grid-cols-5">

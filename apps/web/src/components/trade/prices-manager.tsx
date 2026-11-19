@@ -113,8 +113,8 @@ export function PricesManager({
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="kg">kg</SelectItem>
-                    <SelectItem value="bag">bag</SelectItem>
-                    <SelectItem value="tonne">tonne</SelectItem>
+                    <SelectItem value="bag">{t("units.bag")}</SelectItem>
+                    <SelectItem value="tonne">{t("units.tonne")}</SelectItem>
                   </SelectContent>
                 </Select>
               </div>

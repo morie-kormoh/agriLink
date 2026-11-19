@@ -1,3 +1,5 @@
+import { translateText } from "@agrilink/i18n";
+
 export type AppErrorCode =
   | "UNAUTHENTICATED"
   | "FORBIDDEN"
@@ -51,7 +53,41 @@ export type ActionResult<T = undefined> =
       fieldErrors?: Record<string, string[]>;
     };
 
-export function toActionError(err: unknown): Extract<ActionResult, { ok: false }> {
+/** The signed-in person's UI language (cookie), or undefined outside a request. */
+async function requestLocale(): Promise<string | undefined> {
+  try {
+    const { cookies } = await import("next/headers");
+    return (await cookies()).get("NEXT_LOCALE")?.value;
+  } catch {
+    return undefined;
+  }
+}
+
+/**
+ * Turn an error into the result a server action returns. Messages are translated into the
+ * person's language (Krio) when a translation exists; codes and keys stay as they are.
+ */
+export async function toActionError(err: unknown): Promise<Extract<ActionResult, { ok: false }>> {
+  const result = toActionErrorEn(err);
+  const locale = await requestLocale();
+  if (locale !== "kri") return result;
+  return {
+    ...result,
+    error: translateText(locale, result.error),
+    ...(result.fieldErrors
+      ? {
+          fieldErrors: Object.fromEntries(
+            Object.entries(result.fieldErrors).map(([k, v]) => [
+              k,
+              v.map((m) => translateText(locale, m)),
+            ]),
+          ),
+        }
+      : {}),
+  };
+}
+
+function toActionErrorEn(err: unknown): Extract<ActionResult, { ok: false }> {
   if (err instanceof AppError) {
     return { ok: false, error: err.message, code: err.code, messageKey: err.messageKey };
   }
