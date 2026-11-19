@@ -1,4 +1,4 @@
-import { updateFarmerSchema } from "@agripay/validation";
+import { updateFarmerSchema } from "@agrilink/validation";
 import { v1 } from "@/server/api/v1";
 import { getFarmer, updateFarmer } from "@/server/farmers/service";
 

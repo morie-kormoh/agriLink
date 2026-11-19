@@ -3,13 +3,13 @@
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { UsersIcon } from "lucide-react";
-import { Badge } from "@agripay/ui/components/badge";
-import { EmptyState } from "@agripay/ui/components/blocks";
-import { type ColumnDef, DataTable } from "@agripay/ui/components/data-table";
+import { Badge } from "@agrilink/ui/components/badge";
+import { EmptyState } from "@agrilink/ui/components/blocks";
+import { type ColumnDef, DataTable } from "@agrilink/ui/components/data-table";
 
 export interface FarmerRow {
   id: string;
-  agripayId: string;
+  agrilinkId: string;
   fullName: string;
   gender: string;
   phone: string;
@@ -36,10 +36,10 @@ export function FarmersTable({ rows, basePath }: { rows: FarmerRow[]; basePath: 
 
   const columns: ColumnDef<FarmerRow>[] = [
     {
-      accessorKey: "agripayId",
-      header: t("farmer.agripayId"),
+      accessorKey: "agrilinkId",
+      header: t("farmer.agrilinkId"),
       cell: ({ row }) => (
-        <span className="font-mono text-xs font-semibold">{row.original.agripayId}</span>
+        <span className="font-mono text-xs font-semibold">{row.original.agrilinkId}</span>
       ),
     },
     {

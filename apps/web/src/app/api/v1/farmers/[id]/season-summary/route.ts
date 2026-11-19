@@ -1,4 +1,4 @@
-import { currentSeason, seasonCode } from "@agripay/validation";
+import { currentSeason, seasonCode } from "@agrilink/validation";
 import { v1 } from "@/server/api/v1";
 import { getSeasonOverview } from "@/server/records/service";
 

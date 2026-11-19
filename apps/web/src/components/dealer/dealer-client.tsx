@@ -13,27 +13,27 @@ import {
   SendIcon,
   TicketIcon,
 } from "lucide-react";
-import { Button } from "@agripay/ui/components/button";
+import { Button } from "@agrilink/ui/components/button";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@agripay/ui/components/card";
-import { Input } from "@agripay/ui/components/input";
-import { Label } from "@agripay/ui/components/label";
-import { Checkbox } from "@agripay/ui/components/misc";
-import { OtpInput } from "@agripay/ui/components/otp-input";
+} from "@agrilink/ui/components/card";
+import { Input } from "@agrilink/ui/components/input";
+import { Label } from "@agrilink/ui/components/label";
+import { Checkbox } from "@agrilink/ui/components/misc";
+import { OtpInput } from "@agrilink/ui/components/otp-input";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@agripay/ui/components/select";
-import { toast } from "@agripay/ui/components/sonner";
-import { formatLe } from "@agripay/validation";
+} from "@agrilink/ui/components/select";
+import { toast } from "@agrilink/ui/components/sonner";
+import { formatLe } from "@agrilink/validation";
 import {
   lookupVoucherAction,
   redeemVoucherAction,
@@ -53,7 +53,7 @@ interface Item {
 interface Voucher {
   code: string;
   farmerName: string;
-  agripayId: string;
+  agrilinkId: string;
   remainingLe: string;
   allowedCategories: string[];
   expiresAt: string;
@@ -153,7 +153,7 @@ export function RedeemFlow({ catalogue }: { catalogue: Item[] }) {
               <div>
                 <dt className="text-muted-foreground text-xs">{t("dealer.farmer")}</dt>
                 <dd className="font-medium">
-                  {voucher.farmerName} · {voucher.agripayId}
+                  {voucher.farmerName} · {voucher.agrilinkId}
                 </dd>
               </div>
               <div>

@@ -1,9 +1,9 @@
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
-import { BanknoteIcon, HandCoinsIcon, PercentIcon, TriangleAlertIcon } from "lucide-react";
-import { Button } from "@agripay/ui/components/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@agripay/ui/components/card";
-import { PageHeader, StatCard } from "@agripay/ui/components/blocks";
+import { HandCoinsIcon } from "lucide-react";
+import { Button } from "@agrilink/ui/components/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@agrilink/ui/components/card";
+import { PageHeader, StatStrip } from "@agrilink/ui/components/blocks";
 import {
   Table,
   TableBody,
@@ -11,8 +11,8 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@agripay/ui/components/table";
-import { formatLe } from "@agripay/validation";
+} from "@agrilink/ui/components/table";
+import { formatLe } from "@agrilink/validation";
 import { requirePortal } from "@/server/auth/actor";
 import { getPortfolio } from "@/server/credit/portfolio";
 
@@ -51,25 +51,20 @@ export default async function LenderHome() {
           ) : null
         }
       />
-      <div className="mb-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
-        <StatCard label={t("lender.loans")} value={p.total.loans} icon={HandCoinsIcon} />
-        <StatCard
-          label={t("lender.disbursed")}
-          value={formatLe(p.total.disbursedLe)}
-          icon={BanknoteIcon}
-        />
-        <StatCard label={t("lender.outstanding")} value={formatLe(p.total.outstandingLe)} />
-        <StatCard
-          label={t("lender.repaymentRate")}
-          value={pct(p.total.repaymentRatePct)}
-          icon={PercentIcon}
-        />
-        <StatCard
-          label={`${t("lender.par30")} / ${t("lender.par90")}`}
-          value={`${pct(p.total.par30Pct)} / ${pct(p.total.par90Pct)}`}
-          icon={TriangleAlertIcon}
-        />
-      </div>
+      <StatStrip
+        className="mb-6"
+        items={[
+          { label: t("lender.loans"), value: p.total.loans },
+          { label: t("lender.disbursed"), value: formatLe(p.total.disbursedLe) },
+          { label: t("lender.outstanding"), value: formatLe(p.total.outstandingLe) },
+          { label: t("lender.repaymentRate"), value: pct(p.total.repaymentRatePct), tone: "good" },
+          {
+            label: `${t("lender.par30")} / ${t("lender.par90")}`,
+            value: `${pct(p.total.par30Pct)} / ${pct(p.total.par90Pct)}`,
+            tone: Number(p.total.par30Pct) > 5 ? "danger" : undefined,
+          },
+        ]}
+      />
       <div className="grid gap-6 lg:grid-cols-2">
         {tables.map(([title, rows]) => (
           <Card key={title}>

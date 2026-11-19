@@ -64,7 +64,7 @@ model InboundSms {
 2 Savings       → 1 Harvest Lock balance  2 Change save %  3 Group savings  4 Withdraw early
 3 Loans         → 1 My offers  2 My loan  3 Repay now  4 My voucher
 4 My Farm       → 1 Add expense  2 Record harvest  3 Season summary
-5 AgriPay Score → score, band, top tip; 1 Requests (consent)  2 Who viewed
+5 AgriLink Score → score, band, top tip; 1 Requests (consent)  2 Who viewed
 6 My Profile    → ID, co-op, wallet; 1 Change PIN  2 Language
 0 Help          → call/SMS co-op or agent
 ```

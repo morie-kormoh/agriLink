@@ -1,14 +1,14 @@
 import "server-only";
-import type { MobileMoneyProvider, ProviderCode } from "@agripay/db";
-import { MockAdapter, type PaymentAdapter, ProviderNotConfiguredError } from "@agripay/payments";
+import type { MobileMoneyProvider, ProviderCode } from "@agrilink/db";
+import { MockAdapter, type PaymentAdapter, ProviderNotConfiguredError } from "@agrilink/payments";
 
-const globalForAdapters = globalThis as unknown as { __agripayMock?: MockAdapter };
+const globalForAdapters = globalThis as unknown as { __agrilinkMock?: MockAdapter };
 
 export function mockAdapter(): MockAdapter {
-  globalForAdapters.__agripayMock ??= new MockAdapter({
+  globalForAdapters.__agrilinkMock ??= new MockAdapter({
     callbackSecret: process.env.PAYMENT_CALLBACK_SECRET ?? "mock-secret",
   });
-  return globalForAdapters.__agripayMock;
+  return globalForAdapters.__agrilinkMock;
 }
 
 export function paymentMode(): "mock" | "sandbox" | "live" {

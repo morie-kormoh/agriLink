@@ -4,7 +4,7 @@ import { useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { SearchIcon } from "lucide-react";
-import { Input } from "@agripay/ui/components/input";
+import { Input } from "@agrilink/ui/components/input";
 
 export function UserSearch({ initial }: { initial: string }) {
   const t = useTranslations("common");

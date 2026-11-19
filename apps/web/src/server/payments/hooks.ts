@@ -1,6 +1,6 @@
 import "server-only";
-import { Prisma, type SplitType, type Tx } from "@agripay/db";
-import { nextReleaseDate } from "@agripay/finance";
+import { Prisma, type SplitType, type Tx } from "@agrilink/db";
+import { nextReleaseDate } from "@agrilink/finance";
 import { accountCodes, postJournal } from "./ledger";
 
 /**

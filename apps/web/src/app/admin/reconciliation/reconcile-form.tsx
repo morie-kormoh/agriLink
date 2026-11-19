@@ -5,19 +5,19 @@ import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import Papa from "papaparse";
 import { FileUpIcon, Loader2Icon } from "lucide-react";
-import { Badge } from "@agripay/ui/components/badge";
-import { Button } from "@agripay/ui/components/button";
-import { Card, CardContent } from "@agripay/ui/components/card";
-import { Input } from "@agripay/ui/components/input";
-import { Label } from "@agripay/ui/components/label";
+import { Badge } from "@agrilink/ui/components/badge";
+import { Button } from "@agrilink/ui/components/button";
+import { Card, CardContent } from "@agrilink/ui/components/card";
+import { Input } from "@agrilink/ui/components/input";
+import { Label } from "@agrilink/ui/components/label";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@agripay/ui/components/select";
-import { toast } from "@agripay/ui/components/sonner";
+} from "@agrilink/ui/components/select";
+import { toast } from "@agrilink/ui/components/sonner";
 import { reconcileAction } from "@/app/actions/payments";
 
 type Report = {
@@ -134,7 +134,7 @@ export function ReconcileForm() {
             {[
               ...report.mismatched.map((m) => `${m.providerRef}: ${m.reason}`),
               ...report.missing.map((m) => `${m.providerRef} (${m.payment}): missing`),
-              ...report.unknown.map((u) => `${u.providerRef}: not in AgriPay`),
+              ...report.unknown.map((u) => `${u.providerRef}: not in AgriLink`),
             ].map((line) => (
               <p key={line} className="font-mono text-xs">
                 {line}

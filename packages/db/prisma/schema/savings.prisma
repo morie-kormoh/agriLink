@@ -1,6 +1,6 @@
 // Module 06 — Savings (Harvest Lock, goals & group savings)
 // Funds are held by a licensed custodian (bank, community bank, FSA, MFI or MMO savings product).
-// AgriPay records instructions and mirrors balances in the ledger (SAVINGS:{accountId}).
+// AgriLink records instructions and mirrors balances in the ledger (SAVINGS:{accountId}).
 
 enum SavingsType {
   HARVEST_LOCK

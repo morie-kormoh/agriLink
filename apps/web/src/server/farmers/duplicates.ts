@@ -1,11 +1,11 @@
 import "server-only";
-import type { Db } from "@agripay/db";
+import type { Db } from "@agrilink/db";
 
 export type DuplicateReason = "SAME_NIN" | "SAME_PHONE_SIMILAR_NAME" | "SIMILAR_NAME_SAME_CHIEFDOM";
 
 export interface DuplicateCandidate {
   id: string;
-  agripayId: string;
+  agrilinkId: string;
   fullName: string;
   phone: string;
   reason: DuplicateReason;
@@ -46,7 +46,7 @@ export async function findDuplicateCandidates(
   if (input.nin) {
     const byNin = await db.farmer.findFirst({
       where: { nin: input.nin, id: { not: exclude } },
-      select: { id: true, agripayId: true, fullName: true, phone: true },
+      select: { id: true, agrilinkId: true, fullName: true, phone: true },
     });
     if (byNin) {
       ninTaken = true;
@@ -55,9 +55,9 @@ export async function findDuplicateCandidates(
   }
 
   const samePhone = await db.$queryRaw<
-    { id: string; agripayId: string; fullName: string; phone: string; score: number }[]
+    { id: string; agrilinkId: string; fullName: string; phone: string; score: number }[]
   >`
-    SELECT "id", "agripayId", "fullName", "phone",
+    SELECT "id", "agripayId" AS "agrilinkId", "fullName", "phone",
            similarity(lower("fullName"), lower(${input.fullName}))::float8 AS score
     FROM "Farmer"
     WHERE "phone" = ${input.phone} AND "id" <> ${exclude} AND "status" <> 'INACTIVE'
@@ -71,14 +71,14 @@ export async function findDuplicateCandidates(
   const similarNames = await db.$queryRaw<
     {
       id: string;
-      agripayId: string;
+      agrilinkId: string;
       fullName: string;
       phone: string;
       dateOfBirth: Date | null;
       score: number;
     }[]
   >`
-    SELECT "id", "agripayId", "fullName", "phone", "dateOfBirth",
+    SELECT "id", "agripayId" AS "agrilinkId", "fullName", "phone", "dateOfBirth",
            similarity(lower("fullName"), lower(${input.fullName}))::float8 AS score
     FROM "Farmer"
     WHERE "chiefdomId" = ${input.chiefdomId}
@@ -97,7 +97,7 @@ export async function findDuplicateCandidates(
     if (dobCompatible) {
       candidates.set(row.id, {
         id: row.id,
-        agripayId: row.agripayId,
+        agrilinkId: row.agrilinkId,
         fullName: row.fullName,
         phone: row.phone,
         reason: "SIMILAR_NAME_SAME_CHIEFDOM",

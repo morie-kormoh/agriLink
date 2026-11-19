@@ -11,12 +11,12 @@ const withNextIntl = createNextIntlPlugin("./src/i18n/request.ts");
 const nextConfig: NextConfig = {
   reactStrictMode: true,
   transpilePackages: [
-    "@agripay/ui",
-    "@agripay/validation",
-    "@agripay/i18n",
-    "@agripay/db",
-    "@agripay/payments",
-    "@agripay/finance",
+    "@agrilink/ui",
+    "@agrilink/validation",
+    "@agrilink/i18n",
+    "@agrilink/db",
+    "@agrilink/payments",
+    "@agrilink/finance",
   ],
   serverExternalPackages: ["@node-rs/argon2", "pg", "ioredis", "bullmq"],
   turbopack: {

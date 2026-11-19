@@ -1,6 +1,6 @@
 import Fastify from "fastify";
 import formbody from "@fastify/formbody";
-import { normalizeSlPhone } from "@agripay/validation";
+import { normalizeSlPhone } from "@agrilink/validation";
 
 /**
  * USSD/SMS channel service (skeleton — module 00 step 0.8).
@@ -15,7 +15,7 @@ export function buildApp() {
 
   app.get("/health", async () => ({
     status: "ok",
-    service: "agripay-ussd",
+    service: "agrilink-ussd",
     time: new Date().toISOString(),
   }));
 
@@ -25,7 +25,7 @@ export function buildApp() {
       const phone = normalizeSlPhone(req.body?.phoneNumber ?? "");
       reply.type("text/plain");
       if (!phone) return "END Sorry, we could not read your phone number.";
-      return "END Welcome to AgriPay. USSD services are coming soon.";
+      return "END Welcome to AgriLink. USSD services are coming soon.";
     },
   );
 

@@ -1,8 +1,8 @@
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 import { ArrowLeftIcon, CheckCircle2Icon, ClockIcon } from "lucide-react";
-import { Button } from "@agripay/ui/components/button";
-import { PageHeader, StatCard } from "@agripay/ui/components/blocks";
+import { Button } from "@agrilink/ui/components/button";
+import { PageHeader, StatCard } from "@agrilink/ui/components/blocks";
 import {
   Table,
   TableBody,
@@ -10,8 +10,8 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@agripay/ui/components/table";
-import { hasPermission, type Actor } from "@agripay/validation/permissions";
+} from "@agrilink/ui/components/table";
+import { hasPermission, type Actor } from "@agrilink/validation/permissions";
 import { formatDateTime, formatLe } from "@/lib/format";
 import { getBatch } from "@/server/trade/batches";
 import { ApproveBatchButton, PurchaseRowActions, SubmitBatchButton } from "./batch-actions";
@@ -109,7 +109,7 @@ export async function BatchDetail({
                 <TableCell>
                   <p className="font-medium">{p.farmer.fullName}</p>
                   <p className="text-muted-foreground text-xs">
-                    {p.farmer.agripayId}
+                    {p.farmer.agrilinkId}
                     {p.farmerAcknowledgedAt ? ` · ✓ ${t("trade.farmerAck")}` : ""}
                   </p>
                 </TableCell>

@@ -1,4 +1,4 @@
-// Module 08 — Credit & input vouchers. Lenders fund loans; AgriPay originates, issues vouchers and services repayments.
+// Module 08 — Credit & input vouchers. Lenders fund loans; AgriLink originates, issues vouchers and services repayments.
 
 enum LoanStatus {
   APPLIED

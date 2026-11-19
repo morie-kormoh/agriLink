@@ -1,11 +1,12 @@
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 import { ArrowLeftIcon, KeyRoundIcon, PiggyBankIcon, UsersIcon } from "lucide-react";
-import { prisma } from "@agripay/db";
-import { Button } from "@agripay/ui/components/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@agripay/ui/components/card";
-import { EmptyState, PageHeader, StatCard } from "@agripay/ui/components/blocks";
-import { Alert, AlertDescription, AlertTitle } from "@agripay/ui/components/misc";
+import { prisma } from "@agrilink/db";
+import { Button } from "@agrilink/ui/components/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@agrilink/ui/components/card";
+import { EmptyState, PageHeader, StatCard } from "@agrilink/ui/components/blocks";
+import { MoneyCard, MoneyFigure } from "@agrilink/ui/components/money";
+import { Alert, AlertDescription, AlertTitle } from "@agrilink/ui/components/misc";
 import {
   Table,
   TableBody,
@@ -13,9 +14,10 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@agripay/ui/components/table";
-import { currentSeason, formatLe } from "@agripay/validation";
-import type { Actor } from "@agripay/validation/permissions";
+} from "@agrilink/ui/components/table";
+import { currentSeason, formatLe } from "@agrilink/validation";
+import type { Actor } from "@agrilink/validation/permissions";
+import { isMvpMode } from "@/server/demo/flags";
 import { getSavingsSummary } from "@/server/savings/service";
 import { AccountCard, type AccountView, OpenSavings, type ProductView } from "./savings-client";
 
@@ -61,7 +63,9 @@ export async function SavingsPage({
     s.accounts.filter((a) => a.status === "ACTIVE").map((a) => a.productId),
   );
   const products: ProductView[] = s.products
-    .filter((p) => !openProductIds.has(p.id) && p.type !== "GROUP")
+    .filter(
+      (p) => !openProductIds.has(p.id) && p.type !== "GROUP" && !(isMvpMode() && p.type === "GOAL"),
+    )
     .map((p) => ({
       id: p.id,
       name: p.name,
@@ -91,7 +95,7 @@ export async function SavingsPage({
       <PageHeader
         title={t("savings.title")}
         description={
-          assisted ? `${s.farmer.fullName} · ${s.farmer.agripayId}` : t("savings.subtitle")
+          assisted ? `${s.farmer.fullName} · ${s.farmer.agrilinkId}` : t("savings.subtitle")
         }
       />
       {!user?.pinHash ? (
@@ -109,11 +113,13 @@ export async function SavingsPage({
         </Alert>
       ) : null}
       <div className="mb-6 grid gap-4 sm:grid-cols-3">
-        <StatCard
-          label={t("savings.totalSaved")}
-          value={formatLe(s.totalSavedLe)}
-          icon={PiggyBankIcon}
-        />
+        <MoneyCard tone="gold" className="sm:col-span-1">
+          <p className="text-muted-foreground flex items-center gap-1.5 text-sm">
+            <PiggyBankIcon className="size-4 text-[#9a6a00]" aria-hidden />{" "}
+            {t("savings.totalSaved")}
+          </p>
+          <MoneyFigure amountLe={s.totalSavedLe} size="lg" className="mt-1" />
+        </MoneyCard>
         <StatCard label={t("savings.groups")} value={s.groups.length} icon={UsersIcon} />
         <StatCard
           label={t("savings.unlocks", { date: "" }).trim()}

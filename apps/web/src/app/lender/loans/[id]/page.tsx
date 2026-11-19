@@ -1,10 +1,10 @@
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 import { ArrowLeftIcon } from "lucide-react";
-import { formatVoucherCode } from "@agripay/finance";
-import { Card, CardContent, CardHeader, CardTitle } from "@agripay/ui/components/card";
-import { Field, PageHeader, StatusBadge } from "@agripay/ui/components/blocks";
-import { formatLe } from "@agripay/validation";
+import { formatVoucherCode } from "@agrilink/finance";
+import { Card, CardContent, CardHeader, CardTitle } from "@agrilink/ui/components/card";
+import { Field, PageHeader, StatusBadge } from "@agrilink/ui/components/blocks";
+import { formatLe } from "@agrilink/validation";
 import { toneFor } from "@/components/finance/score-dial";
 import { DecisionButtons, ServicingForms } from "@/components/lender/lender-client";
 import { Terms } from "@/components/finance/loans-client";
@@ -38,7 +38,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
       </Link>
       <PageHeader
         title={`${l.ref} · ${l.farmer.fullName}`}
-        description={`${l.product.name} · ${l.farmer.agripayId} · ${l.farmer.district.name}`}
+        description={`${l.product.name} · ${l.farmer.agrilinkId} · ${l.farmer.district.name}`}
         actions={
           <>
             <StatusBadge tone={toneFor(l.status)}>{t(`loanStatus.${l.status}`)}</StatusBadge>

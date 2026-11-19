@@ -1,4 +1,4 @@
-import { applyLoanSchema, makeOfferSchema } from "@agripay/validation";
+import { applyLoanSchema, makeOfferSchema } from "@agrilink/validation";
 import { v1 } from "@/server/api/v1";
 import { applyForLoan, farmerLoanOverview, listLoans, makeOffer } from "@/server/credit/loans";
 

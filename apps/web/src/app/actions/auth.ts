@@ -2,15 +2,15 @@
 
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import { prisma } from "@agripay/db";
-import { isLocale } from "@agripay/i18n";
+import { prisma } from "@agrilink/db";
+import { isLocale } from "@agrilink/i18n";
 import {
   otpRequestSchema,
   otpVerifySchema,
   selectContextSchema,
   setPinSchema,
-} from "@agripay/validation";
-import { ROLE_HOME } from "@agripay/validation/permissions";
+} from "@agrilink/validation";
+import { ROLE_HOME } from "@agrilink/validation/permissions";
 import { LOCALE_COOKIE } from "@/i18n/request";
 import { audit } from "@/server/audit";
 import { getSessionUser, listContexts, requireActor } from "@/server/auth/actor";

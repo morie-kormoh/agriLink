@@ -1,6 +1,6 @@
 import "server-only";
-import { type Db, Prisma, nextSequenceValue, prisma } from "@agripay/db";
-import { earlyWithdrawalFee, nextReleaseDate } from "@agripay/finance";
+import { type Db, Prisma, nextSequenceValue, prisma } from "@agrilink/db";
+import { earlyWithdrawalFee, nextReleaseDate } from "@agrilink/finance";
 import {
   currentSeason,
   earlyWithdrawalSchema,
@@ -10,8 +10,8 @@ import {
   savingsProductSchema,
   updateAutoSaveSchema,
   type SavingsProductInput,
-} from "@agripay/validation";
-import { type Actor, can } from "@agripay/validation/permissions";
+} from "@agrilink/validation";
+import { type Actor, can } from "@agrilink/validation/permissions";
 import type { z } from "zod";
 import { audit } from "../audit";
 import { AppError, forbidden, notFound } from "../errors";
@@ -211,8 +211,8 @@ async function openAccount(
   await sendSms(
     farmer.phone,
     product.type === "HARVEST_LOCK"
-      ? `AgriPay: Harvest Lock opened. ${o.pct}% of each sale will be saved with ${product.name}${lockedUntil ? ` and unlocks ${fmtDate(lockedUntil)} for planting` : ""}. Ref ${account.ref}`
-      : `AgriPay: Savings goal "${o.goalLabel}" (${formatLe(o.goalLe!)}) opened. ${o.pct}% of each sale will be saved. Ref ${account.ref}`,
+      ? `AgriLink: Harvest Lock opened. ${o.pct}% of each sale will be saved with ${product.name}${lockedUntil ? ` and unlocks ${fmtDate(lockedUntil)} for planting` : ""}. Ref ${account.ref}`
+      : `AgriLink: Savings goal "${o.goalLabel}" (${formatLe(o.goalLe!)}) opened. ${o.pct}% of each sale will be saved. Ref ${account.ref}`,
     "general",
   );
   return account;
@@ -360,7 +360,7 @@ export async function requestEarlyWithdrawal(
       amountLe: quote.netLe,
       idempotencyKey: `savings-early:${acc.id}:${season}`,
       split: { type: "FARMER_WALLET", targetType: "WALLET", targetId: wallet.id },
-      narration: `AgriPay ${acc.ref} early withdrawal`,
+      narration: `AgriLink ${acc.ref} early withdrawal`,
       sourceAccountCode: accountCodes.savings(acc.id),
       fromAccount: acc.custodianAccountRef,
       context: { savingsAccountId: acc.id, feeLe: quote.feeLe, early: true },
@@ -409,7 +409,7 @@ export async function runScheduledReleases(now = new Date()) {
     notices++;
     await sendSms(
       a.farmer!.phone,
-      `AgriPay: your savings of ${formatLe(a.balanceLe.toFixed(2))} (${a.ref}) will be paid to your mobile money on ${fmtDate(a.lockedUntil!)} for planting.`,
+      `AgriLink: your savings of ${formatLe(a.balanceLe.toFixed(2))} (${a.ref}) will be paid to your mobile money on ${fmtDate(a.lockedUntil!)} for planting.`,
       "general",
     );
   }
@@ -457,7 +457,7 @@ export async function runScheduledReleases(now = new Date()) {
         amountLe: available.toFixed(2),
         idempotencyKey: key,
         split: { type: "FARMER_WALLET", targetType: "WALLET", targetId: wallet.id },
-        narration: `AgriPay ${a.ref} savings release`,
+        narration: `AgriLink ${a.ref} savings release`,
         sourceAccountCode: accountCodes.savings(a.id),
         fromAccount: a.custodianAccountRef,
         context: { savingsAccountId: a.id, feeLe: "0", early: false },
@@ -554,7 +554,7 @@ export async function custodianAccounts(actor: Actor) {
     take: 500,
     include: {
       product: { select: { name: true, type: true } },
-      farmer: { select: { fullName: true, agripayId: true, districtId: true } },
+      farmer: { select: { fullName: true, agrilinkId: true, districtId: true } },
     },
   });
   const rows = await Promise.all(
@@ -570,7 +570,7 @@ export async function custodianAccounts(actor: Actor) {
   };
 }
 
-/** Compare the custodian's statement (ref, balance) with AgriPay's mirror. */
+/** Compare the custodian's statement (ref, balance) with AgriLink's mirror. */
 export async function reconcileSavings(actor: Actor, rows: { ref: string; balanceLe: string }[]) {
   const { rows: ours } = await custodianAccounts(actor);
   const byRef = new Map(ours.map((o) => [o.ref, o]));
@@ -620,10 +620,10 @@ export async function notifySavingsMovement(e: {
     a.product.type === "HARVEST_LOCK" ? "Harvest Lock" : `"${a.goalLabel ?? a.product.name}"`;
   const body =
     e.kind === "CREDIT"
-      ? `AgriPay: ${formatLe(e.amountLe)} saved to ${name}. Total ${formatLe(e.balanceLe)}.${a.lockedUntil ? ` Unlocks ${fmtDate(a.lockedUntil)} for planting.` : ""}${e.goalReached ? " Goal reached — well done!" : ""}`
+      ? `AgriLink: ${formatLe(e.amountLe)} saved to ${name}. Total ${formatLe(e.balanceLe)}.${a.lockedUntil ? ` Unlocks ${fmtDate(a.lockedUntil)} for planting.` : ""}${e.goalReached ? " Goal reached — well done!" : ""}`
       : e.kind === "RELEASE"
-        ? `AgriPay: ${formatLe(e.amountLe)} from your ${name} savings has been paid to your mobile money. Good luck with planting!`
-        : `AgriPay: early withdrawal of ${formatLe(e.amountLe)} paid to your mobile money (fee ${formatLe(e.feeLe ?? "0")}). Savings left: ${formatLe(e.balanceLe)}.`;
+        ? `AgriLink: ${formatLe(e.amountLe)} from your ${name} savings has been paid to your mobile money. Good luck with planting!`
+        : `AgriLink: early withdrawal of ${formatLe(e.amountLe)} paid to your mobile money (fee ${formatLe(e.feeLe ?? "0")}). Savings left: ${formatLe(e.balanceLe)}.`;
   await sendSms(a.farmer.phone, body, "general");
   await emit("score.stale", { farmerId: a.farmer.id });
 }

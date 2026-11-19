@@ -2,8 +2,8 @@
 
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
-import { OrgType } from "@agripay/db/enums";
-import { phoneSL } from "@agripay/validation";
+import { OrgType } from "@agrilink/db/enums";
+import { phoneSL } from "@agrilink/validation";
 import { requireActor } from "@/server/auth/actor";
 import {
   adminUnlockPin,

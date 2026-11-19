@@ -1,8 +1,8 @@
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 import { PackageIcon, ScaleIcon } from "lucide-react";
-import { Button } from "@agripay/ui/components/button";
-import { EmptyState, PageHeader } from "@agripay/ui/components/blocks";
+import { Button } from "@agrilink/ui/components/button";
+import { EmptyState, PageHeader } from "@agrilink/ui/components/blocks";
 import {
   Table,
   TableBody,
@@ -10,8 +10,8 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@agripay/ui/components/table";
-import type { Actor } from "@agripay/validation/permissions";
+} from "@agrilink/ui/components/table";
+import type { Actor } from "@agrilink/validation/permissions";
 import { formatDateTime, formatLe } from "@/lib/format";
 import { listBatches } from "@/server/trade/batches";
 import { BatchStatus } from "./status-badges";

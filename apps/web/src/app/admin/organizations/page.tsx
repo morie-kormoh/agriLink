@@ -1,7 +1,7 @@
 import { getTranslations } from "next-intl/server";
-import { prisma } from "@agripay/db";
-import { Badge } from "@agripay/ui/components/badge";
-import { PageHeader } from "@agripay/ui/components/blocks";
+import { prisma } from "@agrilink/db";
+import { Badge } from "@agrilink/ui/components/badge";
+import { PageHeader } from "@agrilink/ui/components/blocks";
 import {
   Table,
   TableBody,
@@ -9,7 +9,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@agripay/ui/components/table";
+} from "@agrilink/ui/components/table";
 import { formatDate } from "@/lib/format";
 import { listOrganizations } from "@/server/admin/service";
 import { requirePortal } from "@/server/auth/actor";

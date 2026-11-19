@@ -1,4 +1,4 @@
-# AgriPay Salone
+# AgriLink Salone
 
 **Empowering Farmers Through Digital Finance.** A digital agricultural financial-inclusion platform for Sierra Leone: farmer registration, farm records, payments, savings and responsible credit on any phone.
 
@@ -13,7 +13,7 @@ apps/web      Next.js portals (agent, co-op, admin, farmer…), API routes, offl
 apps/ussd     Fastify USSD/SMS service (skeleton — module 09)
 apps/worker   BullMQ background jobs (SMS now; payments/scoring later)
 packages/db   Prisma schema (one file per module), migrations, seed
-packages/ui   shadcn/ui components + AgriPay theme
+packages/ui   shadcn/ui components + AgriLink theme
 packages/validation  Zod schemas, phone/money helpers, permission matrix
 packages/i18n English + Krio messages, t() for USSD/SMS
 packages/config  shared tsconfig / ESLint
@@ -30,7 +30,7 @@ pnpm install                        # also generates the Prisma client
 pnpm infra:up                       # Postgres+PostGIS, Redis, MinIO
 pnpm db:deploy                      # apply migrations (or `pnpm db:migrate` while developing)
 pnpm db:seed                        # districts, chiefdoms, crops + demo data
-pnpm --filter @agripay/web seed:demo   # optional: purchases, payments, records, Harvest Lock, scores, a loan application
+pnpm --filter @agrilink/web seed:demo   # optional: purchases, payments, records, Harvest Lock, scores, a loan application
 pnpm dev                            # web on http://localhost:3000, USSD on :4000, worker
 ```
 
@@ -90,15 +90,15 @@ Set `INTERNAL_API_TOKEN` in `.env` so the worker can run payment retries and sta
 
 ## Scripts
 
-| Command                               | What it does                                                                                           |
-| ------------------------------------- | ------------------------------------------------------------------------------------------------------ |
-| `pnpm dev`                            | Run all apps                                                                                           |
-| `pnpm test`                           | Unit + integration tests (needs Postgres; uses `DATABASE_URL_TEST`)                                    |
-| `pnpm --filter @agripay/web test:e2e` | Playwright end-to-end tests (needs `pnpm dev` + seeded DB; run `npx playwright install chromium` once) |
-| `pnpm typecheck` / `pnpm lint`        | Type-check / lint every package                                                                        |
-| `pnpm build`                          | Production build                                                                                       |
-| `pnpm db:migrate`                     | Create/apply a migration while developing                                                              |
-| `pnpm db:studio`                      | Browse the database                                                                                    |
+| Command                                | What it does                                                                                           |
+| -------------------------------------- | ------------------------------------------------------------------------------------------------------ |
+| `pnpm dev`                             | Run all apps                                                                                           |
+| `pnpm test`                            | Unit + integration tests (needs Postgres; uses `DATABASE_URL_TEST`)                                    |
+| `pnpm --filter @agrilink/web test:e2e` | Playwright end-to-end tests (needs `pnpm dev` + seeded DB; run `npx playwright install chromium` once) |
+| `pnpm typecheck` / `pnpm lint`         | Type-check / lint every package                                                                        |
+| `pnpm build`                           | Production build                                                                                       |
+| `pnpm db:migrate`                      | Create/apply a migration while developing                                                              |
+| `pnpm db:studio`                       | Browse the database                                                                                    |
 
 The test database `agripay_test` is created automatically by `infra/postgres/init.sql` on first `infra:up`. Apply migrations to it with
 `DATABASE_URL=postgresql://agripay:agripay@localhost:5432/agripay_test pnpm db:deploy`.

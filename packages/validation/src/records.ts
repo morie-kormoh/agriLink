@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { RecordType } from "@agripay/db/enums";
+import { RecordType } from "@agrilink/db/enums";
 import { moneyLe } from "./money";
 import { seasonCode } from "./common";
 

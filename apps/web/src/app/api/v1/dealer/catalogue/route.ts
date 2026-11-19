@@ -1,4 +1,4 @@
-import { dealerItemSchema } from "@agripay/validation";
+import { dealerItemSchema } from "@agrilink/validation";
 import { v1 } from "@/server/api/v1";
 import { listCatalogue, saveDealerItem } from "@/server/credit/dealers";
 

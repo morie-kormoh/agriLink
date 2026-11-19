@@ -1,8 +1,8 @@
 import { getTranslations } from "next-intl/server";
 import { ShoppingBasketIcon } from "lucide-react";
-import { Badge } from "@agripay/ui/components/badge";
-import { EmptyState, PageHeader } from "@agripay/ui/components/blocks";
-import { Card, CardContent } from "@agripay/ui/components/card";
+import { Badge } from "@agrilink/ui/components/badge";
+import { EmptyState, PageHeader } from "@agrilink/ui/components/blocks";
+import { Card, CardContent } from "@agrilink/ui/components/card";
 import { SaleAck } from "@/components/farmers/sale-ack";
 import { PurchaseStatus } from "@/components/trade/status-badges";
 import { formatDateTime, formatLe } from "@/lib/format";

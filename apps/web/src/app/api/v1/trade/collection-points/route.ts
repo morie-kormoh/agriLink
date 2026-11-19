@@ -1,4 +1,4 @@
-import { collectionPointSchema } from "@agripay/validation";
+import { collectionPointSchema } from "@agrilink/validation";
 import { v1 } from "@/server/api/v1";
 import { createCollectionPoint, listCollectionPoints } from "@/server/trade/settings";
 

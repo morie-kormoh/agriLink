@@ -1,5 +1,5 @@
 import { afterAll, beforeAll, beforeEach, describe, expect, it } from "vitest";
-import { nextFarmerId, prisma } from "@agripay/db";
+import { nextFarmerId, prisma } from "@agrilink/db";
 import { computeKycTier, namesMatch } from "@/server/farmers/kyc";
 import { commitImport, previewImport } from "@/server/farmers/import";
 import {
@@ -30,7 +30,7 @@ afterAll(() => prisma.$disconnect());
 
 const search = { page: 1, pageSize: 50 } as const;
 
-describe("AgriPay IDs", () => {
+describe("AgriLink IDs", () => {
   it("are unique and sequential under concurrency", async () => {
     const ids = await Promise.all(Array.from({ length: 25 }, () => nextFarmerId(prisma, "BOM")));
     expect(new Set(ids).size).toBe(25);
@@ -46,7 +46,7 @@ describe("registerFarmer", () => {
     const r = await registerFarmer(actor, input);
 
     expect(r.created).toBe(true);
-    expect(r.farmer.agripayId).toMatch(/^AP-BOM-\d{6}$/);
+    expect(r.farmer.agrilinkId).toMatch(/^AP-BOM-\d{6}$/);
     const f = await prisma.farmer.findUniqueOrThrow({
       where: { id: r.farmer.id },
       include: { wallets: true, plots: { include: { cropCycles: true } }, user: true },
@@ -70,7 +70,7 @@ describe("registerFarmer", () => {
       await prisma.auditLog.count({ where: { action: "farmer.registered", entityId: f.id } }),
     ).toBe(1);
     expect(
-      smsOutbox().some((m) => m.to === input.phone && m.body.includes(r.farmer.agripayId)),
+      smsOutbox().some((m) => m.to === input.phone && m.body.includes(r.farmer.agrilinkId)),
     ).toBe(true);
   });
 
@@ -205,12 +205,12 @@ describe("scope", () => {
     expect((await searchFarmers(platform.actor, search)).total).toBe(2);
   });
 
-  it("searches by name, AgriPay ID and phone", async () => {
+  it("searches by name, AgriLink ID and phone", async () => {
     const { actor } = await makeOrgWithMember("COOPERATIVE", "COOP_ADMIN");
     const r = await registerFarmer(actor, farmerInput(ref, { fullName: "Kadiatu Turay" }));
     expect((await searchFarmers(actor, { ...search, q: "kadiatu" })).total).toBe(1);
     expect(
-      (await searchFarmers(actor, { ...search, q: r.farmer.agripayId.toLowerCase() })).total,
+      (await searchFarmers(actor, { ...search, q: r.farmer.agrilinkId.toLowerCase() })).total,
     ).toBe(1);
     const f = await prisma.farmer.findUniqueOrThrow({ where: { id: r.farmer.id } });
     expect((await searchFarmers(actor, { ...search, q: `0${f.phone.slice(4)}` })).total).toBe(1);

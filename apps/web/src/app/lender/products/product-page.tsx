@@ -1,10 +1,10 @@
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 import { ArrowLeftIcon } from "lucide-react";
-import { prisma } from "@agripay/db";
-import { Card, CardContent } from "@agripay/ui/components/card";
-import { PageHeader } from "@agripay/ui/components/blocks";
-import type { Actor } from "@agripay/validation/permissions";
+import { prisma } from "@agrilink/db";
+import { Card, CardContent } from "@agrilink/ui/components/card";
+import { PageHeader } from "@agrilink/ui/components/blocks";
+import type { Actor } from "@agrilink/validation/permissions";
 import { ProductForm, type ProductFormValue } from "@/components/lender/lender-client";
 import { getLoanProduct } from "@/server/credit/products";
 import { listVerifiedDealers } from "@/server/credit/dealers";

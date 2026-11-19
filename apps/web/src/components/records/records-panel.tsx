@@ -17,28 +17,28 @@ import {
   UsersIcon,
   WheatIcon,
 } from "lucide-react";
-import { Badge } from "@agripay/ui/components/badge";
-import { Button } from "@agripay/ui/components/button";
-import { StatCard } from "@agripay/ui/components/blocks";
+import { Badge } from "@agrilink/ui/components/badge";
+import { Button } from "@agrilink/ui/components/button";
+import { StatCard } from "@agrilink/ui/components/blocks";
 import {
   Dialog,
   DialogContent,
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@agripay/ui/components/dialog";
-import { Input } from "@agripay/ui/components/input";
-import { Label } from "@agripay/ui/components/label";
-import { Progress } from "@agripay/ui/components/misc";
+} from "@agrilink/ui/components/dialog";
+import { Input } from "@agrilink/ui/components/input";
+import { Label } from "@agrilink/ui/components/label";
+import { Progress } from "@agrilink/ui/components/misc";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@agripay/ui/components/select";
-import { toast } from "@agripay/ui/components/sonner";
-import { formatLe } from "@agripay/validation";
+} from "@agrilink/ui/components/select";
+import { toast } from "@agrilink/ui/components/sonner";
+import { formatLe } from "@agrilink/validation";
 import { addRecordAction, deleteRecordAction } from "@/app/actions/records";
 
 type RecordType =

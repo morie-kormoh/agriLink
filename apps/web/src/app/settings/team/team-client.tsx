@@ -4,18 +4,18 @@ import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { Loader2Icon, SendIcon, XIcon } from "lucide-react";
-import { Button } from "@agripay/ui/components/button";
-import { Input } from "@agripay/ui/components/input";
-import { Label } from "@agripay/ui/components/label";
+import { Button } from "@agrilink/ui/components/button";
+import { Input } from "@agrilink/ui/components/input";
+import { Label } from "@agrilink/ui/components/label";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@agripay/ui/components/select";
-import { toast } from "@agripay/ui/components/sonner";
-import { formatSlPhone } from "@agripay/validation";
+} from "@agrilink/ui/components/select";
+import { toast } from "@agrilink/ui/components/sonner";
+import { formatSlPhone } from "@agrilink/validation";
 import { inviteMemberAction, removeMemberAction, revokeInvitationAction } from "@/app/actions/team";
 
 export function InviteMemberForm({ roles }: { roles: { value: string; label: string }[] }) {

@@ -3,7 +3,7 @@ export function GET() {
   const html = `<!doctype html>
 <html>
   <head>
-    <title>AgriPay Salone API</title>
+    <title>AgriLink Salone API</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
   </head>

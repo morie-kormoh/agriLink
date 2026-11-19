@@ -8,7 +8,7 @@ importers:
 
   .:
     devDependencies:
-      '@agripay/config':
+      '@agrilink/config':
         specifier: workspace:*
         version: link:packages/config
       husky:
@@ -32,10 +32,10 @@ importers:
 
   apps/ussd:
     dependencies:
-      '@agripay/i18n':
+      '@agrilink/i18n':
         specifier: workspace:*
         version: link:../../packages/i18n
-      '@agripay/validation':
+      '@agrilink/validation':
         specifier: workspace:*
         version: link:../../packages/validation
       '@fastify/formbody':
@@ -48,7 +48,7 @@ importers:
         specifier: ^5.6.1
         version: 5.12.8
     devDependencies:
-      '@agripay/config':
+      '@agrilink/config':
         specifier: workspace:*
         version: link:../../packages/config
       '@types/node':
@@ -69,22 +69,22 @@ importers:
 
   apps/web:
     dependencies:
-      '@agripay/db':
+      '@agrilink/db':
         specifier: workspace:*
         version: link:../../packages/db
-      '@agripay/finance':
+      '@agrilink/finance':
         specifier: workspace:*
         version: link:../../packages/finance
-      '@agripay/i18n':
+      '@agrilink/i18n':
         specifier: workspace:*
         version: link:../../packages/i18n
-      '@agripay/payments':
+      '@agrilink/payments':
         specifier: workspace:*
         version: link:../../packages/payments
-      '@agripay/ui':
+      '@agrilink/ui':
         specifier: workspace:*
         version: link:../../packages/ui
-      '@agripay/validation':
+      '@agrilink/validation':
         specifier: workspace:*
         version: link:../../packages/validation
       '@aws-sdk/client-s3':
@@ -93,6 +93,15 @@ importers:
       '@aws-sdk/s3-request-presigner':
         specifier: ^3.896.0
         version: 3.1170.0
+      '@fontsource-variable/bricolage-grotesque':
+        specifier: ^5.3.0
+        version: 5.3.0
+      '@fontsource/atkinson-hyperlegible-mono':
+        specifier: ^5.3.0
+        version: 5.3.0
+      '@fontsource/atkinson-hyperlegible-next':
+        specifier: ^5.3.0
+        version: 5.3.0
       '@hookform/resolvers':
         specifier: ^5.2.2
         version: 5.9.2(@standard-schema/spec@1.1.0)(ajv@8.20.0)(effect@3.20.0)(react-hook-form@7.92.0(@types/react@19.3.0)(react@19.3.1))(valibot@1.4.2(typescript@5.9.3))(zod@4.6.7)
@@ -139,7 +148,7 @@ importers:
         specifier: ^4.1.0
         version: 4.6.7
     devDependencies:
-      '@agripay/config':
+      '@agrilink/config':
         specifier: workspace:*
         version: link:../../packages/config
       '@playwright/test':
@@ -190,7 +199,7 @@ importers:
 
   apps/worker:
     dependencies:
-      '@agripay/validation':
+      '@agrilink/validation':
         specifier: workspace:*
         version: link:../../packages/validation
       bullmq:
@@ -200,7 +209,7 @@ importers:
         specifier: ^17.2.2
         version: 17.4.2
     devDependencies:
-      '@agripay/config':
+      '@agrilink/config':
         specifier: workspace:*
         version: link:../../packages/config
       '@types/node':
@@ -246,7 +255,7 @@ importers:
         specifier: ^8.16.3
         version: 8.23.1
     devDependencies:
-      '@agripay/config':
+      '@agrilink/config':
         specifier: workspace:*
         version: link:../config
       '@types/node':
@@ -277,7 +286,7 @@ importers:
         specifier: ^10.6.0
         version: 10.6.0
     devDependencies:
-      '@agripay/config':
+      '@agrilink/config':
         specifier: workspace:*
         version: link:../config
       '@types/node':
@@ -302,7 +311,7 @@ importers:
         specifier: ^10.7.16
         version: 10.7.18
     devDependencies:
-      '@agripay/config':
+      '@agrilink/config':
         specifier: workspace:*
         version: link:../config
       '@types/node':
@@ -324,7 +333,7 @@ importers:
         specifier: ^10.6.0
         version: 10.6.0
     devDependencies:
-      '@agripay/config':
+      '@agrilink/config':
         specifier: workspace:*
         version: link:../config
       '@types/node':
@@ -376,7 +385,7 @@ importers:
         specifier: ^1.4.0
         version: 1.4.0
     devDependencies:
-      '@agripay/config':
+      '@agrilink/config':
         specifier: workspace:*
         version: link:../config
       '@types/react':
@@ -403,7 +412,7 @@ importers:
 
   packages/validation:
     dependencies:
-      '@agripay/db':
+      '@agrilink/db':
         specifier: workspace:*
         version: link:../db
       decimal.js:
@@ -413,7 +422,7 @@ importers:
         specifier: ^4.1.0
         version: 4.6.7
     devDependencies:
-      '@agripay/config':
+      '@agrilink/config':
         specifier: workspace:*
         version: link:../config
       '@types/node':
@@ -845,6 +854,15 @@ packages:
 
   '@floating-ui/utils@0.2.12':
     resolution: {integrity: sha512-HpCo8tmWzLVad5s2d19EhAz5zqrrQ6s69qd6moPMQvkOuSwDT1YgRfWSVuc4ennqrgv3OHppiOGMQ7oC13yIww==}
+
+  '@fontsource-variable/bricolage-grotesque@5.3.0':
+    resolution: {integrity: sha512-TLi9Q4hJjS2UvoTMRSS2nHu6c4R56lAw60NR9QYtVRCHn0XtsFpiEhNffZ8Glsoxu6wEEwLKBP8lb94J52PNBA==}
+
+  '@fontsource/atkinson-hyperlegible-mono@5.3.0':
+    resolution: {integrity: sha512-7Iha5azCRXJVk4NdxbVdKAE+4p/rMJoW6dslvhktugDFPSp7kxFRGAavBtwtSTrnyNhKXW8w1NHgMnrh/6OshA==}
+
+  '@fontsource/atkinson-hyperlegible-next@5.3.0':
+    resolution: {integrity: sha512-8p1tHVoPDo6oYwSO3sMw5snGwFwSf3TmeSF9Gcj792GXdsg6oqvhoItbj6Hj/XZIk0Xs+Cwu6pkLBAl3Q5HrwA==}
 
   '@formatjs/ecma402-abstract@2.3.6':
     resolution: {integrity: sha512-HJnTFeRM2kVFVr5gr5kH1XP6K0JcJtE7Lzvtr3FS/so5f1kpsqqqxy5JF+FRaO6H2qmcMfAUIox7AJteieRtVw==}
@@ -4920,6 +4938,12 @@ snapshots:
       react-dom: 19.3.1(react@19.3.1)
 
   '@floating-ui/utils@0.2.12': {}
+
+  '@fontsource-variable/bricolage-grotesque@5.3.0': {}
+
+  '@fontsource/atkinson-hyperlegible-mono@5.3.0': {}
+
+  '@fontsource/atkinson-hyperlegible-next@5.3.0': {}
 
   '@formatjs/ecma402-abstract@2.3.6':
     dependencies:

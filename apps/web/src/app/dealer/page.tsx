@@ -1,9 +1,9 @@
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 import { BanknoteIcon, ClockIcon, TicketIcon } from "lucide-react";
-import { Button } from "@agripay/ui/components/button";
-import { PageHeader, StatCard, StatusBadge } from "@agripay/ui/components/blocks";
-import { formatLe } from "@agripay/validation";
+import { Button } from "@agrilink/ui/components/button";
+import { PageHeader, StatCard, StatusBadge } from "@agrilink/ui/components/blocks";
+import { formatLe } from "@agrilink/validation";
 import { NeedProfile } from "@/components/dealer/dealer-client";
 import { requirePortal } from "@/server/auth/actor";
 import { dealerRedemptions } from "@/server/credit/dealers";

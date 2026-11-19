@@ -2,7 +2,7 @@
 
 ## 1. Purpose
 
-Let partner lenders offer **responsible, harvest-aligned input credit** to farmers, paid as **restricted e-vouchers** redeemable only at registered agro-dealers, and repaid automatically from the next harvest payment (module 04 waterfall). **Lenders fund the loans**; AgriPay originates, disburses vouchers and services repayments.
+Let partner lenders offer **responsible, harvest-aligned input credit** to farmers, paid as **restricted e-vouchers** redeemable only at registered agro-dealers, and repaid automatically from the next harvest payment (module 04 waterfall). **Lenders fund the loans**; AgriLink originates, disburses vouchers and services repayments.
 
 ## 2. Scope
 
@@ -170,7 +170,7 @@ model VoucherRedemption {
 ## 8. USSD / SMS touchpoints
 
 - USSD _Loans → Check offers → Accept (disclosure screens) → PIN_.
-- SMS voucher: "Your AgriPay input voucher: K7P4-R2QX, Le 2,000, valid to 30 May at {dealer list}. Show this code to the dealer."
+- SMS voucher: "Your AgriLink input voucher: K7P4-R2QX, Le 2,000, valid to 30 May at {dealer list}. Show this code to the dealer."
 - Dealer USSD _Redeem_: code → amount → farmer receives OTP → dealer enters OTP.
 - SMS after harvest split: "Le 1,200 paid to your fertiliser loan. Remaining Le 0. Loan fully repaid! Your new limit is Le 3,000."
 

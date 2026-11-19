@@ -1,4 +1,4 @@
-// AgriPay Salone — Prisma multi-file schema.
+// AgriLink Salone — Prisma multi-file schema.
 // One .prisma file per module lives in this folder.
 
 generator client {

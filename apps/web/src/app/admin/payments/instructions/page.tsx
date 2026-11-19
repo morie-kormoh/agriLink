@@ -1,8 +1,8 @@
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 import { CheckCircle2Icon } from "lucide-react";
-import { Badge } from "@agripay/ui/components/badge";
-import { EmptyState, PageHeader } from "@agripay/ui/components/blocks";
+import { Badge } from "@agrilink/ui/components/badge";
+import { EmptyState, PageHeader } from "@agrilink/ui/components/blocks";
 import {
   Table,
   TableBody,
@@ -10,7 +10,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@agripay/ui/components/table";
+} from "@agrilink/ui/components/table";
 import { formatDateTime, formatLe } from "@/lib/format";
 import { requirePortal } from "@/server/auth/actor";
 import { listInstructions } from "@/server/payments/service";

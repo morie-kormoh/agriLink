@@ -1,10 +1,10 @@
 import { redirect } from "next/navigation";
 import { getTranslations } from "next-intl/server";
-import { Badge } from "@agripay/ui/components/badge";
-import { PageHeader } from "@agripay/ui/components/blocks";
-import { Card, CardContent, CardHeader, CardTitle } from "@agripay/ui/components/card";
-import { formatSlPhone } from "@agripay/validation";
-import { INVITABLE_ROLES, hasPermission } from "@agripay/validation/permissions";
+import { Badge } from "@agrilink/ui/components/badge";
+import { PageHeader } from "@agrilink/ui/components/blocks";
+import { Card, CardContent, CardHeader, CardTitle } from "@agrilink/ui/components/card";
+import { formatSlPhone } from "@agrilink/validation";
+import { INVITABLE_ROLES, hasPermission } from "@agrilink/validation/permissions";
 import { formatDate, formatDateTime } from "@/lib/format";
 import { listTeam } from "@/server/admin/service";
 import { getCurrentUser } from "@/server/auth/actor";

@@ -4,9 +4,9 @@ import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { CheckIcon, Loader2Icon, XIcon } from "lucide-react";
-import { Button } from "@agripay/ui/components/button";
-import { Input } from "@agripay/ui/components/input";
-import { toast } from "@agripay/ui/components/sonner";
+import { Button } from "@agrilink/ui/components/button";
+import { Input } from "@agrilink/ui/components/input";
+import { toast } from "@agrilink/ui/components/sonner";
 import { resolveDisputeAction } from "@/app/actions/trade";
 
 export function ResolveDispute({ purchaseId }: { purchaseId: string }) {

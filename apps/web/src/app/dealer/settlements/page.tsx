@@ -1,6 +1,6 @@
 import { getTranslations } from "next-intl/server";
-import { PageHeader } from "@agripay/ui/components/blocks";
-import { formatLe } from "@agripay/validation";
+import { PageHeader } from "@agrilink/ui/components/blocks";
+import { formatLe } from "@agrilink/validation";
 import { requirePortal } from "@/server/auth/actor";
 import { dealerRedemptions } from "@/server/credit/dealers";
 import { SettlementsTable } from "./table";

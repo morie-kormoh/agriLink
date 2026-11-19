@@ -9,7 +9,7 @@ import {
   type Tx,
   nextSequenceValue,
   prisma,
-} from "@agripay/db";
+} from "@agrilink/db";
 import {
   type ProviderResult,
   ProviderNotConfiguredError,
@@ -17,9 +17,9 @@ import {
   type WaterfallRule,
   computeWaterfall,
   summariseSplits,
-} from "@agripay/payments";
-import { formatLe } from "@agripay/validation";
-import { type Actor, can } from "@agripay/validation/permissions";
+} from "@agrilink/payments";
+import { formatLe } from "@agrilink/validation";
+import { type Actor, can } from "@agrilink/validation/permissions";
 import { audit } from "../audit";
 import { AppError, forbidden, notFound } from "../errors";
 import { emit } from "../events";
@@ -239,7 +239,7 @@ async function destinationFor(
 
 /**
  * Create the payment for an approved purchase (idempotent on the purchase).
- * Each split becomes one provider instruction straight from the payer to its destination — AgriPay never pools funds.
+ * Each split becomes one provider instruction straight from the payer to its destination — AgriLink never pools funds.
  */
 export async function createPaymentForPurchase(tx: Tx, purchaseId: string, approvedById: string) {
   const idempotencyKey = `purchase:${purchaseId}`;
@@ -266,7 +266,7 @@ export async function createPaymentForPurchase(tx: Tx, purchaseId: string, appro
   });
   const payer = await payerFunding(tx, purchase.buyerOrgId);
   const ref = `PAY-${String(await nextSequenceValue(tx, "payment")).padStart(6, "0")}`;
-  const narration = `AgriPay ${purchase.ref} ${purchase.crop.name}`;
+  const narration = `AgriLink ${purchase.ref} ${purchase.crop.name}`;
 
   const splitsData = [];
   for (const s of wf.splits) {
@@ -604,7 +604,7 @@ async function journalFor(
         include: { farmer: true },
       });
       credit = {
-        accountCode: accountCodes.farmerWallet(w.farmer.agripayId),
+        accountCode: accountCodes.farmerWallet(w.farmer.agrilinkId),
         ownerType: "FARMER",
         ownerId: w.farmerId,
         name: `${w.farmer.fullName} wallet`,
@@ -727,7 +727,7 @@ export async function maybeCompletePayment(paymentId: string) {
         : `You ${formatLe(farmerSplit.amountLe.toString())}`;
       await sendSms(
         p.farmer.phone,
-        `AgriPay: ${p.buyerOrg.name} paid ${formatLe(p.netLe.toString())} for ${p.quantity.toString()}${p.unit} ${p.crop.name}. ${breakdown}. Ref ${payment.ref}`,
+        `AgriLink: ${p.buyerOrg.name} paid ${formatLe(p.netLe.toString())} for ${p.quantity.toString()}${p.unit} ${p.crop.name}. ${breakdown}. Ref ${payment.ref}`,
         "general",
       );
     }
@@ -929,7 +929,7 @@ export async function listPayments(
         purchase: {
           select: {
             ref: true,
-            farmer: { select: { fullName: true, agripayId: true } },
+            farmer: { select: { fullName: true, agrilinkId: true } },
             crop: { select: { name: true } },
           },
         },
@@ -959,7 +959,7 @@ export async function farmerStatement(actor: Actor, farmerId: string) {
     (actor.role === "FARMER" && actor.farmerId === farmerId) ||
     (can(actor, "payment.read") && !!actor.orgId && farmer.cooperativeId === actor.orgId);
   if (!allowed) throw forbidden();
-  const code = accountCodes.farmerWallet(farmer.agripayId);
+  const code = accountCodes.farmerWallet(farmer.agrilinkId);
   const [entries, payments, balance] = await Promise.all([
     prisma.ledgerEntry.findMany({
       where: { account: { code } },

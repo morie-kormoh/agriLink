@@ -3,19 +3,19 @@
  *  03–05  prices → purchases → maker–checker approval → Smart Split payments → farm records
  *  06–08  Harvest Lock (PIN), a savings group, passport scores, a consent request and a loan application.
  *
- * Run after `pnpm db:seed`:   pnpm --filter @agripay/web seed:demo
+ * Run after `pnpm db:seed`:   pnpm --filter @agrilink/web seed:demo
  * Idempotent: each part skips if its data already exists. Demo farmer PIN: 2580.
  */
 import path from "node:path";
 import { config as loadEnv } from "dotenv";
-import type { Role } from "@agripay/db";
-import type { Actor } from "@agripay/validation/permissions";
+import type { Role } from "@agrilink/db";
+import type { Actor } from "@agrilink/validation/permissions";
 
 loadEnv({ path: path.resolve(import.meta.dirname, "../../../.env"), quiet: true });
 process.env.SMS_PROVIDER = "memory"; // don't flood the console with demo SMS
 process.env.RATE_LIMIT_STORE = "memory";
 
-const { prisma } = await import("@agripay/db");
+const { prisma } = await import("@agrilink/db");
 const { setPrice, updateCoopSettings, updateBuyerSettings, createCollectionPoint } =
   await import("../src/server/trade/settings");
 const { recordPurchase, acknowledgePurchase } = await import("../src/server/trade/purchases");
@@ -91,7 +91,7 @@ async function trade() {
   // Co-op purchases: staff weighs, admin approves (maker–checker)
   const bomFarmers = await prisma.farmer.findMany({
     where: { cooperativeId: coopAdmin.orgId!, status: "ACTIVE" },
-    orderBy: { agripayId: "asc" },
+    orderBy: { agrilinkId: "asc" },
     take: 14,
     include: { plots: { include: { cropCycles: true } } },
   });
@@ -135,8 +135,8 @@ async function trade() {
 
   // Buyer purchases from Kenema cocoa farmers (buyer staff records, buyer admin approves)
   const kenFarmers = await prisma.farmer.findMany({
-    where: { agripayId: { startsWith: "AP-KEN-" }, status: "ACTIVE" },
-    orderBy: { agripayId: "asc" },
+    where: { agrilinkId: { startsWith: "AP-KEN-" }, status: "ACTIVE" },
+    orderBy: { agrilinkId: "asc" },
     take: 5,
   });
   let buyerBatch: string | null = null;
@@ -156,7 +156,7 @@ async function trade() {
   }
 
   // Farm records for the demo farmer (Aminata, AP-BOM-000001)
-  const aminata = await prisma.farmer.findUniqueOrThrow({ where: { agripayId: "AP-BOM-000001" } });
+  const aminata = await prisma.farmer.findUniqueOrThrow({ where: { agrilinkId: "AP-BOM-000001" } });
   const farmerActor: Actor = {
     userId: aminata.userId!,
     role: "FARMER",
@@ -216,7 +216,7 @@ async function finance() {
   // Demo PINs (farmers normally set their own) and Harvest Lock for five Bombali farmers.
   const farmers = await prisma.farmer.findMany({
     where: { cooperativeId: coopAdmin.orgId!, status: "ACTIVE", userId: { not: null } },
-    orderBy: { agripayId: "asc" },
+    orderBy: { agrilinkId: "asc" },
     take: 6,
     include: { user: true },
   });
@@ -228,7 +228,7 @@ async function finance() {
       demoPin.add(f.id);
     }
   }
-  const skipped = farmers.filter((f) => !demoPin.has(f.id)).map((f) => f.agripayId);
+  const skipped = farmers.filter((f) => !demoPin.has(f.id)).map((f) => f.agrilinkId);
   if (skipped.length)
     console.info(
       `Kept existing PINs for ${skipped.join(", ")} — open Harvest Lock / apply for loans for them in the app.`,
@@ -290,7 +290,7 @@ async function finance() {
 
   // Loan officer asks farmer #2 for consent (pending — accept it in the farmer portal).
   await requestConsent(officer, {
-    farmer: farmers[1]!.agripayId,
+    farmer: farmers[1]!.agrilinkId,
     scope: "PASSPORT_DETAILED",
     purpose: "assess an input loan for the main season",
     durationMonths: 12,
@@ -298,7 +298,7 @@ async function finance() {
 
   // Aminata applies for an input loan (waiting in the lender's Applications queue).
   const aminata =
-    farmers.find((f) => f.agripayId === "AP-BOM-000001" && demoPin.has(f.id)) ??
+    farmers.find((f) => f.agrilinkId === "AP-BOM-000001" && demoPin.has(f.id)) ??
     farmers.find((f) => demoPin.has(f.id));
   const product = await prisma.loanProduct.findFirst({ where: { active: true } });
   if (product && aminata) {

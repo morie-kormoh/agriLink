@@ -1,5 +1,13 @@
 import * as React from "react";
-import type { LucideIcon } from "lucide-react";
+import {
+  AlertTriangleIcon,
+  CheckCircle2Icon,
+  CircleDotIcon,
+  ClockIcon,
+  InfoIcon,
+  MinusCircleIcon,
+  type LucideIcon,
+} from "lucide-react";
 import { cn } from "../lib/utils";
 import { Badge } from "./badge";
 
@@ -23,7 +31,9 @@ export function PageHeader({
       )}
     >
       <div className="space-y-1">
-        <h1 className="text-2xl font-semibold tracking-tight">{title}</h1>
+        <h1 className="font-display text-ink text-[1.75rem] leading-tight font-bold tracking-tight md:text-3xl dark:text-white">
+          {title}
+        </h1>
         {description ? <p className="text-muted-foreground text-sm">{description}</p> : null}
       </div>
       {actions ? <div className="flex flex-wrap gap-2">{actions}</div> : null}
@@ -46,11 +56,11 @@ export function StatCard({
   className?: string;
 }) {
   return (
-    <div className={cn("bg-card rounded-xl border p-4 shadow-sm", className)}>
+    <div className={cn("bg-card rounded-xl border p-4", className)}>
       <div className="flex items-center justify-between gap-2">
         <p className="text-muted-foreground text-sm">{label}</p>
         {Icon ? (
-          <span className="bg-secondary text-primary rounded-md p-1.5">
+          <span className="bg-secondary text-indigo rounded-lg p-1.5 dark:text-white">
             <Icon className="size-4" aria-hidden />
           </span>
         ) : null}
@@ -98,15 +108,74 @@ export function EmptyState({
 
 type Tone = "success" | "warning" | "destructive" | "info" | "muted" | "secondary";
 
-/** Status pill with a semantic tone. */
+const TONE_ICON: Record<Tone, LucideIcon> = {
+  success: CheckCircle2Icon,
+  warning: ClockIcon,
+  destructive: AlertTriangleIcon,
+  info: CircleDotIcon,
+  muted: MinusCircleIcon,
+  secondary: InfoIcon,
+};
+
+/** Status pill: icon + word, never colour alone (docs/ui §4.6). */
 export function StatusBadge({
   tone = "muted",
   children,
+  icon = true,
 }: {
   tone?: Tone;
   children: React.ReactNode;
+  icon?: boolean;
 }) {
-  return <Badge variant={tone}>{children}</Badge>;
+  const Icon = TONE_ICON[tone];
+  return (
+    <Badge variant={tone}>
+      {icon ? <Icon aria-hidden /> : null}
+      {children}
+    </Badge>
+  );
+}
+
+/**
+ * One row of key numbers separated by thin rules (docs/ui §4.8), used at the top of dashboards
+ * instead of a grid of identical cards.
+ */
+export function StatStrip({
+  items,
+  className,
+}: {
+  items: {
+    label: React.ReactNode;
+    value: React.ReactNode;
+    hint?: React.ReactNode;
+    tone?: "danger" | "good";
+  }[];
+  className?: string;
+}) {
+  return (
+    <dl
+      className={cn(
+        "bg-card grid grid-cols-2 overflow-hidden rounded-xl border sm:flex sm:divide-x",
+        className,
+      )}
+    >
+      {items.map((it, i) => (
+        <div key={i} className="min-w-0 flex-1 border-b p-4 sm:border-b-0 sm:px-5">
+          <dt className="text-muted-foreground truncate text-sm">{it.label}</dt>
+          <dd
+            className={cn(
+              "font-display mt-1 text-2xl font-bold tabular-nums",
+              it.tone === "danger" && "text-kola",
+              it.tone === "good" && "text-primary",
+            )}
+          >
+            {it.value}
+          </dd>
+          {it.hint ? <p className="text-muted-foreground mt-0.5 text-xs">{it.hint}</p> : null}
+        </div>
+      ))}
+    </dl>
+  );
 }
 
 /** Labelled read-only value, used on profile pages. */

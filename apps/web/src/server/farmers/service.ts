@@ -6,7 +6,7 @@ import {
   type RegistrationChannel,
   nextFarmerId,
   prisma,
-} from "@agripay/db";
+} from "@agrilink/db";
 import {
   type FarmerSearch,
   type RegisterFarmerData,
@@ -14,8 +14,8 @@ import {
   addPlotSchema,
   addWalletSchema,
   updateFarmerSchema,
-} from "@agripay/validation";
-import { type Actor, can } from "@agripay/validation/permissions";
+} from "@agrilink/validation";
+import { type Actor, can } from "@agrilink/validation/permissions";
 import type { z } from "zod";
 import { audit } from "../audit";
 import { AppError, forbidden, notFound } from "../errors";
@@ -26,7 +26,7 @@ import { farmerResource, farmerScope } from "./scope";
 
 export interface RegisterResult {
   created: boolean;
-  farmer: { id: string; agripayId: string; fullName: string; status: string; kycTier: number };
+  farmer: { id: string; agrilinkId: string; fullName: string; status: string; kycTier: number };
   duplicateOf: DuplicateCandidate | null;
   sharedPhone: boolean;
   warnings: string[];
@@ -134,10 +134,10 @@ export async function registerFarmer(
       }
       if (dup.phoneTakenByOther) sharedPhone = true;
 
-      const agripayId = await nextFarmerId(tx, district.code);
+      const agrilinkId = await nextFarmerId(tx, district.code);
       const farmer = await tx.farmer.create({
         data: {
-          agripayId,
+          agrilinkId,
           userId,
           phone: input.phone,
           sharedPhone,
@@ -158,7 +158,7 @@ export async function registerFarmer(
           status: duplicateOf ? "DUPLICATE_SUSPECTED" : "ACTIVE",
           duplicateOfId: duplicateOf?.id ?? null,
           duplicateNote: duplicateOf
-            ? `${duplicateOf.reason} (${duplicateOf.agripayId}, score ${duplicateOf.score.toFixed(2)})`
+            ? `${duplicateOf.reason} (${duplicateOf.agrilinkId}, score ${duplicateOf.score.toFixed(2)})`
             : dup.ninTaken
               ? "NIN already registered to another farmer"
               : null,
@@ -188,13 +188,13 @@ export async function registerFarmer(
         entity: "Farmer",
         entityId: farmer.id,
         after: {
-          agripayId,
+          agrilinkId,
           fullName: farmer.fullName,
           phone: farmer.phone,
           cooperativeId,
           channel,
           status: farmer.status,
-          duplicateOf: duplicateOf?.agripayId ?? null,
+          duplicateOf: duplicateOf?.agrilinkId ?? null,
           capturedAt: input.capturedAt ?? null,
         },
       });
@@ -204,7 +204,7 @@ export async function registerFarmer(
     if (result.sharedPhone) warnings.push("SHARED_PHONE");
     await sendSms(
       input.phone,
-      `Welcome to AgriPay, ${result.farmer.fullName}. Your AgriPay ID is ${result.farmer.agripayId}. Keep this ID for payments, savings and loans.`,
+      `Welcome to AgriLink, ${result.farmer.fullName}. Your AgriLink ID is ${result.farmer.agrilinkId}. Keep this ID for payments, savings and loans.`,
       "welcome",
     );
 
@@ -253,7 +253,7 @@ export async function searchFarmers(actor: Actor, params: FarmerSearch) {
     and.push({
       OR: [
         { fullName: { contains: q, mode: "insensitive" } },
-        { agripayId: { contains: q.toUpperCase() } },
+        { agrilinkId: { contains: q.toUpperCase() } },
         { community: { contains: q, mode: "insensitive" } },
         ...(digits.length >= 4 ? [{ phone: { contains: digits.replace(/^0/, "") } }] : []),
       ],
@@ -373,7 +373,7 @@ export async function updateFarmer(
   if (data.nin) {
     const other = await prisma.farmer.findFirst({ where: { nin: data.nin, id: { not: id } } });
     if (other)
-      throw new AppError("CONFLICT", `This NIN is already registered to ${other.agripayId}.`);
+      throw new AppError("CONFLICT", `This NIN is already registered to ${other.agrilinkId}.`);
   }
   return prisma.$transaction(async (tx) => {
     const after = await tx.farmer.update({ where: { id }, data });
@@ -403,7 +403,7 @@ export async function addWallet(
     where: { provider_msisdn: { provider: data.provider, msisdn: data.msisdn } },
   });
   if (taken)
-    throw new AppError("CONFLICT", "This mobile money number is already registered on AgriPay.");
+    throw new AppError("CONFLICT", "This mobile money number is already registered on AgriLink.");
   return prisma.$transaction(async (tx) => {
     const count = await tx.wallet.count({ where: { farmerId } });
     const isPrimary = data.isPrimary || count === 0;

@@ -34,12 +34,38 @@ import {
   ReceiptIcon,
   UsersRoundIcon,
 } from "lucide-react";
-import type { Role } from "@agripay/db/enums";
-import { ROLE_HOME } from "@agripay/validation/permissions";
+import type { Role } from "@agrilink/db/enums";
+import { ROLE_HOME } from "@agrilink/validation/permissions";
+import { isMvpMode } from "@/server/demo/flags";
 import type { NavItem } from "./mobile-nav";
+
+/**
+ * MVP_MODE: only the screens in the demo story (docs/mvp/scope.md). Other pages still work by URL.
+ * Roles not listed keep their full menu.
+ */
+const MVP_MENU: Partial<Record<Role, string[]>> = {
+  COOP_STAFF: ["/coop", "/coop/collections/new", "/coop/collections", "/coop/payments"],
+  COOP_ADMIN: [
+    "/coop",
+    "/coop/collections/new",
+    "/coop/collections",
+    "/coop/payments",
+    "/coop/members",
+  ],
+  FARMER: ["/farmer", "/farmer/payments", "/farmer/savings", "/farmer/passport", "/farmer/loans"],
+  LENDER_ADMIN: ["/lender", "/lender/applications", "/lender/loans"],
+  LENDER_OFFICER: ["/lender", "/lender/applications", "/lender/loans"],
+  AGRO_DEALER: ["/dealer", "/dealer/redeem", "/dealer/settlements"],
+};
 
 /** Navigation per role (portal). */
 export async function navFor(role: Role): Promise<{ title: string; items: NavItem[] }> {
+  const full = await fullNavFor(role);
+  const allow = isMvpMode() ? MVP_MENU[role] : undefined;
+  return allow ? { ...full, items: full.items.filter((i) => allow.includes(i.href)) } : full;
+}
+
+async function fullNavFor(role: Role): Promise<{ title: string; items: NavItem[] }> {
   const t = await getTranslations();
   const title = t(`roles.${role}`);
   switch (role) {

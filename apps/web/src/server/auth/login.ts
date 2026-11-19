@@ -1,6 +1,6 @@
 import "server-only";
-import { prisma } from "@agripay/db";
-import { ROLE_HOME } from "@agripay/validation/permissions";
+import { prisma } from "@agrilink/db";
+import { ROLE_HOME } from "@agrilink/validation/permissions";
 import { audit } from "../audit";
 import { AppError } from "../errors";
 import { listContexts } from "./actor";

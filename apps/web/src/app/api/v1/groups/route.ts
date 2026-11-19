@@ -1,4 +1,4 @@
-import { createGroupSchema } from "@agripay/validation";
+import { createGroupSchema } from "@agrilink/validation";
 import { v1 } from "@/server/api/v1";
 import { createGroup, listGroups } from "@/server/savings/groups";
 

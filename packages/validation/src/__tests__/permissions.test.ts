@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { Role } from "@agripay/db/enums";
+import { Role } from "@agrilink/db/enums";
 import {
   type Action,
   type Actor,

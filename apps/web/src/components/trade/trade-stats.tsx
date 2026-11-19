@@ -1,8 +1,8 @@
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 import { BanknoteIcon, ClockIcon, ScaleIcon, ShieldAlertIcon, UsersIcon } from "lucide-react";
-import { StatCard } from "@agripay/ui/components/blocks";
-import type { Actor } from "@agripay/validation/permissions";
+import { StatCard } from "@agrilink/ui/components/blocks";
+import type { Actor } from "@agrilink/validation/permissions";
 import { formatLe } from "@/lib/format";
 import { tradeStats } from "@/server/trade/stats";
 

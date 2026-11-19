@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { MobileMoneyProvider } from "@agripay/db/enums";
+import { MobileMoneyProvider } from "@agrilink/db/enums";
 import { moneyLe } from "./money";
 import { positiveMoney } from "./trade";
 
@@ -150,7 +150,7 @@ export const recordPayoutSchema = z.object({
 export const CONSENT_SCOPES = ["PASSPORT_SUMMARY", "PASSPORT_DETAILED", "RECORDS_FULL"] as const;
 
 export const requestConsentSchema = z.object({
-  /** AgriPay ID (AP-BOM-000123) or phone — lenders cannot browse farmers. */
+  /** AgriLink ID (AP-BOM-000123) or phone — lenders cannot browse farmers. */
   farmer: text(40),
   scope: z.enum(CONSENT_SCOPES),
   purpose: text(160),

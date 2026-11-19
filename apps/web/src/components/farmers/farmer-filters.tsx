@@ -4,15 +4,15 @@ import { useEffect, useState, useTransition } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { Loader2Icon, SearchIcon, XIcon } from "lucide-react";
-import { Button } from "@agripay/ui/components/button";
-import { Input } from "@agripay/ui/components/input";
+import { Button } from "@agrilink/ui/components/button";
+import { Input } from "@agrilink/ui/components/input";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@agripay/ui/components/select";
+} from "@agrilink/ui/components/select";
 
 const ALL = "__all";
 

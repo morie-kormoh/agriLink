@@ -1,7 +1,7 @@
-import type { Role } from "@agripay/db/enums";
+import type { Role } from "@agrilink/db/enums";
 
 /**
- * AgriPay permission model.
+ * AgriLink permission model.
  * 1) Role → allowed actions (this matrix).
  * 2) Resource scope (org / ownership / consent) checked by `can()` with the context the caller supplies.
  * Shared by the web app, USSD service and worker.

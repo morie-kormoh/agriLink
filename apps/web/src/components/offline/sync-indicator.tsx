@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { RefreshCwIcon } from "lucide-react";
-import { Badge } from "@agripay/ui/components/badge";
+import { Badge } from "@agrilink/ui/components/badge";
 import { useOptionalSync } from "./sync-provider";
 
 /** Top-bar badge showing how many registrations are waiting to sync. */

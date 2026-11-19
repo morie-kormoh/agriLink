@@ -1,6 +1,6 @@
 import "server-only";
 import { NextResponse } from "next/server";
-import type { Role } from "@agripay/db";
+import type { Role } from "@agrilink/db";
 import { api } from "../api";
 import { type CurrentUser, requireActor } from "../auth/actor";
 import { AppError } from "../errors";

@@ -1,6 +1,7 @@
 import "server-only";
-import { type OtpPurpose, prisma } from "@agripay/db";
-import { t } from "@agripay/i18n";
+import { type OtpPurpose, prisma } from "@agrilink/db";
+import { t } from "@agrilink/i18n";
+import { isDemoMode } from "../demo/flags";
 import { AppError } from "../errors";
 import { hmac, randomDigits, safeEqual } from "../crypto";
 import { hitRateLimit } from "../rate-limit";
@@ -13,8 +14,7 @@ export const OTP_MAX_SENDS = 3; // per phone per window
 export const OTP_SEND_WINDOW_SEC = 15 * 60;
 export const OTP_MAX_SENDS_PER_IP = 20;
 
-/** True on a public demo deployment (DEMO_MODE=true). Never set this where real farmers' data lives. */
-export const isDemoMode = () => process.env.DEMO_MODE === "true" && process.env.NODE_ENV !== "test";
+export { isDemoMode };
 
 /**
  * Fixed login code (DEV_OTP_CODE) for local development, or for a demo deployment with DEMO_MODE=true.
@@ -65,10 +65,17 @@ export async function requestOtp(
     ? await hitRateLimit(`otp:ip:${opts.ip}`, OTP_MAX_SENDS_PER_IP, OTP_SEND_WINDOW_SEC)
     : { allowed: true };
   if (!perPhone.allowed || !perIp.allowed) {
-    throw new AppError("RATE_LIMITED", "Too many code requests. Try again later.", "auth.errors.rateLimited");
+    throw new AppError(
+      "RATE_LIMITED",
+      "Too many code requests. Try again later.",
+      "auth.errors.rateLimited",
+    );
   }
 
-  const user = await prisma.user.findUnique({ where: { phone }, select: { id: true, status: true, locale: true } });
+  const user = await prisma.user.findUnique({
+    where: { phone },
+    select: { id: true, status: true, locale: true },
+  });
   if (!user || user.status === "SUSPENDED") {
     return { sent: false, expiresInSec: OTP_TTL_MS / 1000 };
   }
@@ -78,8 +85,8 @@ export async function requestOtp(
   const locale = opts.locale ?? user.locale;
   const body =
     locale === "kri"
-      ? `AgriPay kod: ${code}. I go dɔn na 5 minit. Nɔ sheb am wit ɛnibɔdi.`
-      : `Your AgriPay code is ${code}. It expires in 5 minutes. Never share it with anyone.`;
+      ? `AgriLink kod: ${code}. I go dɔn na 5 minit. Nɔ sheb am wit ɛnibɔdi.`
+      : `Your AgriLink code is ${code}. It expires in 5 minutes. Never share it with anyone.`;
   await sendSms(phone, body, "otp");
   if (process.env.NODE_ENV === "development") {
     console.info(`🔐 [dev] OTP for ${phone}: ${code}  (${t("en", "auth.devHint")})`);
@@ -88,16 +95,28 @@ export async function requestOtp(
 }
 
 /** Check a code; consumes it on success. Throws AppError on failure. */
-export async function verifyOtp(phone: string, code: string, purpose: OtpPurpose = "LOGIN"): Promise<void> {
+export async function verifyOtp(
+  phone: string,
+  code: string,
+  purpose: OtpPurpose = "LOGIN",
+): Promise<void> {
   const otp = await prisma.otpCode.findFirst({
     where: { phone, purpose, usedAt: null },
     orderBy: { createdAt: "desc" },
   });
   if (!otp || otp.expiresAt < new Date()) {
-    throw new AppError("VALIDATION", "That code is wrong or has expired.", "auth.errors.invalidCode");
+    throw new AppError(
+      "VALIDATION",
+      "That code is wrong or has expired.",
+      "auth.errors.invalidCode",
+    );
   }
   if (otp.attempts >= OTP_MAX_ATTEMPTS) {
-    throw new AppError("LOCKED", "Too many wrong codes. Request a new code.", "auth.errors.tooManyAttempts");
+    throw new AppError(
+      "LOCKED",
+      "Too many wrong codes. Request a new code.",
+      "auth.errors.tooManyAttempts",
+    );
   }
   if (!safeEqual(otp.codeHash, codeHash(phone, purpose, code))) {
     const updated = await prisma.otpCode.update({
@@ -106,9 +125,17 @@ export async function verifyOtp(phone: string, code: string, purpose: OtpPurpose
     });
     if (updated.attempts >= OTP_MAX_ATTEMPTS) {
       await prisma.otpCode.update({ where: { id: otp.id }, data: { usedAt: new Date() } });
-      throw new AppError("LOCKED", "Too many wrong codes. Request a new code.", "auth.errors.tooManyAttempts");
+      throw new AppError(
+        "LOCKED",
+        "Too many wrong codes. Request a new code.",
+        "auth.errors.tooManyAttempts",
+      );
     }
-    throw new AppError("VALIDATION", "That code is wrong or has expired.", "auth.errors.invalidCode");
+    throw new AppError(
+      "VALIDATION",
+      "That code is wrong or has expired.",
+      "auth.errors.invalidCode",
+    );
   }
   // Consume atomically (guards against double submit).
   const consumed = await prisma.otpCode.updateMany({
@@ -116,6 +143,10 @@ export async function verifyOtp(phone: string, code: string, purpose: OtpPurpose
     data: { usedAt: new Date() },
   });
   if (consumed.count !== 1) {
-    throw new AppError("VALIDATION", "That code is wrong or has expired.", "auth.errors.invalidCode");
+    throw new AppError(
+      "VALIDATION",
+      "That code is wrong or has expired.",
+      "auth.errors.invalidCode",
+    );
   }
 }

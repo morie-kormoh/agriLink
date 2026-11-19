@@ -1,10 +1,10 @@
 import "server-only";
 import { createHash } from "node:crypto";
-import type { Prisma } from "@agripay/db";
-import { type ConsentScope, type Db, prisma } from "@agripay/db";
-import { RULES_V1, type ScoreResult, canonicalInputs, score } from "@agripay/finance";
-import { isYouth } from "@agripay/validation";
-import { type Actor, can } from "@agripay/validation/permissions";
+import type { Prisma } from "@agrilink/db";
+import { type ConsentScope, type Db, prisma } from "@agrilink/db";
+import { RULES_V1, type ScoreResult, canonicalInputs, score } from "@agrilink/finance";
+import { isYouth } from "@agrilink/validation";
+import { type Actor, can } from "@agrilink/validation/permissions";
 import { audit } from "../audit";
 import { forbidden, notFound } from "../errors";
 import { queue } from "../queues";
@@ -67,7 +67,7 @@ export async function computeScore(farmerId: string, opts: { notify?: boolean; n
     if (farmer) {
       await sendSms(
         farmer.phone,
-        `AgriPay: your score is now ${row.score} (${BAND_LABEL[row.band]}).${tip ? ` Open AgriPay to see how to add points.` : ""}`,
+        `AgriLink: your score is now ${row.score} (${BAND_LABEL[row.band]}).${tip ? ` Open AgriLink to see how to add points.` : ""}`,
         "general",
       );
     }
@@ -234,7 +234,7 @@ export async function getPassportForLender(actor: Actor, farmerId: string) {
     });
     await sendSms(
       farmer.phone,
-      `AgriPay: ${org?.name ?? "A lender"} viewed your AgriPay passport (you allowed this until ${consent.expiresAt!.toLocaleDateString("en-GB", { timeZone: "UTC" })}). You can stop it anytime in AgriPay.`,
+      `AgriLink: ${org?.name ?? "A lender"} viewed your AgriLink passport (you allowed this until ${consent.expiresAt!.toLocaleDateString("en-GB", { timeZone: "UTC" })}). You can stop it anytime in AgriLink.`,
       "general",
     );
   }
@@ -248,7 +248,7 @@ export async function getPassportForLender(actor: Actor, farmerId: string) {
     },
     farmer: {
       id: farmer.id,
-      agripayId: farmer.agripayId,
+      agrilinkId: farmer.agrilinkId,
       fullName: farmer.fullName,
       district: farmer.district.name,
       cooperative: farmer.cooperative?.name ?? null,

@@ -1,4 +1,4 @@
-import { addRecordSchema } from "@agripay/validation";
+import { addRecordSchema } from "@agrilink/validation";
 import { v1 } from "@/server/api/v1";
 import { addRecord, listRecords, seasonsFor } from "@/server/records/service";
 

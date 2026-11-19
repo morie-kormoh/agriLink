@@ -1,5 +1,5 @@
 import { redirect } from "next/navigation";
-import { hasPermission } from "@agripay/validation/permissions";
+import { hasPermission } from "@agrilink/validation/permissions";
 import { ImportFarmers } from "@/components/farmers/import-farmers";
 import { requirePortal } from "@/server/auth/actor";
 

@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { syncFarmersSchema } from "@agripay/validation";
+import { syncFarmersSchema } from "@agrilink/validation";
 import { api } from "@/server/api";
 import { requireActor } from "@/server/auth/actor";
 import { syncFarmers } from "@/server/farmers/sync";

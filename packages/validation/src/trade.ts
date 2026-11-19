@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { BuyerType, MobileMoneyProvider } from "@agripay/db/enums";
+import { BuyerType, MobileMoneyProvider } from "@agrilink/db/enums";
 import { moneyLe } from "./money";
 
 /** Positive money amount as a 2-dp string. */

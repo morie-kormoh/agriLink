@@ -1,7 +1,9 @@
 import { getTranslations } from "next-intl/server";
 import { WalletIcon } from "lucide-react";
-import { EmptyState, PageHeader, StatCard } from "@agripay/ui/components/blocks";
-import { Card, CardContent } from "@agripay/ui/components/card";
+import { EmptyState, PageHeader } from "@agrilink/ui/components/blocks";
+import { MoneyCard, MoneyFigure } from "@agrilink/ui/components/money";
+import { SplitRibbon } from "@agrilink/ui/components/split-ribbon";
+import { Card, CardContent } from "@agrilink/ui/components/card";
 import { PaymentStatus } from "@/components/trade/status-badges";
 import { formatDateTime, formatLe } from "@/lib/format";
 import { requirePortal } from "@/server/auth/actor";
@@ -11,15 +13,23 @@ export default async function FarmerPaymentsPage() {
   const { actor } = await requirePortal("/farmer");
   const t = await getTranslations();
   const s = await farmerStatement(actor, actor.farmerId ?? "");
+  const labels = Object.fromEntries(
+    [
+      "LOAN_REPAYMENT",
+      "SAVINGS",
+      "COOP_DUES",
+      "INSURANCE_PREMIUM",
+      "DEALER_SETTLEMENT",
+      "FARMER_WALLET",
+    ].map((k) => [k, t(`splitShort.${k}`)]),
+  );
   return (
     <>
       <PageHeader title={t("payments.statementTitle")} />
-      <StatCard
-        className="mb-6"
-        label={t("payments.totalReceived")}
-        value={formatLe(s.totalReceivedLe)}
-        icon={WalletIcon}
-      />
+      <MoneyCard tone="indigo" className="mb-6">
+        <p className="text-sm text-white/75">{t("payments.totalReceived")}</p>
+        <MoneyFigure amountLe={s.totalReceivedLe} className="mt-1" />
+      </MoneyCard>
       {s.payments.length === 0 ? (
         <EmptyState icon={WalletIcon} title={t("payments.noPayments")} />
       ) : (
@@ -39,16 +49,16 @@ export default async function FarmerPaymentsPage() {
                     : ""}
                   {formatDateTime(p.createdAt)} · {p.ref}
                 </p>
-                <ul className="flex flex-wrap gap-x-4 gap-y-1 text-sm">
-                  {p.splits.map((sp) => (
-                    <li
-                      key={sp.id}
-                      className={sp.type === "FARMER_WALLET" ? "text-primary font-semibold" : ""}
-                    >
-                      {t(`splitType.${sp.type}`)}: {formatLe(sp.amountLe.toString())}
-                    </li>
-                  ))}
-                </ul>
+                <SplitRibbon
+                  className="pt-1"
+                  grossLe={p.grossLe.toString()}
+                  splits={p.splits.map((sp) => ({
+                    type: sp.type,
+                    amountLe: sp.amountLe.toString(),
+                  }))}
+                  labels={labels}
+                  farmerLabel={labels.FARMER_WALLET}
+                />
               </CardContent>
             </Card>
           ))}

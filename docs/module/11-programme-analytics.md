@@ -2,7 +2,7 @@
 
 ## 1. Purpose
 
-Turn platform data into decisions for each audience — co-ops, buyers, lenders, government/donor programmes and the AgriPay team — and produce the **impact metrics required for the challenge's quarterly reports**, disaggregated by gender, youth and disability.
+Turn platform data into decisions for each audience — co-ops, buyers, lenders, government/donor programmes and the AgriLink team — and produce the **impact metrics required for the challenge's quarterly reports**, disaggregated by gender, youth and disability.
 
 ## 2. Scope
 
@@ -18,7 +18,7 @@ Turn platform data into decisions for each audience — co-ops, buyers, lenders,
 | KPI                            | Definition                                                    | Disaggregation                                    |
 | ------------------------------ | ------------------------------------------------------------- | ------------------------------------------------- |
 | Farmers registered             | `Farmer.status=ACTIVE`                                        | gender, youth (18–35), disability, district, crop |
-| First digital transaction      | farmers whose first ever successful payment came via AgriPay  | gender, youth                                     |
+| First digital transaction      | farmers whose first ever successful payment came via AgriLink | gender, youth                                     |
 | Digital farmer payments        | count & value of successful BUYER_TO_FARMER payments          | district, crop, co-op                             |
 | Cash-to-digital share          | digital payment value ÷ total purchase value per co-op        | co-op                                             |
 | Time to pay                    | median minutes from purchase approval to farmer split success | provider                                          |

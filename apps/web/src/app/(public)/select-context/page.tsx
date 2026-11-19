@@ -7,8 +7,8 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@agripay/ui/components/card";
-import { Alert, AlertDescription } from "@agripay/ui/components/misc";
+} from "@agrilink/ui/components/card";
+import { Alert, AlertDescription } from "@agrilink/ui/components/misc";
 import { getSessionUser, listContexts } from "@/server/auth/actor";
 import { ContextPicker } from "./context-picker";
 

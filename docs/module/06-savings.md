@@ -7,7 +7,7 @@ Help farmers smooth seasonal income: automatically save part of every harvest pa
 ## 2. Scope
 
 **In:** savings products (configured per custodian), farmer savings accounts, auto-save split rules, locked periods and release schedules, early withdrawal rules, group savings (contributions, cycle, payouts), statements, balance views.
-**Out:** The custodian's own core banking. Funds are held by a **licensed partner** (bank, community bank, FSA, MFI or MMO savings product). AgriPay records instructions and mirrors balances.
+**Out:** The custodian's own core banking. Funds are held by a **licensed partner** (bank, community bank, FSA, MFI or MMO savings product). AgriLink records instructions and mirrors balances.
 
 ## 3. Dependencies
 

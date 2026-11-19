@@ -1,4 +1,4 @@
-import { setPinSchema } from "@agripay/validation";
+import { setPinSchema } from "@agrilink/validation";
 import { v1 } from "@/server/api/v1";
 import { setPin } from "@/server/auth/pin";
 

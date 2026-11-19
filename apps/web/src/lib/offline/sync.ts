@@ -1,5 +1,5 @@
-import type { RegisterFarmerInput } from "@agripay/validation";
-import { type AgriPayOfflineDB, type PendingFarmer, offlineDb } from "./db";
+import type { RegisterFarmerInput } from "@agrilink/validation";
+import { type AgriLinkOfflineDB, type PendingFarmer, offlineDb } from "./db";
 
 export const BATCH_SIZE = 25;
 /** Backoff after each failed attempt: 30s, 2m, 5m, 15m, 1h (then hourly). */
@@ -14,7 +14,7 @@ type ServerResult =
       clientRef: string;
       status: "created" | "exists";
       farmerId: string;
-      agripayId: string;
+      agrilinkId: string;
       duplicateOf: string | null;
       warnings: string[];
     }
@@ -31,7 +31,7 @@ export async function enqueueFarmer(
   payload: RegisterFarmerInput,
   ownerUserId: string,
   photo?: Blob | null,
-  db: AgriPayOfflineDB = offlineDb(),
+  db: AgriLinkOfflineDB = offlineDb(),
 ): Promise<string> {
   const clientRef = (payload.clientRef as string | undefined) ?? crypto.randomUUID();
   const record: PendingFarmer = {
@@ -71,7 +71,7 @@ export function syncPending(
     ownerUserId: string;
     force?: boolean;
     fetchImpl?: typeof fetch;
-    db?: AgriPayOfflineDB;
+    db?: AgriLinkOfflineDB;
   } = { ownerUserId: "" },
 ): Promise<SyncSummary> {
   if (running) return running;
@@ -90,7 +90,7 @@ async function doSync({
   ownerUserId: string;
   force?: boolean;
   fetchImpl?: typeof fetch;
-  db?: AgriPayOfflineDB;
+  db?: AgriLinkOfflineDB;
 }): Promise<SyncSummary> {
   if (typeof navigator !== "undefined" && navigator.onLine === false)
     return { ok: 0, failed: 0, skipped: true };
@@ -152,7 +152,7 @@ async function doSync({
         ok++;
         await db.pendingFarmers.update(rec.clientRef, {
           status: "synced",
-          agripayId: r.agripayId,
+          agrilinkId: r.agrilinkId,
           farmerId: r.farmerId,
           duplicateOf: r.duplicateOf,
           warnings: r.warnings,
@@ -184,7 +184,7 @@ async function doSync({
 
 /** After a record has synced, upload its photo via a presigned URL. Failures are retried next sync. */
 async function uploadPendingPhotos(
-  db: AgriPayOfflineDB,
+  db: AgriLinkOfflineDB,
   ownerUserId: string,
   fetchImpl: typeof fetch,
 ) {
@@ -233,7 +233,7 @@ async function uploadPendingPhotos(
 export async function pruneSynced(
   ownerUserId: string,
   olderThanMs = 7 * 24 * 3600 * 1000,
-  db: AgriPayOfflineDB = offlineDb(),
+  db: AgriLinkOfflineDB = offlineDb(),
 ) {
   const cutoff = Date.now() - olderThanMs;
   await db.pendingFarmers

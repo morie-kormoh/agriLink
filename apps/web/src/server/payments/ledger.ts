@@ -1,5 +1,5 @@
 import "server-only";
-import { type Db, Prisma, type Tx } from "@agripay/db";
+import { type Db, Prisma, type Tx } from "@agrilink/db";
 import { randomUUID } from "node:crypto";
 
 /**
@@ -8,7 +8,7 @@ import { randomUUID } from "node:crypto";
  *
  * Account codes:
  *   ORG:{orgId}:FUNDING           payer's disbursement account (debited when money leaves)
- *   FARMER:{agripayId}:WALLET     farmer's mobile money wallet (credited when paid)
+ *   FARMER:{agrilinkId}:WALLET     farmer's mobile money wallet (credited when paid)
  *   ORG:{orgId}:DUES              co-op dues received
  *   SAVINGS:{accountId}           savings held at the custodian (credits − releases − fees = balance)
  *   LOAN:{loanId}                 repayments received for a loan
@@ -80,7 +80,7 @@ export async function balanceOf(db: Db, accountCode: string): Promise<Prisma.Dec
 
 export const accountCodes = {
   funding: (orgId: string) => `ORG:${orgId}:FUNDING`,
-  farmerWallet: (agripayId: string) => `FARMER:${agripayId}:WALLET`,
+  farmerWallet: (agrilinkId: string) => `FARMER:${agrilinkId}:WALLET`,
   coopDues: (orgId: string) => `ORG:${orgId}:DUES`,
   savings: (id: string) => `SAVINGS:${id}`,
   loan: (id: string) => `LOAN:${id}`,

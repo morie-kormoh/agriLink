@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { otpVerifySchema } from "@agripay/validation";
+import { otpVerifySchema } from "@agrilink/validation";
 import { api } from "@/server/api";
 import { loginWithOtp } from "@/server/auth/login";
 import { requestMeta } from "@/server/request";

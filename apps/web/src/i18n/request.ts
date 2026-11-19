@@ -1,6 +1,6 @@
 import { cookies } from "next/headers";
 import { getRequestConfig } from "next-intl/server";
-import { DEFAULT_LOCALE, getMessages, isLocale } from "@agripay/i18n";
+import { DEFAULT_LOCALE, getMessages, isLocale } from "@agrilink/i18n";
 
 export const LOCALE_COOKIE = "NEXT_LOCALE";
 

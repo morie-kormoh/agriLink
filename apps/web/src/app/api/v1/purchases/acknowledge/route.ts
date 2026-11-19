@@ -1,4 +1,4 @@
-import { acknowledgeSchema } from "@agripay/validation";
+import { acknowledgeSchema } from "@agrilink/validation";
 import { v1 } from "@/server/api/v1";
 import { forbidden } from "@/server/errors";
 import { acknowledgePurchase } from "@/server/trade/purchases";

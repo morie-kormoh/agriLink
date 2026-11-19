@@ -1,8 +1,8 @@
 import "server-only";
 import { cache } from "react";
 import { redirect } from "next/navigation";
-import { type OrgType, type Role, prisma } from "@agripay/db";
-import { type Actor, PORTAL_ROLES } from "@agripay/validation/permissions";
+import { type OrgType, type Role, prisma } from "@agrilink/db";
+import { type Actor, PORTAL_ROLES } from "@agrilink/validation/permissions";
 import { AppError } from "../errors";
 import { getSession } from "./session";
 

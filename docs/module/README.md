@@ -1,6 +1,6 @@
-# AgriPay Salone — Implementation Modules
+# AgriLink Salone — Implementation Modules
 
-This folder breaks the AgriPay Salone platform (see `../../AgriPay_Salone_Concept_Note.md`) into **14 implementation modules**. Each module file follows the same template so it can be picked up as a work package:
+This folder breaks the AgriLink Salone platform (see `../../AgriLink_Salone_Concept_Note.md`) into **14 implementation modules**. Each module file follows the same template so it can be picked up as a work package:
 
 1. Purpose
 2. Scope (in / out)

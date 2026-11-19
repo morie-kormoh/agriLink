@@ -1,4 +1,4 @@
-import { previewWaterfallSchema } from "@agripay/validation";
+import { previewWaterfallSchema } from "@agrilink/validation";
 import { v1 } from "@/server/api/v1";
 import { previewWaterfall } from "@/server/payments/service";
 

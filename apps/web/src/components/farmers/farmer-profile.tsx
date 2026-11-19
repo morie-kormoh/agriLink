@@ -1,13 +1,13 @@
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 import { MapPinIcon, NotebookPenIcon, PiggyBankIcon, SproutIcon, WalletIcon } from "lucide-react";
-import { Button } from "@agripay/ui/components/button";
-import { Badge } from "@agripay/ui/components/badge";
-import { Field, PageHeader } from "@agripay/ui/components/blocks";
-import { Card, CardContent, CardHeader, CardTitle } from "@agripay/ui/components/card";
-import { Alert, AlertDescription } from "@agripay/ui/components/misc";
-import { ageInYears, formatSlPhone, isYouth } from "@agripay/validation";
-import { type Actor, can } from "@agripay/validation/permissions";
+import { Button } from "@agrilink/ui/components/button";
+import { Badge } from "@agrilink/ui/components/badge";
+import { Field, PageHeader } from "@agrilink/ui/components/blocks";
+import { Card, CardContent, CardHeader, CardTitle } from "@agrilink/ui/components/card";
+import { Alert, AlertDescription } from "@agrilink/ui/components/misc";
+import { ageInYears, formatSlPhone, isYouth } from "@agrilink/validation";
+import { type Actor, can } from "@agrilink/validation/permissions";
 import { formatAcres, formatDate } from "@/lib/format";
 import type { getFarmer } from "@/server/farmers/service";
 import { FarmerIdCard } from "./id-card";
@@ -38,7 +38,7 @@ export async function FarmerProfile({
     <>
       <PageHeader
         title={farmer.fullName}
-        description={`${farmer.agripayId} · ${farmer.community}, ${farmer.chiefdom.name}, ${farmer.district.name}`}
+        description={`${farmer.agrilinkId} · ${farmer.community}, ${farmer.chiefdom.name}, ${farmer.district.name}`}
         actions={
           <>
             {savingsHref ? (
@@ -83,7 +83,7 @@ export async function FarmerProfile({
       <div className="grid gap-6 lg:grid-cols-3">
         <div className="lg:col-span-1">
           <FarmerIdCard
-            agripayId={farmer.agripayId}
+            agrilinkId={farmer.agrilinkId}
             fullName={farmer.fullName}
             district={farmer.district.name}
             cooperative={farmer.cooperative?.name ?? null}

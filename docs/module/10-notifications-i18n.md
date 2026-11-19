@@ -75,7 +75,7 @@ interface SmsProvider {
 ```
 
 - `ConsoleProvider` (dev/demo): writes to `Notification` and shows in the simulator SMS inbox.
-- Aggregator adapter(s) selected by `SMS_PROVIDER`; Sender ID "AgriPay" (registration with operators required).
+- Aggregator adapter(s) selected by `SMS_PROVIDER`; Sender ID "AgriLink" (registration with operators required).
 - Optional per-operator routing (Orange / Africell / QCell) if direct connections are obtained.
 
 ## 7. i18n

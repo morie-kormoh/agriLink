@@ -1,11 +1,11 @@
 import "server-only";
 import { cookies, headers } from "next/headers";
-import { type Role, prisma } from "@agripay/db";
-import { SHORT_SESSION_ROLES } from "@agripay/validation/permissions";
+import { type Role, prisma } from "@agrilink/db";
+import { SHORT_SESSION_ROLES } from "@agrilink/validation/permissions";
 import { randomToken, sha256 } from "../crypto";
 import { verifyAccessToken } from "./tokens";
 
-export const SESSION_COOKIE = "agripay_session";
+export const SESSION_COOKIE = "agrilink_session";
 const DAY_MS = 24 * 60 * 60 * 1000;
 export const SESSION_TTL_MS = 7 * DAY_MS;
 export const SUPER_ADMIN_TTL_MS = 12 * 60 * 60 * 1000;

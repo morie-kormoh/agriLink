@@ -1,7 +1,7 @@
 import "server-only";
 import { hash, verify } from "@node-rs/argon2";
-import { prisma } from "@agripay/db";
-import { pinSchema } from "@agripay/validation";
+import { prisma } from "@agrilink/db";
+import { pinSchema } from "@agrilink/validation";
 import { audit } from "../audit";
 import { AppError } from "../errors";
 import { sendSms } from "../sms";
@@ -53,7 +53,7 @@ export async function setPin(
   if (user.pinHash) {
     await sendSms(
       user.phone,
-      "AgriPay: your PIN was changed. If this wasn't you, contact your cooperative or AgriPay support now.",
+      "AgriLink: your PIN was changed. If this wasn't you, contact your cooperative or AgriLink support now.",
       "security",
     );
   }
@@ -108,7 +108,7 @@ export async function verifyPinForUser(
   if (lock) {
     await sendSms(
       user.phone,
-      "AgriPay: your PIN is locked for 30 minutes after 3 wrong attempts. If this wasn't you, contact your cooperative.",
+      "AgriLink: your PIN is locked for 30 minutes after 3 wrong attempts. If this wasn't you, contact your cooperative.",
       "security",
     );
   }

@@ -1,19 +1,19 @@
 "use client";
 
 import { useState } from "react";
-import { Button } from "@agripay/ui/components/button";
-import { Label } from "@agripay/ui/components/label";
-import { Checkbox, Switch } from "@agripay/ui/components/misc";
-import { OtpInput } from "@agripay/ui/components/otp-input";
+import { Button } from "@agrilink/ui/components/button";
+import { Label } from "@agrilink/ui/components/label";
+import { Checkbox, Switch } from "@agrilink/ui/components/misc";
+import { OtpInput } from "@agrilink/ui/components/otp-input";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@agripay/ui/components/select";
-import { toast } from "@agripay/ui/components/sonner";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@agripay/ui/components/tabs";
+} from "@agrilink/ui/components/select";
+import { toast } from "@agrilink/ui/components/sonner";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@agrilink/ui/components/tabs";
 
 export function UiDemoClient() {
   const [otp, setOtp] = useState("");

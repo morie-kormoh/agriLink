@@ -1,5 +1,5 @@
 import { getTranslations } from "next-intl/server";
-import { PageHeader, StatusBadge } from "@agripay/ui/components/blocks";
+import { PageHeader, StatusBadge } from "@agrilink/ui/components/blocks";
 import {
   Table,
   TableBody,
@@ -7,7 +7,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@agripay/ui/components/table";
+} from "@agrilink/ui/components/table";
 import { toneFor } from "@/components/finance/score-dial";
 import { requirePortal } from "@/server/auth/actor";
 import { listLenderConsents } from "@/server/passport/consent";
@@ -50,7 +50,7 @@ export default async function Page() {
                   </TableCell>
                   <TableCell>
                     {c.farmer.fullName}
-                    <p className="text-muted-foreground text-xs">{c.farmer.agripayId}</p>
+                    <p className="text-muted-foreground text-xs">{c.farmer.agrilinkId}</p>
                   </TableCell>
                   <TableCell className="text-xs">{t(`consentScope.${c.scope}`)}</TableCell>
                   <TableCell className="text-xs">{c.purpose}</TableCell>

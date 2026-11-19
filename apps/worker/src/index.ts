@@ -1,7 +1,7 @@
 import path from "node:path";
 import { config as loadEnv } from "dotenv";
 import { type ConnectionOptions, type Job, Queue, Worker } from "bullmq";
-import { maskPhone } from "@agripay/validation";
+import { maskPhone } from "@agrilink/validation";
 
 loadEnv({ path: path.resolve(import.meta.dirname, "../../../.env"), quiet: true });
 

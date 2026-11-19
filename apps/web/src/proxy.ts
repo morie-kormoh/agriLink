@@ -27,7 +27,7 @@ export function proxy(request: NextRequest) {
   const isProtected = PROTECTED_PREFIXES.some(
     (p) => pathname === p || pathname.startsWith(`${p}/`),
   );
-  if (isProtected && !request.cookies.has("agripay_session")) {
+  if (isProtected && !request.cookies.has("agrilink_session")) {
     const url = request.nextUrl.clone();
     url.pathname = "/login";
     url.search = `?next=${encodeURIComponent(pathname + search)}`;

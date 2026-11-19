@@ -15,11 +15,11 @@ import {
   SaveIcon,
   TriangleAlertIcon,
 } from "lucide-react";
-import { type Gender, LandTenure, MobileMoneyProvider } from "@agripay/db/enums";
-import { Button } from "@agripay/ui/components/button";
-import { Card, CardContent, CardFooter } from "@agripay/ui/components/card";
-import { Input } from "@agripay/ui/components/input";
-import { Label } from "@agripay/ui/components/label";
+import { type Gender, LandTenure, MobileMoneyProvider } from "@agrilink/db/enums";
+import { Button } from "@agrilink/ui/components/button";
+import { Card, CardContent, CardFooter } from "@agrilink/ui/components/card";
+import { Input } from "@agrilink/ui/components/input";
+import { Label } from "@agrilink/ui/components/label";
 import {
   Alert,
   AlertDescription,
@@ -27,16 +27,16 @@ import {
   RadioGroup,
   RadioGroupItem,
   Switch,
-} from "@agripay/ui/components/misc";
+} from "@agrilink/ui/components/misc";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@agripay/ui/components/select";
-import { toast } from "@agripay/ui/components/sonner";
-import { Stepper } from "@agripay/ui/components/stepper";
+} from "@agrilink/ui/components/select";
+import { toast } from "@agrilink/ui/components/sonner";
+import { Stepper } from "@agrilink/ui/components/stepper";
 import {
   type RegisterFarmerData,
   type RegisterFarmerInput,
@@ -44,7 +44,7 @@ import {
   formatSlPhone,
   normalizeSlPhone,
   registerFarmerSchema,
-} from "@agripay/validation";
+} from "@agrilink/validation";
 import { useOptionalSync } from "@/components/offline/sync-provider";
 import { offlineDb } from "@/lib/offline/db";
 import { compressImage } from "@/lib/offline/photo";
@@ -64,7 +64,7 @@ const STEP_FIELDS: FieldName[][] = [
 
 type Done = {
   fullName: string;
-  agripayId?: string;
+  agrilinkId?: string;
   farmerId?: string;
   offline: boolean;
   duplicateOf?: string | null;
@@ -207,7 +207,7 @@ export function RegisterWizard({
         rec?.status === "synced"
           ? {
               fullName: rec.fullName,
-              agripayId: rec.agripayId,
+              agrilinkId: rec.agrilinkId,
               farmerId: rec.farmerId,
               offline: false,
               duplicateOf: rec.duplicateOf,
@@ -220,7 +220,10 @@ export function RegisterWizard({
         toast.info(t("farmer.savedOffline"));
       } else {
         toast.success(
-          t("farmer.registeredToast", { name: result.fullName, agripayId: result.agripayId ?? "" }),
+          t("farmer.registeredToast", {
+            name: result.fullName,
+            agrilinkId: result.agrilinkId ?? "",
+          }),
         );
       }
       setDone(result);
@@ -244,12 +247,12 @@ export function RegisterWizard({
                   ? t("farmer.savedOffline")
                   : t("farmer.registeredToast", {
                       name: done.fullName,
-                      agripayId: done.agripayId ?? "",
+                      agrilinkId: done.agrilinkId ?? "",
                     })}
               </p>
-              {done.agripayId ? (
+              {done.agrilinkId ? (
                 <p className="text-primary font-mono text-2xl font-bold tracking-wider">
-                  {done.agripayId}
+                  {done.agrilinkId}
                 </p>
               ) : null}
             </div>
@@ -258,7 +261,10 @@ export function RegisterWizard({
             <Alert variant="warning">
               <TriangleAlertIcon />
               <AlertDescription>
-                {t("farmer.duplicateWarning", { name: done.fullName, agripayId: done.duplicateOf })}
+                {t("farmer.duplicateWarning", {
+                  name: done.fullName,
+                  agrilinkId: done.duplicateOf,
+                })}
               </AlertDescription>
             </Alert>
           ) : null}

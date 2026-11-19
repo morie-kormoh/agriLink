@@ -1,5 +1,5 @@
 import { getTranslations } from "next-intl/server";
-import { PageHeader } from "@agripay/ui/components/blocks";
+import { PageHeader } from "@agrilink/ui/components/blocks";
 import { RegisterWizard } from "@/components/farmers/register-wizard";
 import { requirePortal } from "@/server/auth/actor";
 import { getReferenceData } from "@/server/reference";

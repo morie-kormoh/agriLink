@@ -1,4 +1,4 @@
-import { respondConsentSchema, revokeConsentSchema } from "@agripay/validation";
+import { respondConsentSchema, revokeConsentSchema } from "@agrilink/validation";
 import { v1 } from "@/server/api/v1";
 import { notFound } from "@/server/errors";
 import { respondConsent, revokeConsent } from "@/server/passport/consent";

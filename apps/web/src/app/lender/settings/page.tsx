@@ -1,6 +1,6 @@
 import { getTranslations } from "next-intl/server";
-import { Card, CardContent } from "@agripay/ui/components/card";
-import { PageHeader } from "@agripay/ui/components/blocks";
+import { Card, CardContent } from "@agrilink/ui/components/card";
+import { PageHeader } from "@agrilink/ui/components/blocks";
 import { InstitutionForm } from "@/components/lender/lender-client";
 import { requirePortal } from "@/server/auth/actor";
 import { getInstitution } from "@/server/finance/common";

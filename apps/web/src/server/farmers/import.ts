@@ -1,12 +1,12 @@
 import "server-only";
-import { prisma } from "@agripay/db";
+import { prisma } from "@agrilink/db";
 import {
   type RegisterFarmerData,
   csvFarmerRowSchema,
   currentSeason,
   registerFarmerSchema,
-} from "@agripay/validation";
-import { type Actor, can } from "@agripay/validation/permissions";
+} from "@agrilink/validation";
+import { type Actor, can } from "@agrilink/validation/permissions";
 import { uuidFromString } from "../crypto";
 import { forbidden } from "../errors";
 import { registerFarmer } from "./service";

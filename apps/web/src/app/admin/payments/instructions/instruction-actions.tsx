@@ -4,8 +4,8 @@ import { useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { Loader2Icon, RotateCcwIcon, XIcon } from "lucide-react";
-import { Button } from "@agripay/ui/components/button";
-import { toast } from "@agripay/ui/components/sonner";
+import { Button } from "@agrilink/ui/components/button";
+import { toast } from "@agrilink/ui/components/sonner";
 import { markInstructionFailedAction, retryInstructionAction } from "@/app/actions/payments";
 
 export function InstructionActions({ id, status }: { id: string; status: string }) {

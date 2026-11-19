@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { ArrowLeftRightIcon, LogOutIcon, ShieldCheckIcon, UsersIcon } from "lucide-react";
-import { Avatar, AvatarFallback } from "@agripay/ui/components/misc";
+import { Avatar, AvatarFallback } from "@agrilink/ui/components/misc";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -11,7 +11,7 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@agripay/ui/components/dropdown-menu";
+} from "@agrilink/ui/components/dropdown-menu";
 import { logoutAction } from "@/app/actions/auth";
 
 export function UserMenu({

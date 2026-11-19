@@ -9,8 +9,8 @@ import type {
   LoanProductInput,
   RequestConsentInput,
   SavingsProductInput,
-} from "@agripay/validation";
-import type { Actor } from "@agripay/validation/permissions";
+} from "@agrilink/validation";
+import type { Actor } from "@agrilink/validation/permissions";
 import { requireActor } from "@/server/auth/actor";
 import {
   acceptOffer,
@@ -158,7 +158,7 @@ export async function requestConsentAction(input: RequestConsentInput) {
     requestConsent(a, input).then((r) => ({
       ref: r.request.ref,
       duplicate: r.duplicate,
-      agripayId: r.farmer.agripayId,
+      agrilinkId: r.farmer.agrilinkId,
     })),
   );
 }

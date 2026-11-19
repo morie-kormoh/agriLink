@@ -1,5 +1,5 @@
-import { prisma } from "@agripay/db";
-import { positiveMoney } from "@agripay/validation";
+import { prisma } from "@agrilink/db";
+import { positiveMoney } from "@agrilink/validation";
 import { v1 } from "@/server/api/v1";
 import { checkEligibility } from "@/server/credit/eligibility";
 import { disclosureFor, getLoanProduct } from "@/server/credit/products";

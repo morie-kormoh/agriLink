@@ -1,4 +1,4 @@
-import { setPriceSchema } from "@agripay/validation";
+import { setPriceSchema } from "@agrilink/validation";
 import { v1 } from "@/server/api/v1";
 import { listActivePrices, setPrice } from "@/server/trade/settings";
 

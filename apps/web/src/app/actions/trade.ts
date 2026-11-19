@@ -8,8 +8,10 @@ import type {
   coopSettingsSchema,
   recordPurchaseSchema,
   setPriceSchema,
-} from "@agripay/validation";
+} from "@agrilink/validation";
+import { prisma } from "@agrilink/db";
 import { requireActor } from "@/server/auth/actor";
+import { isMvpMode } from "@/server/demo/flags";
 import { type ActionResult, toActionError } from "@/server/errors";
 import { previewWaterfall } from "@/server/payments/service";
 import { approveBatch, approvePurchase, submitBatch } from "@/server/trade/batches";
@@ -46,6 +48,14 @@ export async function recordPurchaseAction(input: z.input<typeof recordPurchaseS
   try {
     const { actor } = await requireActor();
     const r = await recordPurchase(actor, input);
+    // MVP: send it straight to the manager (the two-person rule still applies: the recorder can't approve).
+    if (isMvpMode()) {
+      const batch = await prisma.purchaseBatch.findUnique({
+        where: { id: r.purchase.batchId },
+        select: { status: true },
+      });
+      if (batch?.status === "OPEN") await submitBatch(actor, r.purchase.batchId);
+    }
     revalidateTrade();
     return { ok: true as const, data: r };
   } catch (e) {

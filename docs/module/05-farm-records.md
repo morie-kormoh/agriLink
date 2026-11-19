@@ -6,7 +6,7 @@ Give farmers a simple digital farm book: what they spent, what they harvested an
 
 ## 2. Scope
 
-**In:** manual records (inputs, labour, other costs, harvest, sales outside AgriPay), automatic records from events, crop-cycle linking, season summaries, profit summary SMS, record verification levels, co-op view.
+**In:** manual records (inputs, labour, other costs, harvest, sales outside AgriLink), automatic records from events, crop-cycle linking, season summaries, profit summary SMS, record verification levels, co-op view.
 **Out:** Accounting-grade bookkeeping for agri-SMEs (future).
 
 ## 3. Dependencies
@@ -56,7 +56,7 @@ model SeasonSummary {
 
 ## 5. Business rules
 
-- `SALE` records from AgriPay purchases are `SYSTEM_VERIFIED`; input vouchers redeemed are `SYSTEM_VERIFIED`; agent-entered records are `AGENT_CONFIRMED`; farmer-entered are `SELF_REPORTED`.
+- `SALE` records from AgriLink purchases are `SYSTEM_VERIFIED`; input vouchers redeemed are `SYSTEM_VERIFIED`; agent-entered records are `AGENT_CONFIRMED`; farmer-entered are `SELF_REPORTED`.
 - The passport (07) weights verified records more than self-reported ones.
 - Season codes: `{YEAR}-MAIN` (rainy season) and `{YEAR}-DRY`; default derived from `occurredAt` with co-op override.
 - Farmers can edit/delete only their `SELF_REPORTED` records within 30 days.
@@ -84,7 +84,7 @@ model SeasonSummary {
 
 - USSD _My Farm → Add expense_: type → amount → confirm.
 - USSD _My Farm → Season summary_.
-- SMS at season close: "AgriPay 2027 main season: You spent Le 1,800, sold Le 8,000 (20 bags rice). Net Le 6,200. Saved Le 1,200. Keep recording to grow your AgriPay score."
+- SMS at season close: "AgriLink 2027 main season: You spent Le 1,800, sold Le 8,000 (20 bags rice). Net Le 6,200. Saved Le 1,200. Keep recording to grow your AgriLink score."
 
 ## 9. Step-by-step implementation
 

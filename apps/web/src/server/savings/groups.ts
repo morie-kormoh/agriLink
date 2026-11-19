@@ -1,12 +1,12 @@
 import "server-only";
-import { Prisma, nextSequenceValue, prisma } from "@agripay/db";
+import { Prisma, nextSequenceValue, prisma } from "@agrilink/db";
 import {
   type GroupFrequency,
   onTimeRate,
   periodNumber,
   rotatingRecipient,
   totalPeriods,
-} from "@agripay/finance";
+} from "@agrilink/finance";
 import {
   addGroupMemberSchema,
   createGroupSchema,
@@ -14,8 +14,8 @@ import {
   recordContributionSchema,
   recordPayoutSchema,
   type CreateGroupInput,
-} from "@agripay/validation";
-import { type Actor, can } from "@agripay/validation/permissions";
+} from "@agrilink/validation";
+import { type Actor, can } from "@agrilink/validation/permissions";
 import type { z } from "zod";
 import { audit } from "../audit";
 import { AppError, forbidden, notFound } from "../errors";
@@ -24,7 +24,7 @@ import { sendSms } from "../sms";
 
 /**
  * Group savings (VSLA / Osusu) — module 06. The group's cash stays with the group (or its mobile money
- * account); AgriPay keeps the books: members, contributions per period, rotating payouts and statements.
+ * account); AgriLink keeps the books: members, contributions per period, rotating payouts and statements.
  */
 
 async function loadGroup(id: string) {
@@ -131,7 +131,7 @@ export async function getGroup(actor: Actor, id: string) {
           select: {
             id: true,
             fullName: true,
-            agripayId: true,
+            agrilinkId: true,
             phone: true,
             loans: {
               where: { groupId: id },
@@ -226,7 +226,7 @@ export async function addGroupMember(
       action: "group.member_saved",
       entity: "SavingsGroup",
       entityId: groupId,
-      after: { farmer: farmer.agripayId, ...data },
+      after: { farmer: farmer.agrilinkId, ...data },
     });
     return m;
   });
@@ -249,9 +249,10 @@ export async function recordContribution(
     throw new AppError("VALIDATION", `This cycle has ${periods} periods.`);
   if (data.method === "MOBILE_MONEY" && !data.reference)
     throw new AppError("VALIDATION", "Enter the mobile money transaction ID.");
+  let c;
   try {
-    return await prisma.$transaction(async (tx) => {
-      const c = await tx.groupContribution.create({
+    c = await prisma.$transaction(async (tx) => {
+      const row = await tx.groupContribution.create({
         data: { groupId, ...data, recordedById: actor.userId },
       });
       await audit(tx, {
@@ -261,7 +262,7 @@ export async function recordContribution(
         entityId: groupId,
         after: data,
       });
-      return c;
+      return row;
     });
   } catch (e) {
     if (e instanceof Prisma.PrismaClientKnownRequestError && e.code === "P2002")
@@ -270,9 +271,9 @@ export async function recordContribution(
         "A contribution is already recorded for this member and period.",
       );
     throw e;
-  } finally {
-    void emit("score.stale", { farmerId: data.farmerId });
   }
+  await emit("score.stale", { farmerId: data.farmerId });
+  return c;
 }
 
 /** Osusu: pay the period's pot to the member whose turn it is. */
@@ -318,7 +319,7 @@ export async function recordPayout(
         entityId: groupId,
         after: {
           periodNo: data.periodNo,
-          to: recipient.farmer.agripayId,
+          to: recipient.farmer.agrilinkId,
           amountLe: amount.toFixed(2),
         },
       });
@@ -326,7 +327,7 @@ export async function recordPayout(
     });
     await sendSms(
       recipient.farmer.phone,
-      `AgriPay: ${g.name} paid you the period ${data.periodNo} pot of ${formatLe(amount.toFixed(2))}.`,
+      `AgriLink: ${g.name} paid you the period ${data.periodNo} pot of ${formatLe(amount.toFixed(2))}.`,
       "general",
     );
     return p;
@@ -354,7 +355,7 @@ export async function sendGroupStatements(actor: Actor, groupId: string) {
     const t = totals.find((x) => x.farmerId === m.farmerId)?._sum.amountLe ?? new Prisma.Decimal(0);
     await sendSms(
       m.farmer.phone,
-      `AgriPay ${g.name}: your total savings this cycle is ${formatLe(t.toFixed(2))}.`,
+      `AgriLink ${g.name}: your total savings this cycle is ${formatLe(t.toFixed(2))}.`,
       "general",
     );
   }

@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { Role } from "@agripay/db/enums";
+import { Role } from "@agrilink/db/enums";
 import { phoneSL } from "./phone";
 
 export const otpRequestSchema = z.object({

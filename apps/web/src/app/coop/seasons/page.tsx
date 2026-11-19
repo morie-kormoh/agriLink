@@ -1,7 +1,7 @@
 import { getTranslations } from "next-intl/server";
 import { redirect } from "next/navigation";
-import { PageHeader } from "@agripay/ui/components/blocks";
-import { Badge } from "@agripay/ui/components/badge";
+import { PageHeader } from "@agrilink/ui/components/blocks";
+import { Badge } from "@agrilink/ui/components/badge";
 import {
   Table,
   TableBody,
@@ -9,9 +9,9 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@agripay/ui/components/table";
-import { currentSeason, seasonCode } from "@agripay/validation";
-import { hasPermission } from "@agripay/validation/permissions";
+} from "@agrilink/ui/components/table";
+import { currentSeason, seasonCode } from "@agrilink/validation";
+import { hasPermission } from "@agrilink/validation/permissions";
 import { formatLe } from "@/lib/format";
 import { requirePortal } from "@/server/auth/actor";
 import { coopSeasonTable } from "@/server/records/service";
@@ -62,7 +62,7 @@ export default async function CoopSeasonsPage({
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>{t("farmer.agripayId")}</TableHead>
+              <TableHead>{t("farmer.agrilinkId")}</TableHead>
               <TableHead>{t("farmer.name")}</TableHead>
               <TableHead className="text-right">{t("records.spent")}</TableHead>
               <TableHead className="text-right">{t("records.sold")}</TableHead>
@@ -81,7 +81,7 @@ export default async function CoopSeasonsPage({
             ) : (
               rows.map((r) => (
                 <TableRow key={r.farmer.id}>
-                  <TableCell className="font-mono text-xs">{r.farmer.agripayId}</TableCell>
+                  <TableCell className="font-mono text-xs">{r.farmer.agrilinkId}</TableCell>
                   <TableCell>{r.farmer.fullName}</TableCell>
                   <TableCell className="text-right tabular-nums">
                     {formatLe(r.totals.totalCostLe)}

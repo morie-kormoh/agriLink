@@ -12,27 +12,27 @@ import {
   SendIcon,
   XIcon,
 } from "lucide-react";
-import { Button } from "@agripay/ui/components/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@agripay/ui/components/card";
+import { Button } from "@agrilink/ui/components/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@agrilink/ui/components/card";
 import {
   Dialog,
   DialogContent,
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@agripay/ui/components/dialog";
-import { Input } from "@agripay/ui/components/input";
-import { Label } from "@agripay/ui/components/label";
-import { Checkbox } from "@agripay/ui/components/misc";
+} from "@agrilink/ui/components/dialog";
+import { Input } from "@agrilink/ui/components/input";
+import { Label } from "@agrilink/ui/components/label";
+import { Checkbox } from "@agrilink/ui/components/misc";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@agripay/ui/components/select";
-import { toast } from "@agripay/ui/components/sonner";
-import { Textarea } from "@agripay/ui/components/textarea";
+} from "@agrilink/ui/components/select";
+import { toast } from "@agrilink/ui/components/sonner";
+import { Textarea } from "@agrilink/ui/components/textarea";
 import {
   approveLoanAction,
   createSavingsProductAction,
@@ -536,10 +536,10 @@ export function ConsentRequestForm() {
               durationMonths: Number(f.durationMonths),
             }),
           (d) => {
-            const r = d as { ref: string; duplicate: boolean; agripayId: string };
+            const r = d as { ref: string; duplicate: boolean; agrilinkId: string };
             return r.duplicate
               ? t("lender.alreadyRequested", { ref: r.ref })
-              : t("lender.requested", { ref: r.ref, id: r.agripayId });
+              : t("lender.requested", { ref: r.ref, id: r.agrilinkId });
           },
           () => setF({ ...f, farmer: "", purpose: "" }),
         );
@@ -852,7 +852,7 @@ export function ReconcileSavingsForm() {
           </p>
           {result.mismatched.map((m) => (
             <p key={m.ref} className="text-destructive sm:col-span-4">
-              {m.ref}: AgriPay {m.ours} ≠ {m.theirs}
+              {m.ref}: AgriLink {m.ours} ≠ {m.theirs}
             </p>
           ))}
         </div>

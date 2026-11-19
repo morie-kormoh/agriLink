@@ -1,6 +1,6 @@
 import "server-only";
-import { Prisma, prisma } from "@agripay/db";
-import { type Actor, can } from "@agripay/validation/permissions";
+import { Prisma, prisma } from "@agrilink/db";
+import { type Actor, can } from "@agrilink/validation/permissions";
 import { forbidden } from "../errors";
 
 /** Trade KPIs for a co-op or buyer dashboard. */

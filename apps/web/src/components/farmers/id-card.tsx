@@ -1,16 +1,16 @@
 import { getTranslations } from "next-intl/server";
 import { SproutIcon, UserRoundIcon } from "lucide-react";
 
-/** Printable AgriPay Farmer ID card. */
+/** Printable AgriLink Farmer ID card. */
 export async function FarmerIdCard({
-  agripayId,
+  agrilinkId,
   fullName,
   district,
   cooperative,
   photoUrl,
   kycTier,
 }: {
-  agripayId: string;
+  agrilinkId: string;
   fullName: string;
   district: string;
   cooperative: string | null;
@@ -19,10 +19,10 @@ export async function FarmerIdCard({
 }) {
   const t = await getTranslations();
   return (
-    <div className="from-primary text-primary-foreground overflow-hidden rounded-2xl bg-gradient-to-br to-[oklch(0.4_0.1_155)] p-5 shadow-md">
+    <div className="bg-indigo gara overflow-hidden rounded-[var(--radius-money)] p-5 text-white">
       <div className="mb-4 flex items-center justify-between">
         <span className="flex items-center gap-2 text-sm font-semibold">
-          <span className="bg-accent text-accent-foreground rounded-md p-1">
+          <span className="bg-gold text-ink rounded-md p-1">
             <SproutIcon className="size-4" />
           </span>
           {t("farmer.idCardTitle")}
@@ -42,12 +42,12 @@ export async function FarmerIdCard({
           </div>
         )}
         <div className="min-w-0">
-          <p className="truncate text-lg font-semibold">{fullName}</p>
+          <p className="font-display truncate text-lg font-bold">{fullName}</p>
           <p className="truncate text-sm opacity-80">{district}</p>
           {cooperative ? <p className="truncate text-xs opacity-80">{cooperative}</p> : null}
         </div>
       </div>
-      <p className="text-accent mt-5 font-mono text-2xl font-bold tracking-widest">{agripayId}</p>
+      <p className="text-gold mt-5 font-mono text-2xl font-medium tracking-widest">{agrilinkId}</p>
     </div>
   );
 }

@@ -1,6 +1,6 @@
 import { getTranslations } from "next-intl/server";
-import { Badge } from "@agripay/ui/components/badge";
-import { PageHeader } from "@agripay/ui/components/blocks";
+import { Badge } from "@agrilink/ui/components/badge";
+import { PageHeader } from "@agrilink/ui/components/blocks";
 import {
   Table,
   TableBody,
@@ -8,8 +8,8 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@agripay/ui/components/table";
-import { formatSlPhone } from "@agripay/validation";
+} from "@agrilink/ui/components/table";
+import { formatSlPhone } from "@agrilink/validation";
 import { Pagination } from "@/components/pagination";
 import { formatDateTime } from "@/lib/format";
 import { listUsers } from "@/server/admin/service";
@@ -56,7 +56,7 @@ export default async function AdminUsersPage({
                     <div className="flex flex-wrap gap-1">
                       {u.farmer ? (
                         <Badge variant="secondary">
-                          {t("roles.FARMER")} · {u.farmer.agripayId}
+                          {t("roles.FARMER")} · {u.farmer.agrilinkId}
                         </Badge>
                       ) : null}
                       {u.memberships.map((m) => (

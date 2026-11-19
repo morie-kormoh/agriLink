@@ -1,6 +1,6 @@
 import "server-only";
 import { notFound } from "next/navigation";
-import type { Actor } from "@agripay/validation/permissions";
+import type { Actor } from "@agrilink/validation/permissions";
 import { AppError } from "../errors";
 import { getFarmer } from "./service";
 

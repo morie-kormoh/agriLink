@@ -2,12 +2,12 @@
 
 ## 1. Purpose
 
-Extend AgriPay with two TOR use cases once the core is piloted:
+Extend AgriLink with two TOR use cases once the core is piloted:
 
 - **Digitally enabled agri-insurance**: weather-index or area-yield micro-insurance bundled with input loans, underwritten by a **licensed insurer**.
 - **Crowdfunded input finance**: individuals (including diaspora) co-fund cooperative input-loan pools through a regulated partner, repaid through the same harvest waterfall.
 
-AgriPay acts as **distribution and servicing platform only**; it does not underwrite risk or hold investor funds.
+AgriLink acts as **distribution and servicing platform only**; it does not underwrite risk or hold investor funds.
 
 ## 2. Scope
 
@@ -102,7 +102,7 @@ model Pledge {
 - Insurance enrolment needs simple disclosure (what is covered, premium, cover dates, how payout works) + farmer PIN.
 - Premium collection: added to loan (financed) **or** as a `SplitRule` `INSURANCE_PREMIUM`; never deducted without consent.
 - Index-trigger payouts are automatic to all active policies in the affected district/period via module 04, with SMS.
-- Crowdfunding: funds collected and held by the partner; campaigns show risk disclosure; AgriPay shows aggregated, anonymised farmer impact only; repayments from loans in the pool distributed by the partner.
+- Crowdfunding: funds collected and held by the partner; campaigns show risk disclosure; AgriLink shows aggregated, anonymised farmer impact only; repayments from loans in the pool distributed by the partner.
 
 ## 6. Step-by-step implementation
 

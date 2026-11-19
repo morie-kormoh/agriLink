@@ -1,4 +1,4 @@
-import { ageInYears, formatLe, formatSlPhone, isYouth } from "@agripay/validation";
+import { ageInYears, formatLe, formatSlPhone, isYouth } from "@agrilink/validation";
 
 export { formatLe, formatSlPhone, isYouth, ageInYears };
 

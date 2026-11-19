@@ -1,4 +1,4 @@
-import { loanProductSchema } from "@agripay/validation";
+import { loanProductSchema } from "@agrilink/validation";
 import { v1 } from "@/server/api/v1";
 import { getLoanProduct, saveLoanProduct } from "@/server/credit/products";
 

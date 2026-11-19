@@ -4,14 +4,14 @@ import { useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { Loader2Icon, MoreHorizontalIcon } from "lucide-react";
-import { Button } from "@agripay/ui/components/button";
+import { Button } from "@agrilink/ui/components/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@agripay/ui/components/dropdown-menu";
-import { toast } from "@agripay/ui/components/sonner";
+} from "@agrilink/ui/components/dropdown-menu";
+import { toast } from "@agrilink/ui/components/sonner";
 import { setUserStatusAction, unlockPinAction } from "@/app/actions/admin";
 
 export function UserActions({

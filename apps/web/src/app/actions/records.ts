@@ -1,7 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import type { AddRecordInput } from "@agripay/validation";
+import type { AddRecordInput } from "@agrilink/validation";
 import { requireActor } from "@/server/auth/actor";
 import { type ActionResult, toActionError } from "@/server/errors";
 import { addRecord, closeSeason, deleteRecord } from "@/server/records/service";

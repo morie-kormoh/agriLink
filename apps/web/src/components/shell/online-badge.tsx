@@ -3,7 +3,7 @@
 import { useSyncExternalStore } from "react";
 import { useTranslations } from "next-intl";
 import { WifiIcon, WifiOffIcon } from "lucide-react";
-import { Badge } from "@agripay/ui/components/badge";
+import { Badge } from "@agrilink/ui/components/badge";
 
 function subscribe(cb: () => void) {
   window.addEventListener("online", cb);

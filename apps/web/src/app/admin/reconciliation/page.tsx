@@ -1,6 +1,6 @@
 import { getTranslations } from "next-intl/server";
-import { prisma } from "@agripay/db";
-import { PageHeader } from "@agripay/ui/components/blocks";
+import { prisma } from "@agrilink/db";
+import { PageHeader } from "@agrilink/ui/components/blocks";
 import {
   Table,
   TableBody,
@@ -8,7 +8,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@agripay/ui/components/table";
+} from "@agrilink/ui/components/table";
 import { formatDateTime } from "@/lib/format";
 import { requirePortal } from "@/server/auth/actor";
 import { ReconcileForm } from "./reconcile-form";

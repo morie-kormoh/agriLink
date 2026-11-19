@@ -1,12 +1,12 @@
 import "server-only";
-import { type Db, Prisma, prisma } from "@agripay/db";
+import { type Db, Prisma, prisma } from "@agrilink/db";
 import {
   buyerSettingsSchema,
   collectionPointSchema,
   coopSettingsSchema,
   setPriceSchema,
-} from "@agripay/validation";
-import { type Actor, can } from "@agripay/validation/permissions";
+} from "@agrilink/validation";
+import { type Actor, can } from "@agrilink/validation/permissions";
 import type { z } from "zod";
 import { audit } from "../audit";
 import { AppError, forbidden, notFound } from "../errors";

@@ -1,11 +1,11 @@
 import "server-only";
-import { type Db, prisma } from "@agripay/db";
+import { type Db, prisma } from "@agrilink/db";
 import {
   institutionSettingsSchema,
   normalizeSlPhone,
   type InstitutionSettingsInput,
-} from "@agripay/validation";
-import { type Actor, can } from "@agripay/validation/permissions";
+} from "@agrilink/validation";
+import { type Actor, can } from "@agrilink/validation/permissions";
 import { audit } from "../audit";
 import { verifyPinForUser } from "../auth/pin";
 import { AppError, forbidden, notFound } from "../errors";
@@ -24,7 +24,7 @@ export async function confirmFarmerPin(farmerId: string, pin: string) {
   if (!farmer.userId || !farmer.user?.pinHash) {
     throw new AppError(
       "VALIDATION",
-      "The farmer must set an AgriPay PIN first (in the app or on USSD).",
+      "The farmer must set an AgriLink PIN first (in the app or on USSD).",
       "finance.errors.noPin",
     );
   }
@@ -67,15 +67,15 @@ export function lenderOrgId(actor: Actor): string {
   throw forbidden();
 }
 
-/** Find a farmer by AgriPay ID or exact phone (organisations without registry access cannot browse). */
+/** Find a farmer by AgriLink ID or exact phone (organisations without registry access cannot browse). */
 export async function findFarmerByIdOrPhone(db: Db, q: string) {
   const s = q.trim();
   if (/^AP-[A-Z]{3}-\d{6}$/i.test(s))
-    return db.farmer.findUnique({ where: { agripayId: s.toUpperCase() } });
+    return db.farmer.findUnique({ where: { agrilinkId: s.toUpperCase() } });
   const phone = normalizeSlPhone(s);
   if (!phone) return null;
   const matches = await db.farmer.findMany({ where: { phone, status: "ACTIVE" }, take: 2 });
-  // A shared family phone is ambiguous: ask for the AgriPay ID instead.
+  // A shared family phone is ambiguous: ask for the AgriLink ID instead.
   return matches.length === 1 ? matches[0]! : null;
 }
 

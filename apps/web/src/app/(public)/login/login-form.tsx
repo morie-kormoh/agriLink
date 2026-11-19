@@ -4,18 +4,35 @@ import { useEffect, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { InfoIcon, Loader2Icon, PhoneIcon } from "lucide-react";
-import { Button } from "@agripay/ui/components/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@agripay/ui/components/card";
-import { Input } from "@agripay/ui/components/input";
-import { Label } from "@agripay/ui/components/label";
-import { Alert, AlertDescription } from "@agripay/ui/components/misc";
-import { OtpInput } from "@agripay/ui/components/otp-input";
-import { formatSlPhone, normalizeSlPhone } from "@agripay/validation";
+import { Button } from "@agrilink/ui/components/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@agrilink/ui/components/card";
+import { Input } from "@agrilink/ui/components/input";
+import { Label } from "@agrilink/ui/components/label";
+import { Alert, AlertDescription } from "@agrilink/ui/components/misc";
+import { OtpInput } from "@agrilink/ui/components/otp-input";
+import { formatSlPhone, normalizeSlPhone } from "@agrilink/validation";
 import { requestOtpAction, verifyOtpAction } from "@/app/actions/auth";
+import { PersonaSwitcher } from "@/components/demo/persona-switcher";
 
 const RESEND_SECONDS = 60;
 
-export function LoginForm({ next, showDevHint, demoCode }: { next: string | null; showDevHint: boolean; demoCode: string | null }) {
+export function LoginForm({
+  next,
+  showDevHint,
+  demoCode,
+  personas,
+}: {
+  next: string | null;
+  showDevHint: boolean;
+  demoCode: string | null;
+  personas: { key: string; name: string; description: string }[] | null;
+}) {
   const t = useTranslations();
   const router = useRouter();
   const [step, setStep] = useState<"phone" | "code">("phone");
@@ -39,7 +56,11 @@ export function LoginForm({ next, showDevHint, demoCode }: { next: string | null
   function sendCode() {
     setError(null);
     if (!normalizeSlPhone(phoneInput)) {
-      setError(t.has("validation.phone") ? t("validation.phone") : "Enter a valid Sierra Leone phone number");
+      setError(
+        t.has("validation.phone")
+          ? t("validation.phone")
+          : "Enter a valid Sierra Leone phone number",
+      );
       return;
     }
     startTransition(async () => {
@@ -75,6 +96,14 @@ export function LoginForm({ next, showDevHint, demoCode }: { next: string | null
             <CardDescription>{t("auth.loginSubtitle")}</CardDescription>
           </CardHeader>
           <CardContent>
+            {personas ? (
+              <div className="mb-6 border-b pb-6">
+                <PersonaSwitcher personas={personas} />
+                <p className="text-muted-foreground mt-5 text-center text-sm">
+                  or sign in with your phone number
+                </p>
+              </div>
+            ) : null}
             <form
               className="space-y-4"
               onSubmit={(e) => {
@@ -85,13 +114,13 @@ export function LoginForm({ next, showDevHint, demoCode }: { next: string | null
               <div className="space-y-2">
                 <Label htmlFor="phone">{t("auth.phoneLabel")}</Label>
                 <div className="relative">
-                  <PhoneIcon className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground" />
+                  <PhoneIcon className="text-muted-foreground pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2" />
                   <Input
                     id="phone"
                     type="tel"
                     inputMode="tel"
                     autoComplete="tel"
-                    autoFocus
+                    autoFocus={!personas}
                     className="pl-9 text-lg"
                     placeholder={t("auth.phonePlaceholder")}
                     value={phoneInput}
@@ -100,7 +129,7 @@ export function LoginForm({ next, showDevHint, demoCode }: { next: string | null
                   />
                 </div>
               </div>
-              {error ? <p className="text-sm text-destructive">{error}</p> : null}
+              {error ? <p className="text-destructive text-sm">{error}</p> : null}
               <Button type="submit" className="w-full" size="lg" disabled={pending}>
                 {pending ? <Loader2Icon className="animate-spin" /> : null}
                 {t("auth.sendCode")}
@@ -112,12 +141,26 @@ export function LoginForm({ next, showDevHint, demoCode }: { next: string | null
         <>
           <CardHeader>
             <CardTitle className="text-xl">{t("auth.codeTitle")}</CardTitle>
-            <CardDescription>{t("auth.codeSubtitle", { phone: formatSlPhone(phone) })}</CardDescription>
+            <CardDescription>
+              {t("auth.codeSubtitle", { phone: formatSlPhone(phone) })}
+            </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
-            <OtpInput value={code} onChange={setCode} onComplete={verify} disabled={pending} autoFocus aria-label={t("auth.codeLabel")} />
-            {error ? <p className="text-sm text-destructive">{error}</p> : null}
-            <Button className="w-full" size="lg" disabled={pending || code.length !== 6} onClick={() => verify()}>
+            <OtpInput
+              value={code}
+              onChange={setCode}
+              onComplete={verify}
+              disabled={pending}
+              autoFocus
+              aria-label={t("auth.codeLabel")}
+            />
+            {error ? <p className="text-destructive text-sm">{error}</p> : null}
+            <Button
+              className="w-full"
+              size="lg"
+              disabled={pending || code.length !== 6}
+              onClick={() => verify()}
+            >
               {pending ? <Loader2Icon className="animate-spin" /> : null}
               {t("auth.verify")}
             </Button>
@@ -125,11 +168,16 @@ export function LoginForm({ next, showDevHint, demoCode }: { next: string | null
               <Button variant="link" className="px-0" onClick={() => setStep("phone")}>
                 {t("auth.changeNumber")}
               </Button>
-              <Button variant="link" className="px-0" disabled={cooldown > 0 || pending} onClick={sendCode}>
+              <Button
+                variant="link"
+                className="px-0"
+                disabled={cooldown > 0 || pending}
+                onClick={sendCode}
+              >
                 {cooldown > 0 ? t("auth.resendIn", { seconds: cooldown }) : t("auth.resend")}
               </Button>
             </div>
-            <p className="text-xs text-muted-foreground">{t("auth.errors.noAccount")}</p>
+            <p className="text-muted-foreground text-xs">{t("auth.errors.noAccount")}</p>
             {demoCode ? (
               <Alert variant="info">
                 <InfoIcon />

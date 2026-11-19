@@ -1,6 +1,6 @@
 import "server-only";
-import { type OrgType, type Prisma, prisma } from "@agripay/db";
-import { type Actor, can } from "@agripay/validation/permissions";
+import { type OrgType, type Prisma, prisma } from "@agrilink/db";
+import { type Actor, can } from "@agrilink/validation/permissions";
 import { audit } from "../audit";
 import { AppError, forbidden } from "../errors";
 import { inviteMember } from "../auth/invitations";
@@ -70,7 +70,7 @@ export async function listUsers(actor: Actor, q?: string, page = 1, pageSize = 2
       take: pageSize,
       include: {
         memberships: { where: { active: true }, include: { org: { select: { name: true } } } },
-        farmer: { select: { agripayId: true } },
+        farmer: { select: { agrilinkId: true } },
       },
     }),
   ]);

@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { otpVerifySchema } from "@agripay/validation";
+import { otpVerifySchema } from "@agrilink/validation";
 import { v1Public } from "@/server/api/v1";
 import { loginMobileWithOtp } from "@/server/auth/login";
 import { requestMeta } from "@/server/request";

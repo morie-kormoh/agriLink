@@ -29,7 +29,7 @@ _Last updated: 17 Nov 2026_
 - 6-step registration wizard (person → location → phone & wallet → farm & crop + GPS → photo & consent → review), mobile-first.
 - **Offline-first:** registrations queue in IndexedDB (Dexie) with a client UUID; sync on reconnect, every 5 min and on demand; batches of 25; backoff; per-agent queues on shared devices; photos (compressed ≤200 KB) uploaded after the record via presigned S3 URL; service worker caches the app shell (production builds).
 - `POST /api/sync/farmers`: idempotent per `clientRef`, per-record results.
-- AgriPay IDs `AP-{DISTRICT}-{000123}`; KYC tiers 1–3; wallet name verification (mock provider until module 04).
+- AgriLink IDs `AP-{DISTRICT}-{000123}`; KYC tiers 1–3; wallet name verification (mock provider until module 04).
 - Duplicate detection: same NIN, same phone + similar name (pg_trgm), near-identical name in the same chiefdom with compatible DOB; shared-phone handling; co-op review screen.
 - Co-op portal: dashboard (women/youth/disability/district), members list with search & filters, profiles with ID card, CSV import (template → dry-run preview → commit, idempotent), CSV export, duplicates.
 - PostGIS: `FarmPlot.geom` kept in sync from lat/lng by trigger, GIST index.
@@ -45,7 +45,7 @@ _Last updated: 17 Nov 2026_
 ## Module 04 — Payments Orchestrator & Ledger ✅
 
 - `packages/payments`: Smart Split waterfall (priority rules, % of gross/remaining, fixed, outstanding balance capped at 60%, 30% farmer floor), provider adapter interface, mock provider with HMAC callbacks.
-- Each split is paid **directly from the payer to its destination** — AgriPay never holds funds.
+- Each split is paid **directly from the payer to its destination** — AgriLink never holds funds.
 - Instructions: atomic claim, status check before any resend, backoff 1m/5m/15m/1h/6h, max 5 attempts, webhook `/api/webhooks/payments/[provider]`, worker tick every minute.
 - Double-entry ledger posted only on success; DB triggers make it append-only and reject unbalanced journals.
 - Farmer SMS receipt exactly once; farmer statement; admin instructions (retry / mark failed) and reconciliation.
@@ -59,7 +59,7 @@ _Last updated: 17 Nov 2026_
 
 ## Module 06 — Savings ✅
 
-- Harvest Lock and savings goals held by a licensed custodian (a LENDER org with `FinancialInstitution` settings). AgriPay mirrors balances in the ledger (`SAVINGS:{accountId}`) and on the account, updated in the same transaction as the provider confirmation.
+- Harvest Lock and savings goals held by a licensed custodian (a LENDER org with `FinancialInstitution` settings). AgriLink mirrors balances in the ledger (`SAVINGS:{accountId}`) and on the account, updated in the same transaction as the provider confirmation.
 - Opening, changing %, pausing and emergency withdrawals always need the **farmer's own PIN** (also when an agent or co-op staff helps).
 - Auto-save is a Smart Split rule (priority after loan repayment, before dues). Pausing removes it from the next payment.
 - Daily job: SMS 7 days before release, then the full balance is paid to the farmer's wallet; the lock rolls to next season. Goals release when reached.
@@ -71,7 +71,7 @@ _Last updated: 17 Nov 2026_
 
 - `packages/finance` scoring `rules-v1.0`: identity, co-op standing, records, verified sales, savings, repayment, buyer relationship = 100 points; bands Building / Fair / Good / Strong. Pure and reproducible (inputs hash stored); gender, age, disability and location are not inputs.
 - Recomputed after payments, savings movements, repayments, records and nightly (debounced via the worker with `SCORE_EXECUTION=queue`); SMS when the band changes.
-- Consent: lender requests by AgriPay ID or exact phone → farmer grants/declines with PIN → can revoke any time. Scopes: summary ⊂ detailed ⊂ full records. 12-month default; unanswered requests expire after 30 days.
+- Consent: lender requests by AgriLink ID or exact phone → farmer grants/declines with PIN → can revoke any time. Scopes: summary ⊂ detailed ⊂ full records. 12-month default; unanswered requests expire after 30 days.
 - Lender passport view: 403 without consent, every view logged and shown to the farmer (SMS at most once a day per lender), watermarked with viewer and time. Eligible-farmer search shows only consented farmers, plus an anonymised count (hidden below 5).
 - Fairness monitoring: score distribution by gender and youth (aggregates only, small groups suppressed) for module 11.
 

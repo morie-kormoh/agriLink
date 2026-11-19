@@ -1,7 +1,7 @@
 import { getTranslations } from "next-intl/server";
 import { DownloadIcon } from "lucide-react";
-import { Button } from "@agripay/ui/components/button";
-import { PageHeader } from "@agripay/ui/components/blocks";
+import { Button } from "@agrilink/ui/components/button";
+import { PageHeader } from "@agrilink/ui/components/blocks";
 import {
   Table,
   TableBody,
@@ -9,7 +9,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@agripay/ui/components/table";
+} from "@agrilink/ui/components/table";
 import { formatDate, formatLe } from "@/lib/format";
 import { requirePortal } from "@/server/auth/actor";
 import { supplierReport } from "@/server/trade/batches";
@@ -35,7 +35,7 @@ export default async function SuppliersPage() {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>{t("farmer.agripayId")}</TableHead>
+              <TableHead>{t("farmer.agrilinkId")}</TableHead>
               <TableHead>{t("farmer.name")}</TableHead>
               <TableHead>{t("farmer.location")}</TableHead>
               <TableHead>{t("trade.crop")}</TableHead>
@@ -55,7 +55,7 @@ export default async function SuppliersPage() {
             ) : (
               rows.map((r) => (
                 <TableRow key={`${r.farmerId}:${r.crop}:${r.unit}`}>
-                  <TableCell className="font-mono text-xs">{r.agripayId}</TableCell>
+                  <TableCell className="font-mono text-xs">{r.agrilinkId}</TableCell>
                   <TableCell>{r.fullName}</TableCell>
                   <TableCell className="text-xs">
                     {r.community}, {r.chiefdom}, {r.district}

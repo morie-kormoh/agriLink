@@ -1,19 +1,19 @@
 import type { Metadata, Viewport } from "next";
 import { NextIntlClientProvider } from "next-intl";
 import { getLocale } from "next-intl/server";
-import { Toaster } from "@agripay/ui/components/sonner";
+import { Toaster } from "@agrilink/ui/components/sonner";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: { default: "AgriPay Salone", template: "%s · AgriPay Salone" },
-  description: "AgriPay Salone — Empowering Farmers Through Digital Finance.",
-  applicationName: "AgriPay Salone",
-  appleWebApp: { capable: true, title: "AgriPay", statusBarStyle: "default" },
+  title: { default: "AgriLink Salone", template: "%s · AgriLink Salone" },
+  description: "AgriLink Salone — Empowering Farmers Through Digital Finance.",
+  applicationName: "AgriLink Salone",
+  appleWebApp: { capable: true, title: "AgriLink", statusBarStyle: "default" },
   icons: { icon: "/icons/icon.svg", apple: "/icons/icon.svg" },
 };
 
 export const viewport: Viewport = {
-  themeColor: "#2f7d4f",
+  themeColor: "#1f2a6b",
   width: "device-width",
   initialScale: 1,
 };

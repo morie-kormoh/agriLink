@@ -5,21 +5,21 @@ import {
   HandCoinsIcon,
   ShieldCheckIcon,
   StoreIcon,
-  TicketIcon,
   XIcon,
 } from "lucide-react";
-import { formatVoucherCode } from "@agripay/finance";
+import { formatVoucherCode } from "@agrilink/finance";
+import { VoucherTicket } from "@agrilink/ui/components/voucher-ticket";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@agripay/ui/components/card";
-import { EmptyState, PageHeader, StatusBadge } from "@agripay/ui/components/blocks";
-import { Alert, AlertDescription, Progress } from "@agripay/ui/components/misc";
-import { formatLe } from "@agripay/validation";
-import type { Actor } from "@agripay/validation/permissions";
+} from "@agrilink/ui/components/card";
+import { EmptyState, PageHeader, StatusBadge } from "@agrilink/ui/components/blocks";
+import { Alert, AlertDescription, Progress } from "@agrilink/ui/components/misc";
+import { formatLe } from "@agrilink/validation";
+import type { Actor } from "@agrilink/validation/permissions";
 import {
   acceptOfferAction,
   acceptRestructureAction,
@@ -111,8 +111,8 @@ export async function LoansPage({ actor }: { actor: Actor }) {
             <Card key={l.id}>
               <CardHeader>
                 <CardTitle className="flex flex-wrap items-center gap-2">
-                  <BanknoteIcon className="text-primary size-4" /> {t("credit.myLoan")}:{" "}
-                  {l.product.name}
+                  <BanknoteIcon className="text-indigo size-4 dark:text-white" />{" "}
+                  {t("credit.myLoan")}: {l.product.name}
                   <StatusBadge tone={toneFor(l.status)}>{t(`loanStatus.${l.status}`)}</StatusBadge>
                 </CardTitle>
                 <CardDescription>
@@ -137,21 +137,22 @@ export async function LoansPage({ actor }: { actor: Actor }) {
                   </div>
                 ) : null}
                 {v && (v.status === "ISSUED" || v.status === "PARTIALLY_REDEEMED") ? (
-                  <div className="border-primary/40 bg-primary/5 rounded-xl border-2 border-dashed p-4">
-                    <p className="flex items-center gap-2 text-sm font-medium">
-                      <TicketIcon className="size-4" /> {t("credit.voucher")}
-                    </p>
-                    <p className="my-2 font-mono text-3xl font-bold tracking-widest">
-                      {formatVoucherCode(v.code)}
-                    </p>
-                    <p className="text-sm">
-                      {t("credit.left")}: <b>{formatLe(v.remainingLe.toFixed(2))}</b> /{" "}
-                      {formatLe(v.valueLe.toFixed(2))} ·{" "}
-                      {t("credit.validUntil", { date: fmt(v.expiresAt) })}
-                    </p>
-                    <p className="text-muted-foreground mt-2 text-xs">{t("credit.voucherHint")}</p>
+                  <VoucherTicket
+                    code={formatVoucherCode(v.code)}
+                    title={t("credit.voucher")}
+                    issuer={l.product.lenderOrg.name}
+                    remaining={
+                      <>
+                        {t("credit.left")}:{" "}
+                        <b className="tabular-nums">{formatLe(v.remainingLe.toFixed(2))}</b> /{" "}
+                        {formatLe(v.valueLe.toFixed(2))}
+                      </>
+                    }
+                    validUntil={t("credit.validUntil", { date: fmt(v.expiresAt) })}
+                    note={t("credit.voucherHint")}
+                  >
                     {o.dealers.length ? (
-                      <div className="mt-3 text-sm">
+                      <div className="text-sm">
                         <p className="flex items-center gap-1 font-medium">
                           <StoreIcon className="size-4" /> {t("credit.where")}
                         </p>
@@ -165,7 +166,7 @@ export async function LoansPage({ actor }: { actor: Actor }) {
                         </ul>
                       </div>
                     ) : null}
-                  </div>
+                  </VoucherTicket>
                 ) : null}
                 {v?.redemptions.length ? (
                   <ul className="space-y-1 text-sm">

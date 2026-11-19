@@ -1,6 +1,8 @@
 import { SyncIndicator } from "@/components/offline/sync-indicator";
 import { SyncProvider } from "@/components/offline/sync-provider";
+import { PhonePanel } from "@/components/demo/phone-panel";
 import { requirePortal } from "@/server/auth/actor";
+import { isDemoMode } from "@/server/demo/flags";
 import { AppShell } from "./app-shell";
 import { navFor } from "./nav";
 
@@ -26,6 +28,7 @@ export async function PortalLayout({
       topbarExtra={withSync ? <SyncIndicator /> : undefined}
     >
       {children}
+      {isDemoMode() ? <PhonePanel /> : null}
     </AppShell>
   );
   return withSync ? <SyncProvider ownerUserId={current.user.id}>{shell}</SyncProvider> : shell;

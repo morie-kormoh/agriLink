@@ -15,7 +15,7 @@ export async function nextSequenceValue(db: Db, key: string): Promise<number> {
   return Number(value);
 }
 
-/** AgriPay farmer ID, e.g. AP-BOM-000123 (never reused). */
+/** AgriLink farmer ID, e.g. AP-BOM-000123 (never reused). */
 export async function nextFarmerId(db: Db, districtCode: string): Promise<string> {
   const code = districtCode.toUpperCase();
   const n = await nextSequenceValue(db, `farmer:${code}`);

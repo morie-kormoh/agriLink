@@ -1,15 +1,15 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
-import { Button } from "@agripay/ui/components/button";
+import { Button } from "@agrilink/ui/components/button";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@agripay/ui/components/card";
-import { Alert, AlertDescription } from "@agripay/ui/components/misc";
+} from "@agrilink/ui/components/card";
+import { Alert, AlertDescription } from "@agrilink/ui/components/misc";
 import { getSessionUser } from "@/server/auth/actor";
 import { getInvitationByToken } from "@/server/auth/invitations";
 import { AcceptInviteButton } from "./accept-button";

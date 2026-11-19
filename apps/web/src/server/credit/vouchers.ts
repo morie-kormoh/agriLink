@@ -1,20 +1,20 @@
 import "server-only";
 import { randomBytes } from "node:crypto";
-import { Prisma, type Tx, nextSequenceValue, prisma } from "@agripay/db";
+import { Prisma, type Tx, nextSequenceValue, prisma } from "@agrilink/db";
 import {
   formatVoucherCode,
   generateVoucherCode,
   isValidVoucherCode,
   loanCost,
   normalizeVoucherCode,
-} from "@agripay/finance";
+} from "@agrilink/finance";
 import {
   formatLe,
   redeemVoucherSchema,
   redemptionOtpSchema,
   type RedeemVoucherInput,
-} from "@agripay/validation";
-import { type Actor, can } from "@agripay/validation/permissions";
+} from "@agrilink/validation";
+import { type Actor, can } from "@agrilink/validation/permissions";
 import type { z } from "zod";
 import { audit } from "../audit";
 import { issueOtpCode, verifyOtp } from "../auth/otp";
@@ -73,7 +73,7 @@ export async function voucherSms(voucherId: string) {
   const where = dealers.length
     ? dealers.map((d) => d.org.name).join(", ")
     : "registered agro-dealers";
-  return `AgriPay input voucher: ${formatVoucherCode(v.code)}, ${formatLe(v.valueLe.toFixed(2))}, valid to ${v.expiresAt.toLocaleDateString("en-GB", { day: "numeric", month: "short", timeZone: "UTC" })} at ${where}. Show this code to the dealer. Never share the confirmation code you get by SMS with anyone else.`;
+  return `AgriLink input voucher: ${formatVoucherCode(v.code)}, ${formatLe(v.valueLe.toFixed(2))}, valid to ${v.expiresAt.toLocaleDateString("en-GB", { day: "numeric", month: "short", timeZone: "UTC" })} at ${where}. Show this code to the dealer. Never share the confirmation code you get by SMS with anyone else.`;
 }
 
 const firstNameAndInitial = (name: string) => {
@@ -85,7 +85,7 @@ async function usableVoucher(dealer: { id: string; verified: boolean }, rawCode:
   if (!dealer.verified)
     throw new AppError(
       "FORBIDDEN",
-      "Your shop must be verified by AgriPay before redeeming vouchers.",
+      "Your shop must be verified by AgriLink before redeeming vouchers.",
       "dealer.errors.notVerified",
     );
   if (!isValidVoucherCode(rawCode))
@@ -150,7 +150,7 @@ export async function lookupVoucher(actor: Actor, code: string) {
   return {
     code: formatVoucherCode(v.code),
     farmerName: firstNameAndInitial(v.farmer.fullName),
-    agripayId: v.farmer.agripayId,
+    agrilinkId: v.farmer.agrilinkId,
     remainingLe: v.remainingLe.toFixed(2),
     valueLe: v.valueLe.toFixed(2),
     allowedCategories: v.allowedCategories,
@@ -184,7 +184,7 @@ export async function requestRedemptionOtp(
   const what = lines.map((l) => `${l.name} x${l.qty}`).join(", ");
   await sendSms(
     v.farmer.phone,
-    `AgriPay: ${dealer.org.name} wants to use ${formatLe(amount.toFixed(2))} of your voucher for ${what}. If you agree, give them this code: ${otp}. It expires in 5 minutes.`,
+    `AgriLink: ${dealer.org.name} wants to use ${formatLe(amount.toFixed(2))} of your voucher for ${what}. If you agree, give them this code: ${otp}. It expires in 5 minutes.`,
     "otp",
   );
   return {
@@ -281,7 +281,7 @@ export async function redeemVoucher(actor: Actor, input: RedeemVoucherInput) {
       amountLe: amount.toFixed(2),
       idempotencyKey: `redemption:${r.id}`,
       split: { type: "DEALER_SETTLEMENT", targetType: "DEALER", targetId: dealer.id },
-      narration: `AgriPay voucher ${r.ref}`,
+      narration: `AgriLink voucher ${r.ref}`,
       context: { redemptionId: r.id, loanId: v.loanId },
       approvedById: actor.userId,
     });
@@ -306,7 +306,7 @@ export async function redeemVoucher(actor: Actor, input: RedeemVoucherInput) {
   await dispatchPayments([payment.id]);
   await sendSms(
     v.farmer.phone,
-    `AgriPay: you used ${formatLe(amount.toFixed(2))} of your input voucher at ${dealer.org.name}. Left on voucher: ${formatLe(remaining.toFixed(2))}. Ref ${redemption.ref}`,
+    `AgriLink: you used ${formatLe(amount.toFixed(2))} of your input voucher at ${dealer.org.name}. Left on voucher: ${formatLe(remaining.toFixed(2))}. Ref ${redemption.ref}`,
     "general",
   );
   await emit("voucher.redeemed", { redemptionId: redemption.id });
@@ -384,7 +384,7 @@ export async function expireVouchers(now = new Date()) {
     if (v.remainingLe.gt(0)) {
       await sendSms(
         v.farmer.phone,
-        `AgriPay: your input voucher ${formatVoucherCode(v.code)} expired. The unused ${formatLe(v.remainingLe.toFixed(2))} is not charged to you.`,
+        `AgriLink: your input voucher ${formatVoucherCode(v.code)} expired. The unused ${formatLe(v.remainingLe.toFixed(2))} is not charged to you.`,
         "general",
       );
     }

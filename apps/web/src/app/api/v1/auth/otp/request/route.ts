@@ -1,4 +1,4 @@
-import { otpRequestSchema } from "@agripay/validation";
+import { otpRequestSchema } from "@agrilink/validation";
 import { v1Public } from "@/server/api/v1";
 import { requestOtp } from "@/server/auth/otp";
 import { requestMeta } from "@/server/request";

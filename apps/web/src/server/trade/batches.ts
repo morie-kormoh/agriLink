@@ -1,6 +1,6 @@
 import "server-only";
-import { type Prisma, prisma } from "@agripay/db";
-import { type Actor, can } from "@agripay/validation/permissions";
+import { type Prisma, prisma } from "@agrilink/db";
+import { type Actor, can } from "@agrilink/validation/permissions";
 import { audit } from "../audit";
 import { AppError, forbidden, notFound } from "../errors";
 import { createPaymentForPurchase, dispatchPayments } from "../payments/service";
@@ -58,7 +58,7 @@ export async function getBatch(actor: Actor, id: string) {
             select: {
               id: true,
               fullName: true,
-              agripayId: true,
+              agrilinkId: true,
               wallets: { where: { isPrimary: true }, select: { id: true } },
             },
           },
@@ -161,29 +161,18 @@ export async function approveBatch(actor: Actor, id: string) {
     else toApprove.push(p.id);
   }
 
-  // One transaction per purchase: each approval + payment is atomic on its own, and a large batch
-  // never outlives a single transaction's timeout on a high-latency database. Re-running the
-  // approval picks up whatever is still RECORDED, and committed PENDING instructions are retried
-  // by processDueInstructions even if this request dies before dispatching them.
-  const paymentIds: string[] = [];
-  try {
-    for (const pid of toApprove) {
-      const paymentId = await prisma.$transaction(
-        async (tx) => {
-          const updated = await tx.purchase.updateMany({
-            where: { id: pid, status: "RECORDED" },
-            data: { status: "APPROVED", approvedById: actor.userId, approvedAt: new Date() },
-          });
-          if (updated.count !== 1) return null;
-          const payment = await createPaymentForPurchase(tx, pid, actor.userId);
-          return payment.id;
-        },
-        { timeout: 30_000 },
-      );
-      if (paymentId) paymentIds.push(paymentId);
-    }
-
-    await prisma.$transaction(async (tx) => {
+  const paymentIds = await prisma.$transaction(
+    async (tx) => {
+      const ids: string[] = [];
+      for (const pid of toApprove) {
+        const updated = await tx.purchase.updateMany({
+          where: { id: pid, status: "RECORDED" },
+          data: { status: "APPROVED", approvedById: actor.userId, approvedAt: new Date() },
+        });
+        if (updated.count !== 1) continue;
+        const payment = await createPaymentForPurchase(tx, pid, actor.userId);
+        ids.push(payment.id);
+      }
       const remaining = await tx.purchase.count({
         where: { batchId: id, status: { in: ["RECORDED", "DISPUTED"] } },
       });
@@ -199,16 +188,17 @@ export async function approveBatch(actor: Actor, id: string) {
         entity: "PurchaseBatch",
         entityId: id,
         after: {
-          approved: paymentIds.length,
+          approved: ids.length,
           held: held.map((h) => ({ ref: h.ref, reason: h.reason })),
           fullyApproved: remaining === 0,
         },
       });
-    });
-  } finally {
-    // Send whatever committed, even if a later purchase failed.
-    await dispatchPayments(paymentIds);
-  }
+      return ids;
+    },
+    { timeout: 60_000 },
+  );
+
+  await dispatchPayments(paymentIds);
   return { approved: paymentIds.length, paymentIds, held };
 }
 
@@ -270,7 +260,7 @@ export async function supplierReport(actor: Actor) {
   const rows = await prisma.$queryRaw<
     {
       farmerId: string;
-      agripayId: string;
+      agrilinkId: string;
       fullName: string;
       district: string;
       chiefdom: string;
@@ -283,7 +273,7 @@ export async function supplierReport(actor: Actor) {
       lastPurchase: Date;
     }[]
   >`
-    SELECT f.id AS "farmerId", f."agripayId", f."fullName", d.name AS district, c.name AS chiefdom, f.community,
+    SELECT f.id AS "farmerId", f."agripayId" AS "agrilinkId", f."fullName", d.name AS district, c.name AS chiefdom, f.community,
            cr.name AS crop, COUNT(*) AS purchases, SUM(p.quantity)::text AS quantity, p.unit,
            SUM(p."netLe")::text AS "netLe", MAX(p."recordedAt") AS "lastPurchase"
     FROM "Purchase" p

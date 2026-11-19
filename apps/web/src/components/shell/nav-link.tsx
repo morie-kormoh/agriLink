@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { cn } from "@agripay/ui/lib/utils";
+import { cn } from "@agrilink/ui/lib/utils";
 
 export function NavLink({
   href,
@@ -25,9 +25,9 @@ export function NavLink({
       onClick={onNavigate}
       aria-current={active ? "page" : undefined}
       className={cn(
-        "flex min-h-11 items-center gap-3 rounded-md px-3 text-sm font-medium transition-colors md:min-h-9",
+        "relative flex min-h-11 items-center gap-3 rounded-lg px-3 text-sm font-medium transition-colors md:min-h-10",
         active
-          ? "bg-sidebar-accent text-sidebar-accent-foreground"
+          ? "bg-sidebar-accent text-sidebar-accent-foreground before:bg-gold before:absolute before:inset-y-2 before:-left-3 before:w-1 before:rounded-r-full"
           : "text-sidebar-foreground/80 hover:bg-sidebar-accent/60 hover:text-sidebar-accent-foreground",
       )}
     >

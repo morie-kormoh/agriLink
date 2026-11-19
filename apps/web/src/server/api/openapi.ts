@@ -45,7 +45,7 @@ import {
   restructureSchema,
   revokeConsentSchema,
   updateAutoSaveSchema,
-} from "@agripay/validation";
+} from "@agrilink/validation";
 
 /**
  * OpenAPI 3.1 description of /api/v1, generated from the same Zod schemas the server validates with.
@@ -448,7 +448,7 @@ const ENDPOINTS: Endpoint[] = [
     method: "post",
     path: "/consents",
     tag: "Passport",
-    summary: "Ask a farmer (AgriPay ID or phone) for consent",
+    summary: "Ask a farmer (AgriLink ID or phone) for consent",
     body: requestConsentSchema,
     status: 201,
     roles: "LENDER_ADMIN, LENDER_OFFICER",
@@ -739,10 +739,10 @@ export function buildOpenApi(serverUrl: string) {
   return {
     openapi: "3.1.0",
     info: {
-      title: "AgriPay Salone API",
+      title: "AgriLink Salone API",
       version: "1.0.0",
       description:
-        "API for the AgriPay mobile app, USSD service and partners. Sign in with POST /auth/otp/request then /auth/otp/verify, " +
+        "API for the AgriLink mobile app, USSD service and partners. Sign in with POST /auth/otp/request then /auth/otp/verify, " +
         "send `Authorization: Bearer <accessToken>` (valid 15 minutes) and refresh with /auth/refresh. " +
         "If you belong to several workspaces, choose one with POST /me/context (otherwise 409 CONTEXT_REQUIRED). " +
         "Money is a string in Leones with 2 decimals. Send a `clientRef` UUID when creating farmers or purchases offline.",

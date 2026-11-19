@@ -1,7 +1,7 @@
 import { createHmac, randomInt } from "node:crypto";
 import type { Page } from "@playwright/test";
 import { Redis } from "ioredis";
-import { createPrismaClient } from "@agripay/db";
+import { createPrismaClient } from "@agrilink/db";
 
 export const prisma = createPrismaClient();
 
@@ -38,7 +38,7 @@ export async function signIn(page: Page, phone: string, national: string) {
   await page.goto("/login");
   await page.getByLabel("Phone number").fill(national);
   await page.getByRole("button", { name: "Send code" }).click();
-  await page.getByText("Enter the code").waitFor();
+  await page.getByText("Enter the code", { exact: true }).waitFor();
   const code = await plantOtp(phone);
   for (const [i, d] of [...code].entries()) {
     await page.getByLabel(`Digit ${i + 1}`).fill(d);

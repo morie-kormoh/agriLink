@@ -1,4 +1,4 @@
-import { redemptionItemsSchema } from "@agripay/validation";
+import { redemptionItemsSchema } from "@agrilink/validation";
 import { z } from "zod";
 import { v1 } from "@/server/api/v1";
 import { redeemVoucher, requestRedemptionOtp } from "@/server/credit/vouchers";

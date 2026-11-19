@@ -1,8 +1,7 @@
 import { getTranslations } from "next-intl/server";
-import { AccessibilityIcon, CopyIcon, SparklesIcon, UsersIcon, VenusIcon } from "lucide-react";
-import { StatCard } from "@agripay/ui/components/blocks";
-import { Card, CardContent, CardHeader, CardTitle } from "@agripay/ui/components/card";
-import { Progress } from "@agripay/ui/components/misc";
+import { StatStrip } from "@agrilink/ui/components/blocks";
+import { Card, CardContent, CardHeader, CardTitle } from "@agrilink/ui/components/card";
+import { Progress } from "@agrilink/ui/components/misc";
 import { percent } from "@/lib/format";
 import type { platformStats } from "@/server/admin/service";
 
@@ -14,35 +13,23 @@ export async function StatsGrid({ stats }: { stats: Stats }) {
   const max = Math.max(1, ...stats.byDistrict.map((d) => d.count));
   return (
     <div className="space-y-6">
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
-        <StatCard
-          label={t("admin.farmers")}
-          value={stats.farmers.toLocaleString("en")}
-          icon={UsersIcon}
-        />
-        <StatCard
-          label={t("admin.women")}
-          value={percent(stats.women, stats.farmers)}
-          hint={stats.women.toLocaleString("en")}
-          icon={VenusIcon}
-        />
-        <StatCard
-          label={t("admin.youth")}
-          value={percent(stats.youth, stats.farmers)}
-          hint={stats.youth.toLocaleString("en")}
-          icon={SparklesIcon}
-        />
-        <StatCard
-          label={t("farmer.disability")}
-          value={stats.disability.toLocaleString("en")}
-          icon={AccessibilityIcon}
-        />
-        <StatCard
-          label={t("nav.duplicates")}
-          value={stats.duplicates.toLocaleString("en")}
-          icon={CopyIcon}
-        />
-      </div>
+      <StatStrip
+        items={[
+          { label: t("admin.farmers"), value: stats.farmers.toLocaleString("en") },
+          {
+            label: t("admin.women"),
+            value: percent(stats.women, stats.farmers),
+            hint: stats.women.toLocaleString("en"),
+          },
+          {
+            label: t("admin.youth"),
+            value: percent(stats.youth, stats.farmers),
+            hint: stats.youth.toLocaleString("en"),
+          },
+          { label: t("farmer.disability"), value: stats.disability.toLocaleString("en") },
+          { label: t("nav.duplicates"), value: stats.duplicates.toLocaleString("en") },
+        ]}
+      />
       {stats.byDistrict.length ? (
         <Card>
           <CardHeader>

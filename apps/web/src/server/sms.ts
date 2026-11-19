@@ -1,6 +1,7 @@
 import "server-only";
 import { Queue } from "bullmq";
-import { maskPhone } from "@agripay/validation";
+import { maskPhone } from "@agrilink/validation";
+import { logDemoSms } from "./demo/sms-log";
 import { env } from "./env";
 
 /**
@@ -27,16 +28,30 @@ function smsQueue(): Queue {
   if (!queue) {
     const url = new URL(env().REDIS_URL);
     queue = new Queue("sms", {
-      connection: { host: url.hostname, port: Number(url.port || 6379), password: url.password || undefined },
-      defaultJobOptions: { attempts: 3, backoff: { type: "exponential", delay: 10_000 }, removeOnComplete: 1000 },
+      connection: {
+        host: url.hostname,
+        port: Number(url.port || 6379),
+        password: url.password || undefined,
+      },
+      defaultJobOptions: {
+        attempts: 3,
+        backoff: { type: "exponential", delay: 10_000 },
+        removeOnComplete: 1000,
+      },
     });
   }
   return queue;
 }
 
-export async function sendSms(to: string, body: string, kind: OutboundSms["kind"] = "general"): Promise<void> {
+export async function sendSms(
+  to: string,
+  body: string,
+  kind: OutboundSms["kind"] = "general",
+): Promise<void> {
   const msg: OutboundSms = { to, body, kind, at: new Date() };
   const provider = env().SMS_PROVIDER;
+  // Demo only: show it in the on-screen phone panel too.
+  await logDemoSms({ to, body, kind, at: msg.at.toISOString() });
 
   if (provider === "memory") {
     outbox.push(msg);
@@ -53,7 +68,9 @@ export async function sendSms(to: string, body: string, kind: OutboundSms["kind"
   // console provider
   const hide = process.env.NODE_ENV === "production" && process.env.DEMO_MODE !== "true";
   const safeBody = kind === "otp" && hide ? "<otp hidden>" : body;
-  console.info(`\n📱 [SMS → ${process.env.NODE_ENV === "production" ? maskPhone(to) : to}] ${safeBody}\n`);
+  console.info(
+    `\n📱 [SMS → ${process.env.NODE_ENV === "production" ? maskPhone(to) : to}] ${safeBody}\n`,
+  );
 }
 
 /** Test helpers */

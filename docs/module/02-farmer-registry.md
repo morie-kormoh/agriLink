@@ -2,7 +2,7 @@
 
 ## 1. Purpose
 
-Create a trusted digital identity for each smallholder farmer — profile, location, farm plots, crops, wallets and cooperative link — captured by field agents **even without network**, and issue a unique **AgriPay Farmer ID**.
+Create a trusted digital identity for each smallholder farmer — profile, location, farm plots, crops, wallets and cooperative link — captured by field agents **even without network**, and issue a unique **AgriLink Farmer ID**.
 
 ## 2. Scope
 
@@ -22,7 +22,7 @@ enum FarmerStatus { DRAFT ACTIVE INACTIVE DUPLICATE_SUSPECTED }
 
 model Farmer {
   id             String       @id @default(cuid())
-  agripayId      String       @unique          // AP-BOM-000123
+  agrilinkId      String       @unique          // AP-BOM-000123
   userId         String       @unique
   fullName       String
   gender         Gender
@@ -100,7 +100,7 @@ model AgentAssignment {
 
 - **Minimum to register (tier 1):** name, gender, phone, district, chiefdom, community, one crop. Everything else optional, so registration takes **under 3 minutes**.
 - **Tier 2:** + verified wallet name match **or** co-op attestation. **Tier 3:** + NIN.
-- **AgriPay ID:** `AP-{DISTRICT_CODE}-{6-digit sequence}`; never reused.
+- **AgriLink ID:** `AP-{DISTRICT_CODE}-{6-digit sequence}`; never reused.
 - **Duplicates:** flag `DUPLICATE_SUSPECTED` if the same phone or NIN exists, or same name + DOB + chiefdom (fuzzy, trigram similarity > 0.8). The agent sees a warning; a co-op admin resolves.
 - **Women in household farms** are registered as individual farmers, so payments go to the person who grew the crop.
 - Phone of a family member allowed (shared phones are common) but flagged `sharedPhone: true` in metadata; the wallet must still be the farmer's own or nominated.
@@ -115,7 +115,7 @@ model AgentAssignment {
 | `updateFarmer(id, patch)`      | AGENT (own), COOP_*     |                                                                              |
 | `addWallet / verifyWallet`     | AGENT, FARMER           | verify = provider name lookup (module 04 adapter)                            |
 | `addPlot`, `addCropCycle`      | AGENT, FARMER           |                                                                              |
-| `searchFarmers(q, filters)`    | scoped by role          | by name, phone, AgriPay ID                                                   |
+| `searchFarmers(q, filters)`    | scoped by role          | by name, phone, AgriLink ID                                                  |
 | `importFarmersCsv(file)`       | COOP_ADMIN              | dry run → preview errors → commit                                            |
 | `resolveDuplicate(id, action)` | COOP_ADMIN, SUPER_ADMIN | merge / keep both                                                            |
 
@@ -126,7 +126,7 @@ model AgentAssignment {
 - `/(agent)/sync`: queue view, retry, last sync time.
 - `/(coop)/members`: member table, filters (gender, crop, chiefdom, tier), import CSV, duplicates tab.
 - `/(coop)/members/[id]`: profile, plots map (Leaflet or MapLibre), crops, wallets.
-- `/(farmer)/profile`: farmer self-view with AgriPay ID card.
+- `/(farmer)/profile`: farmer self-view with AgriLink ID card.
 
 ## 8. Offline design (agent PWA)
 
@@ -138,7 +138,7 @@ model AgentAssignment {
 
 ## 9. USSD / SMS touchpoints
 
-- SMS after registration: "Welcome to AgriPay, {name}. Your ID is AP-BOM-000123. Dial *XXX# to set your PIN."
+- SMS after registration: "Welcome to AgriLink, {name}. Your ID is AP-BOM-000123. Dial *XXX# to set your PIN."
 - USSD _My Profile_: shows ID, co-op, primary wallet.
 - USSD self-registration (basic tier, optional): name → district → chiefdom → crop.
 

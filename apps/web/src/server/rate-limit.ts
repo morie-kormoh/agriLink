@@ -35,8 +35,12 @@ export async function hitRateLimit(
       const res = await redis().multi().incr(k).expire(k, windowSec, "NX").exec();
       count = Number(res?.[0]?.[1] ?? 1);
     } catch (e) {
-      if (process.env.NODE_ENV === "production") throw e;
-      console.warn("[rate-limit] Redis unavailable, using in-memory limiter:", (e as Error).message);
+      // A Redis outage must not lock everyone out of signing in. Fall back to per-instance counters and log it;
+      // OTP and PIN attempts are also limited in the database, so brute force stays blocked.
+      console.error(
+        "[rate-limit] Redis unavailable, using in-memory limiter:",
+        (e as Error).message,
+      );
       count = memoryHit(key, windowSec);
     }
   }

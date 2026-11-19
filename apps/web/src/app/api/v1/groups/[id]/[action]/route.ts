@@ -2,7 +2,7 @@ import {
   addGroupMemberSchema,
   recordContributionSchema,
   recordPayoutSchema,
-} from "@agripay/validation";
+} from "@agrilink/validation";
 import { v1 } from "@/server/api/v1";
 import { notFound } from "@/server/errors";
 import {

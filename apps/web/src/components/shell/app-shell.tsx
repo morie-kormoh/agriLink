@@ -1,10 +1,13 @@
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
-import { SproutIcon } from "lucide-react";
-import { formatSlPhone } from "@agripay/validation";
-import { hasPermission } from "@agripay/validation/permissions";
+import { BanknoteIcon, GaugeIcon, HandCoinsIcon, HouseIcon, PiggyBankIcon } from "lucide-react";
+import { cn } from "@agrilink/ui/lib/utils";
+import { formatSlPhone } from "@agrilink/validation";
+import { hasPermission } from "@agrilink/validation/permissions";
 import type { CurrentUser } from "@/server/auth/actor";
 import { listContexts } from "@/server/auth/actor";
+import { BottomTabs } from "./bottom-tabs";
+import { BrandMark } from "./brand-mark";
 import { LanguageSwitcher } from "./language-switcher";
 import { MobileNav, type NavItem } from "./mobile-nav";
 import { NavLink } from "./nav-link";
@@ -28,20 +31,34 @@ export async function AppShell({
   const t = await getTranslations();
   const contexts = await listContexts(current.user.id);
   const roleLabel = t(`roles.${current.actor.role}`);
+  const isFarmer = current.actor.role === "FARMER";
+  const isAdmin = current.actor.role === "SUPER_ADMIN";
+  const tabs = isFarmer
+    ? [
+        { href: "/farmer", label: t("nav.tabHome"), icon: <HouseIcon />, exact: true },
+        { href: "/farmer/payments", label: t("nav.tabMoney"), icon: <BanknoteIcon /> },
+        { href: "/farmer/savings", label: t("nav.tabSavings"), icon: <PiggyBankIcon /> },
+        { href: "/farmer/passport", label: t("nav.tabPassport"), icon: <GaugeIcon /> },
+        { href: "/farmer/loans", label: t("nav.tabLoans"), icon: <HandCoinsIcon /> },
+      ]
+    : null;
 
   return (
     <div className="flex min-h-dvh">
-      <aside className="no-print bg-sidebar text-sidebar-foreground sticky top-0 hidden h-dvh w-64 shrink-0 flex-col md:flex">
+      <aside
+        className={cn(
+          "no-print gara text-sidebar-foreground sticky top-0 hidden h-dvh w-64 shrink-0 flex-col md:flex",
+          isAdmin ? "bg-indigo-900" : "bg-sidebar",
+        )}
+      >
         <Link
           href="/"
-          className="border-sidebar-border flex h-16 items-center gap-2 border-b px-5 font-semibold"
+          className="border-sidebar-border font-display flex h-16 items-center gap-2.5 border-b px-5 text-lg font-bold text-white"
         >
-          <span className="bg-accent text-accent-foreground rounded-md p-1">
-            <SproutIcon className="size-5" />
-          </span>
-          AgriPay
+          <BrandMark className="size-8" />
+          AgriLink
         </Link>
-        <div className="text-sidebar-foreground/60 px-5 pt-4 pb-2 text-xs tracking-wide uppercase">
+        <div className="text-sidebar-foreground/70 px-5 pt-4 pb-2 text-sm font-semibold">
           {title}
         </div>
         <nav className="flex flex-1 flex-col gap-1 px-3">
@@ -60,7 +77,10 @@ export async function AppShell({
       <div className="flex min-w-0 flex-1 flex-col">
         <header className="no-print bg-background/95 sticky top-0 z-30 flex h-16 items-center gap-2 border-b px-3 backdrop-blur sm:px-6">
           <MobileNav items={items} title={title} />
-          <span className="truncate font-semibold md:hidden">AgriPay</span>
+          <span className="font-display flex items-center gap-2 truncate font-bold md:hidden">
+            <BrandMark className="size-7" />
+            AgriLink
+          </span>
           <div className="ml-auto flex items-center gap-2">
             {topbarExtra}
             <OnlineBadge />
@@ -77,8 +97,11 @@ export async function AppShell({
             />
           </div>
         </header>
-        <main className="mx-auto w-full max-w-6xl flex-1 p-4 sm:p-6">{children}</main>
+        <main className={cn("mx-auto w-full max-w-6xl flex-1 p-4 sm:p-6", tabs && "pb-24 md:pb-6")}>
+          {children}
+        </main>
       </div>
+      {tabs ? <BottomTabs items={tabs} /> : null}
     </div>
   );
 }

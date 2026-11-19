@@ -1,5 +1,5 @@
 {
-  "name": "@agripay/web",
+  "name": "@agrilink/web",
   "version": "0.1.0",
   "private": true,
   "type": "module",
@@ -14,14 +14,17 @@
     "seed:demo": "tsx --conditions=react-server scripts/demo-trade.ts"
   },
   "dependencies": {
-    "@agripay/db": "workspace:*",
-    "@agripay/i18n": "workspace:*",
-    "@agripay/finance": "workspace:*",
-    "@agripay/payments": "workspace:*",
-    "@agripay/ui": "workspace:*",
-    "@agripay/validation": "workspace:*",
+    "@agrilink/db": "workspace:*",
+    "@agrilink/finance": "workspace:*",
+    "@agrilink/i18n": "workspace:*",
+    "@agrilink/payments": "workspace:*",
+    "@agrilink/ui": "workspace:*",
+    "@agrilink/validation": "workspace:*",
     "@aws-sdk/client-s3": "^3.896.0",
     "@aws-sdk/s3-request-presigner": "^3.896.0",
+    "@fontsource-variable/bricolage-grotesque": "^5.3.0",
+    "@fontsource/atkinson-hyperlegible-mono": "^5.3.0",
+    "@fontsource/atkinson-hyperlegible-next": "^5.3.0",
     "@hookform/resolvers": "^5.2.2",
     "@node-rs/argon2": "^2.0.2",
     "bullmq": "^5.58.0",
@@ -39,7 +42,7 @@
     "zod": "^4.1.0"
   },
   "devDependencies": {
-    "@agripay/config": "workspace:*",
+    "@agrilink/config": "workspace:*",
     "@playwright/test": "^1.55.1",
     "@tailwindcss/postcss": "^4.1.13",
     "@types/node": "^22.18.0",
@@ -47,11 +50,11 @@
     "@types/react": "^19.1.13",
     "@types/react-dom": "^19.1.9",
     "dotenv": "^17.2.2",
-    "tsx": "^4.20.5",
     "eslint": "^9.36.0",
     "fake-indexeddb": "^6.2.2",
     "postcss": "^8.5.6",
     "tailwindcss": "^4.1.13",
+    "tsx": "^4.20.5",
     "typescript": "~5.9.3",
     "vite-tsconfig-paths": "^5.1.4",
     "vitest": "^4.0.0"

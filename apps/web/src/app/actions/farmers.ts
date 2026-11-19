@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import type { z } from "zod";
-import type { addPlotSchema, addWalletSchema, updateFarmerSchema } from "@agripay/validation";
+import type { addPlotSchema, addWalletSchema, updateFarmerSchema } from "@agrilink/validation";
 import { requireActor } from "@/server/auth/actor";
 import { type ActionResult, toActionError } from "@/server/errors";
 import { commitImport, previewImport } from "@/server/farmers/import";

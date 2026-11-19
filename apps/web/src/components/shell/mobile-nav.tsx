@@ -2,14 +2,14 @@
 
 import { useState } from "react";
 import { MenuIcon } from "lucide-react";
-import { Button } from "@agripay/ui/components/button";
+import { Button } from "@agrilink/ui/components/button";
 import {
   Sheet,
   SheetContent,
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-} from "@agripay/ui/components/sheet";
+} from "@agrilink/ui/components/sheet";
 import { NavLink } from "./nav-link";
 
 export interface NavItem {

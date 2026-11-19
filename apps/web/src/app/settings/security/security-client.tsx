@@ -4,10 +4,10 @@ import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { Loader2Icon, LogOutIcon } from "lucide-react";
-import { Button } from "@agripay/ui/components/button";
-import { Input } from "@agripay/ui/components/input";
-import { Label } from "@agripay/ui/components/label";
-import { toast } from "@agripay/ui/components/sonner";
+import { Button } from "@agrilink/ui/components/button";
+import { Input } from "@agrilink/ui/components/input";
+import { Label } from "@agrilink/ui/components/label";
+import { toast } from "@agrilink/ui/components/sonner";
 import { revokeOtherSessionsAction, setPinAction } from "@/app/actions/auth";
 
 function PinInput(props: React.ComponentProps<typeof Input>) {

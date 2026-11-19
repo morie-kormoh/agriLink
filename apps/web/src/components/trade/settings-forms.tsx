@@ -4,20 +4,20 @@ import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { Loader2Icon, MapPinIcon, PlusIcon } from "lucide-react";
-import { BuyerType, MobileMoneyProvider } from "@agripay/db/enums";
-import { Button } from "@agripay/ui/components/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@agripay/ui/components/card";
-import { Input } from "@agripay/ui/components/input";
-import { Label } from "@agripay/ui/components/label";
-import { Switch } from "@agripay/ui/components/misc";
+import { BuyerType, MobileMoneyProvider } from "@agrilink/db/enums";
+import { Button } from "@agrilink/ui/components/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@agrilink/ui/components/card";
+import { Input } from "@agrilink/ui/components/input";
+import { Label } from "@agrilink/ui/components/label";
+import { Switch } from "@agrilink/ui/components/misc";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@agripay/ui/components/select";
-import { toast } from "@agripay/ui/components/sonner";
+} from "@agrilink/ui/components/select";
+import { toast } from "@agrilink/ui/components/sonner";
 import {
   createCollectionPointAction,
   setCollectionPointActiveAction,

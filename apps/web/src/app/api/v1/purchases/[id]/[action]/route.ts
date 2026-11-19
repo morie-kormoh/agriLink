@@ -1,4 +1,4 @@
-import { cancelPurchaseSchema, resolveDisputeSchema } from "@agripay/validation";
+import { cancelPurchaseSchema, resolveDisputeSchema } from "@agrilink/validation";
 import { v1 } from "@/server/api/v1";
 import { notFound } from "@/server/errors";
 import { approvePurchase } from "@/server/trade/batches";

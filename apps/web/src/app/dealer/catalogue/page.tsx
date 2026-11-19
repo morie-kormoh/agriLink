@@ -1,6 +1,6 @@
 import { getTranslations } from "next-intl/server";
-import { Card, CardContent, CardHeader, CardTitle } from "@agripay/ui/components/card";
-import { PageHeader } from "@agripay/ui/components/blocks";
+import { Card, CardContent, CardHeader, CardTitle } from "@agrilink/ui/components/card";
+import { PageHeader } from "@agrilink/ui/components/blocks";
 import { CatalogueForm, NeedProfile } from "@/components/dealer/dealer-client";
 import { requirePortal } from "@/server/auth/actor";
 import { dealerFor, listCatalogue } from "@/server/credit/dealers";

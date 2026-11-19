@@ -1,7 +1,7 @@
 import "server-only";
-import { Prisma, prisma } from "@agripay/db";
-import { daysPastDue } from "@agripay/finance";
-import { type Actor, can } from "@agripay/validation/permissions";
+import { Prisma, prisma } from "@agrilink/db";
+import { daysPastDue } from "@agrilink/finance";
+import { type Actor, can } from "@agrilink/validation/permissions";
 import { forbidden } from "../errors";
 import { lenderOrgId } from "../finance/common";
 

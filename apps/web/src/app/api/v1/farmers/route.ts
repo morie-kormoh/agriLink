@@ -1,4 +1,4 @@
-import { farmerSearchSchema, isYouth, registerFarmerSchema } from "@agripay/validation";
+import { farmerSearchSchema, isYouth, registerFarmerSchema } from "@agrilink/validation";
 import { page, queryObject, v1 } from "@/server/api/v1";
 import { channelForActor, registerFarmer, searchFarmers } from "@/server/farmers/service";
 
@@ -10,7 +10,7 @@ export const GET = v1(async ({ current, query }) => {
   return page(
     r.items.map((f) => ({
       id: f.id,
-      agripayId: f.agripayId,
+      agrilinkId: f.agrilinkId,
       fullName: f.fullName,
       gender: f.gender,
       phone: f.phone,

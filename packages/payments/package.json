@@ -1,5 +1,5 @@
 {
-  "name": "@agripay/payments",
+  "name": "@agrilink/payments",
   "version": "0.1.0",
   "private": true,
   "type": "module",
@@ -15,7 +15,7 @@
     "decimal.js": "^10.6.0"
   },
   "devDependencies": {
-    "@agripay/config": "workspace:*",
+    "@agrilink/config": "workspace:*",
     "@types/node": "^22.18.0",
     "eslint": "^9.36.0",
     "fast-check": "^4.3.0",

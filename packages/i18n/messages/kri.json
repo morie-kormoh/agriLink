@@ -22,10 +22,12 @@
     "MALE": "Man"
   },
   "landing": {
-    "signIn": "Sayn in"
+    "signIn": "Sayn in",
+    "demoTitle": "Tɛst di dɛmo",
+    "demoBody": "Pik wan pɔsin. Wan klik go sayn yu in — yu nɔ nid fon ɔ kod. Fala dɛn wan bay wan, 1 to 5."
   },
   "auth": {
-    "loginTitle": "Sayn in na AgriPay",
+    "loginTitle": "Sayn in na AgriLink",
     "loginSubtitle": "Put yu fon nɔmba. Wi go sɛn yu 6 nɔmba kod na SMS.",
     "phoneLabel": "Fon nɔmba",
     "sendCode": "Sɛn di kod",
@@ -67,8 +69,13 @@
   },
   "nav": {
     "savings": "Sev mɔni",
-    "passport": "Mi AgriPay paspɔt",
-    "loans": "Lɔn"
+    "passport": "Mi AgriLink paspɔt",
+    "loans": "Lɔn",
+    "tabHome": "Os",
+    "tabMoney": "Mɔni",
+    "tabSavings": "Sev",
+    "tabPassport": "Paspɔt",
+    "tabLoans": "Lon"
   },
   "finance": {
     "pin": "Yu PIN",
@@ -80,5 +87,37 @@
   },
   "credit": {
     "title": "Lɔn fɔ input"
+  },
+  "splitShort": {
+    "LOAN_REPAYMENT": "Lon",
+    "SAVINGS": "Sev",
+    "COOP_DUES": "Dyuz",
+    "INSURANCE_PREMIUM": "Inshɔrans",
+    "FARMER_WALLET": "Yu",
+    "DEALER_SETTLEMENT": "Dila"
+  },
+  "home": {
+    "hello": "Kushɛ, {name}",
+    "received": "Wetin yu dɔn gɛt tru AgriLink",
+    "lastPayment": "Yu las pemɛnt",
+    "paidBy": "{buyer} pe {amount}",
+    "floor": "Wi kip at list 30% fɔ yu.",
+    "noPayment": "We baya pe fɔ yu krɔp, yu go si ya usai ɔl di mɔni go.",
+    "saved": "Sev",
+    "passport": "Paspɔt",
+    "voucher": "Vawcha",
+    "noVoucher": "Natin yet",
+    "left": "{amount} lɛf",
+    "seeAll": "Ɔl pemɛnt",
+    "myDetails": "Mi tin dɛn",
+    "to": "Fɔ {name}"
+  },
+  "login": {
+    "panelTitle": "Yu avɛst, pe fayn.",
+    "panelBody": "Sayn in wit yu fon nɔmba. Wi go sɛn 6-digit kod bay SMS."
+  },
+  "admin": {
+    "pipeline": "Pemɛnt dɛn",
+    "needsAttention": "Dɛn nid fɔ luk"
   }
 }

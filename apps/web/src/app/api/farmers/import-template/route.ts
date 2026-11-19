@@ -1,4 +1,4 @@
-import { CSV_TEMPLATE_HEADER } from "@agripay/validation";
+import { CSV_TEMPLATE_HEADER } from "@agrilink/validation";
 
 export function GET() {
   const example = [
@@ -8,7 +8,7 @@ export function GET() {
   return new Response(`${CSV_TEMPLATE_HEADER}\n${example}\n`, {
     headers: {
       "Content-Type": "text/csv; charset=utf-8",
-      "Content-Disposition": 'attachment; filename="agripay-farmers-template.csv"',
+      "Content-Disposition": 'attachment; filename="agrilink-farmers-template.csv"',
     },
   });
 }

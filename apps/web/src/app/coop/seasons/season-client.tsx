@@ -4,15 +4,15 @@ import { useTransition } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { Loader2Icon, MessageSquareTextIcon } from "lucide-react";
-import { Button } from "@agripay/ui/components/button";
+import { Button } from "@agrilink/ui/components/button";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@agripay/ui/components/select";
-import { toast } from "@agripay/ui/components/sonner";
+} from "@agrilink/ui/components/select";
+import { toast } from "@agrilink/ui/components/sonner";
 import { closeSeasonAction } from "@/app/actions/records";
 
 export function SeasonPicker({ season, seasons }: { season: string; seasons: string[] }) {

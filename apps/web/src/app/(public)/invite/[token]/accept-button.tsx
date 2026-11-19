@@ -3,8 +3,8 @@
 import { useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { Loader2Icon } from "lucide-react";
-import { Button } from "@agripay/ui/components/button";
-import { toast } from "@agripay/ui/components/sonner";
+import { Button } from "@agrilink/ui/components/button";
+import { toast } from "@agrilink/ui/components/sonner";
 import { acceptInvitationAction } from "@/app/actions/auth";
 
 export function AcceptInviteButton({ token, label }: { token: string; label: string }) {

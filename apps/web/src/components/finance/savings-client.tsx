@@ -16,12 +16,12 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@agripay/ui/components/card";
-import { Input } from "@agripay/ui/components/input";
-import { Label } from "@agripay/ui/components/label";
-import { Progress } from "@agripay/ui/components/misc";
-import { autoSavePreview } from "@agripay/finance";
-import { formatLe } from "@agripay/validation";
+} from "@agrilink/ui/components/card";
+import { Input } from "@agrilink/ui/components/input";
+import { Label } from "@agrilink/ui/components/label";
+import { Progress } from "@agrilink/ui/components/misc";
+import { autoSavePreview } from "@agrilink/finance";
+import { formatLe } from "@agrilink/validation";
 import {
   earlyWithdrawalAction,
   openGoalAction,

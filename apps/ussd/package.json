@@ -1,5 +1,5 @@
 {
-  "name": "@agripay/ussd",
+  "name": "@agrilink/ussd",
   "version": "0.1.0",
   "private": true,
   "type": "module",
@@ -11,14 +11,14 @@
     "test": "vitest run"
   },
   "dependencies": {
-    "@agripay/i18n": "workspace:*",
-    "@agripay/validation": "workspace:*",
+    "@agrilink/i18n": "workspace:*",
+    "@agrilink/validation": "workspace:*",
     "@fastify/formbody": "^8.0.2",
     "dotenv": "^17.2.2",
     "fastify": "^5.6.1"
   },
   "devDependencies": {
-    "@agripay/config": "workspace:*",
+    "@agrilink/config": "workspace:*",
     "@types/node": "^22.18.0",
     "eslint": "^9.36.0",
     "tsx": "^4.20.5",

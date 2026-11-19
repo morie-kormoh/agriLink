@@ -1,4 +1,4 @@
-import { institutionSettingsSchema } from "@agripay/validation";
+import { institutionSettingsSchema } from "@agrilink/validation";
 import { v1 } from "@/server/api/v1";
 import { getInstitution, updateInstitution } from "@/server/finance/common";
 

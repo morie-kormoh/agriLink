@@ -1,6 +1,6 @@
 import "server-only";
-import type { Prisma } from "@agripay/db";
-import type { Actor } from "@agripay/validation/permissions";
+import type { Prisma } from "@agrilink/db";
+import type { Actor } from "@agrilink/validation/permissions";
 import { forbidden } from "../errors";
 
 /** Prisma `where` limiting farmers to what the actor may see (module 01 scope rules). */

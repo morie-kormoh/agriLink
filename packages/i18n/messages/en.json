@@ -1,6 +1,6 @@
 {
   "common": {
-    "appName": "AgriPay Salone",
+    "appName": "AgriLink Salone",
     "tagline": "Empowering Farmers Through Digital Finance.",
     "continue": "Continue",
     "back": "Back",
@@ -72,17 +72,39 @@
   },
   "landing": {
     "headline": "Turn every harvest into a financial future",
-    "body": "AgriPay connects farmers, cooperatives, buyers and lenders. Sales become savings, records become credit — on any phone.",
+    "body": "AgriLink connects farmers, cooperatives, buyers and lenders. Sales become savings, records become credit — on any phone.",
     "signIn": "Sign in",
     "featureRegister": "Digital farmer ID",
     "featureRegisterBody": "Register farmers in the field, even without network.",
     "featurePay": "Fast, safe payments",
     "featurePayBody": "Get paid straight to Orange Money, Afrimoney or QMoney.",
     "featureCredit": "Fair access to credit",
-    "featureCreditBody": "Your records and savings build your AgriPay score."
+    "featureCreditBody": "Your records and savings build your AgriLink score.",
+    "title": "Every leone, where it should go.",
+    "lead": "When a buyer pays for a farmer's crop, AgriLink splits the money in one go: the loan gets repaid, savings grow, the co-op gets its dues, and the farmer gets the rest — straight to mobile money.",
+    "tryDemo": "Try the demo",
+    "heroCaption": "Aminata sells 1,000 kg of rice. Le 4,000 arrives.",
+    "howTitle": "How it works",
+    "how1": "The co-op weighs the crop and records the sale.",
+    "how2": "The buyer pays once, by mobile money.",
+    "how3": "AgriLink splits the payment at the moment it arrives.",
+    "how4": "The farmer gets an SMS showing where every leone went.",
+    "how5": "Good sales build a Farm Passport that unlocks input credit.",
+    "whoTitle": "Built for everyone in the chain",
+    "whoFarmer": "Farmers",
+    "whoFarmerBody": "See every payment, save at harvest, and borrow seeds and fertiliser against their own record — on any phone, by USSD too.",
+    "whoCoop": "Co-operatives",
+    "whoCoopBody": "Record purchases offline, pay members in one batch, collect dues without chasing cash.",
+    "whoLender": "Lenders",
+    "whoLenderBody": "Lend for inputs as vouchers, get repaid automatically from the next harvest sale.",
+    "whoDealer": "Agro-dealers",
+    "whoDealerBody": "Accept voucher codes, hand over inputs, get settled to mobile money the same day.",
+    "foot": "A prototype for the Sierra Leone FinTech Innovation Challenge 2026. Demo data only.",
+    "demoTitle": "Try the demo",
+    "demoBody": "Pick a person from the story. One click signs you in — no phone or code needed. Follow them in order, 1 to 5."
   },
   "auth": {
-    "loginTitle": "Sign in to AgriPay",
+    "loginTitle": "Sign in to AgriLink",
     "loginSubtitle": "Enter your phone number. We'll send you a 6-digit code by SMS.",
     "phoneLabel": "Phone number",
     "phonePlaceholder": "076 123 456",
@@ -99,8 +121,8 @@
       "rateLimited": "Too many attempts. Please wait a few minutes and try again.",
       "invalidCode": "That code is wrong or has expired.",
       "tooManyAttempts": "Too many wrong codes. Request a new code.",
-      "noAccount": "This number is not registered on AgriPay. Ask your cooperative or an AgriPay agent to register you.",
-      "suspended": "This account is suspended. Contact AgriPay support."
+      "noAccount": "This number is not registered on AgriLink. Ask your cooperative or an AgriLink agent to register you.",
+      "suspended": "This account is suspended. Contact AgriLink support."
     },
     "selectContextTitle": "Choose how to continue",
     "selectContextSubtitle": "You have access to more than one workspace.",
@@ -111,7 +133,7 @@
   "security": {
     "title": "Security",
     "pinTitle": "Transaction PIN",
-    "pinBody": "Your PIN confirms loans, savings changes and consent on USSD and in the app. Never share it — AgriPay staff will never ask for it.",
+    "pinBody": "Your PIN confirms loans, savings changes and consent on USSD and in the app. Never share it — AgriLink staff will never ask for it.",
     "pinSet": "PIN is set",
     "pinNotSet": "No PIN yet",
     "currentPin": "Current PIN",
@@ -190,7 +212,12 @@
     "settlements": "Settlements",
     "shopProfile": "Shop profile",
     "dealers": "Agro-dealers",
-    "allLoans": "All loans"
+    "allLoans": "All loans",
+    "tabHome": "Home",
+    "tabMoney": "Money",
+    "tabSavings": "Savings",
+    "tabPassport": "Passport",
+    "tabLoans": "Loans"
   },
   "farmer": {
     "registerTitle": "Register a farmer",
@@ -233,16 +260,16 @@
       "cooperative": "Cooperative",
       "noCooperative": "No cooperative"
     },
-    "consentText": "I have explained to the farmer that AgriPay will store their name, phone, location and farm details to provide payments, savings and credit services, and that their details will only be shared with lenders if they agree. The farmer agrees to be registered.",
+    "consentText": "I have explained to the farmer that AgriLink will store their name, phone, location and farm details to provide payments, savings and credit services, and that their details will only be shared with lenders if they agree. The farmer agrees to be registered.",
     "consentLabel": "The farmer agrees to be registered",
     "saveOffline": "Save registration",
     "savedOffline": "Saved on this device. It will sync when you are online.",
-    "registeredToast": "{name} registered — ID {agripayId}",
-    "duplicateWarning": "Possible duplicate of {name} ({agripayId}). A cooperative admin will review it.",
-    "sharedPhoneWarning": "This phone number already belongs to another AgriPay user. The farmer can still be registered, but will not have their own login.",
+    "registeredToast": "{name} registered — ID {agrilinkId}",
+    "duplicateWarning": "Possible duplicate of {name} ({agrilinkId}). A cooperative admin will review it.",
+    "sharedPhoneWarning": "This phone number already belongs to another AgriLink user. The farmer can still be registered, but will not have their own login.",
     "listTitle": "Farmers",
-    "searchPlaceholder": "Search name, phone or AgriPay ID",
-    "agripayId": "AgriPay ID",
+    "searchPlaceholder": "Search name, phone or AgriLink ID",
+    "agrilinkId": "AgriLink ID",
     "name": "Name",
     "location": "Location",
     "crop": "Crop",
@@ -263,14 +290,14 @@
     "noPlots": "No plots recorded yet.",
     "youth": "Youth (18–35)",
     "disability": "Disability",
-    "idCardTitle": "AgriPay Farmer ID",
+    "idCardTitle": "AgriLink Farmer ID",
     "registeredBy": "Registered by",
     "export": "Export CSV",
     "viewRecords": "Farm records"
   },
   "sync": {
     "title": "Sync",
-    "subtitle": "Registrations saved on this device are sent to AgriPay when you are online.",
+    "subtitle": "Registrations saved on this device are sent to AgriLink when you are online.",
     "lastSync": "Last sync: {time}",
     "never": "never",
     "syncNow": "Sync now",
@@ -315,7 +342,11 @@
     "newOrg": "New organisation",
     "orgName": "Organisation name",
     "orgType": "Type",
-    "adminPhone": "Admin phone (invited by SMS)"
+    "adminPhone": "Admin phone (invited by SMS)",
+    "pipeline": "Payments pipeline",
+    "pipelineHint": "Every payment, by where it is now. Failed and partial payments need a look.",
+    "needsAttention": "Needs attention",
+    "paidOut": "Paid out"
   },
   "validation": {
     "phone": "Enter a valid Sierra Leone phone number"
@@ -363,14 +394,14 @@
   "verification": {
     "SELF_REPORTED": "Self-reported",
     "AGENT_CONFIRMED": "Confirmed by agent",
-    "SYSTEM_VERIFIED": "Verified by AgriPay"
+    "SYSTEM_VERIFIED": "Verified by AgriLink"
   },
   "trade": {
     "recordTitle": "Record a purchase",
     "recordSubtitle": "Weigh, check the price and save. The farmer gets an SMS receipt.",
     "farmer": "Farmer",
-    "findFarmer": "Search name, phone or AgriPay ID",
-    "findFarmerBuyer": "Enter the farmer's AgriPay ID or phone number",
+    "findFarmer": "Search name, phone or AgriLink ID",
+    "findFarmerBuyer": "Enter the farmer's AgriLink ID or phone number",
     "noWallet": "No mobile money wallet — payment will be held until one is added.",
     "change": "Change",
     "crop": "Crop",
@@ -469,11 +500,11 @@
     "lastError": "Last error",
     "nextAttempt": "Next attempt",
     "reconTitle": "Reconciliation",
-    "reconSubtitle": "Upload a provider statement (CSV with providerRef, amountLe, status) to compare with AgriPay.",
+    "reconSubtitle": "Upload a provider statement (CSV with providerRef, amountLe, status) to compare with AgriLink.",
     "matched": "Matched",
     "mismatched": "Mismatched",
     "missing": "Missing in statement",
-    "unknown": "Not in AgriPay"
+    "unknown": "Not in AgriLink"
   },
   "records": {
     "title": "Farm records",
@@ -573,11 +604,11 @@
   },
   "finance": {
     "pin": "Your PIN",
-    "pinHelp": "Enter the farmer's 4–5 digit AgriPay PIN to confirm.",
-    "pinHelpSelf": "Enter your 4–5 digit AgriPay PIN to confirm.",
+    "pinHelp": "Enter the farmer's 4–5 digit AgriLink PIN to confirm.",
+    "pinHelpSelf": "Enter your 4–5 digit AgriLink PIN to confirm.",
     "confirmWithPin": "Confirm with PIN",
     "noPinTitle": "Set your PIN first",
-    "noPinBody": "You need an AgriPay PIN to confirm savings, loans and permissions.",
+    "noPinBody": "You need an AgriLink PIN to confirm savings, loans and permissions.",
     "setPin": "Set PIN",
     "assisted": "Helping a farmer? They must type their own PIN — never ask for it or write it down."
   },
@@ -672,7 +703,7 @@
     "noMembers": "No members yet."
   },
   "passport": {
-    "title": "My AgriPay passport",
+    "title": "My AgriLink passport",
     "subtitle": "Your credit-readiness score. Only you decide who can see it.",
     "score": "Score",
     "band": "Band",
@@ -698,7 +729,7 @@
       "joinCoop": "Join a cooperative to add up to 4 more points.",
       "joinCoopOrGroup": "Join a cooperative (10 points) or a savings group (6 points).",
       "keepRecords": "Keep at least 3 farm records this season to add up to {points} points.",
-      "sellThroughCoop": "Sell through your co-op or buyer on AgriPay, in more months, to add points.",
+      "sellThroughCoop": "Sell through your co-op or buyer on AgriLink, in more months, to add points.",
       "openHarvestLock": "Open Harvest Lock to add 5 points and save for planting.",
       "saveMonthly": "Save something every month (or contribute on time in your group) to add points.",
       "clearDefault": "Repay your overdue loan to start rebuilding this score.",
@@ -748,7 +779,7 @@
     },
     "readTerms": "Read the terms",
     "terms": "Loan terms",
-    "applySharing": "Applying lets {lender} see your AgriPay passport (score, sales, savings and repayments) for 12 months.",
+    "applySharing": "Applying lets {lender} see your AgriLink passport (score, sales, savings and repayments) for 12 months.",
     "accept": "Accept offer",
     "cancel": "Cancel loan",
     "cancelHint": "You can cancel until {time} if you have not used the voucher.",
@@ -780,7 +811,7 @@
       "repaid": "Fully repaid",
       "cancelled": "Cancelled"
     },
-    "responsible": "How AgriPay protects you: no loan without your PIN, repayments never take more than the agreed % of a sale and you always keep at least 30%, no extra charges if you are late, and reminders only go to you."
+    "responsible": "How AgriLink protects you: no loan without your PIN, repayments never take more than the agreed % of a sale and you always keep at least 30%, no extra charges if you are late, and reminders only go to you."
   },
   "lender": {
     "portfolio": "Portfolio",
@@ -828,7 +859,7 @@
     "farmers": "Farmers who allow access",
     "farmersSub": "You only see farmers who gave you consent with their PIN.",
     "requestConsent": "Request consent",
-    "farmerIdOrPhone": "AgriPay ID or phone",
+    "farmerIdOrPhone": "AgriLink ID or phone",
     "scope": "What you want to see",
     "purpose2": "Purpose (shown to the farmer)",
     "months": "Months",
@@ -854,7 +885,7 @@
     "savingsAccount": "Custodial savings account",
     "threshold": "Officer approval limit (Le)",
     "custodian": "Savings accounts held",
-    "custodianSub": "AgriPay mirrors balances; your core banking system is the record of funds.",
+    "custodianSub": "AgriLink mirrors balances; your core banking system is the record of funds.",
     "mirror": "Ledger check",
     "reconcile": "Reconcile with your statement",
     "reconcileHint": "Paste CSV lines: account ref, balance (e.g. SAV-000001, 1250.00)",
@@ -905,7 +936,7 @@
     "payoutProvider": "Provider",
     "district": "District",
     "verified": "Verified",
-    "notVerified": "Waiting for AgriPay verification",
+    "notVerified": "Waiting for AgriLink verification",
     "reverify": "Changing the payout number needs re-verification.",
     "settlements": "Settlements",
     "settled": "Settled",
@@ -921,5 +952,33 @@
     "title": "Agro-dealers",
     "verify": "Verify",
     "unverify": "Remove verification"
+  },
+  "splitShort": {
+    "LOAN_REPAYMENT": "Loan",
+    "SAVINGS": "Saved",
+    "COOP_DUES": "Dues",
+    "INSURANCE_PREMIUM": "Insurance",
+    "FARMER_WALLET": "You",
+    "DEALER_SETTLEMENT": "Dealer"
+  },
+  "home": {
+    "hello": "Hello, {name}",
+    "received": "Received through AgriLink",
+    "lastPayment": "Your last payment",
+    "paidBy": "{buyer} paid {amount}",
+    "floor": "We kept at least 30% for you.",
+    "noPayment": "When a buyer pays for your crop, you will see here where every leone went.",
+    "saved": "Saved",
+    "passport": "Passport",
+    "voucher": "Voucher",
+    "noVoucher": "None yet",
+    "left": "{amount} left",
+    "seeAll": "All payments",
+    "myDetails": "My details",
+    "to": "To {name}"
+  },
+  "login": {
+    "panelTitle": "Your harvest, paid properly.",
+    "panelBody": "Sign in with your phone number. We send a 6-digit code by SMS."
   }
 }

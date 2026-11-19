@@ -143,7 +143,7 @@ model Purchase {
 
 ## 8. USSD / SMS touchpoints
 
-- SMS receipt: "AgriPay: {coop} bought 20 bags (1,000kg) RICE grade A @ Le 4.00/kg = Le 4,000. Deductions Le 0. Reply 1 to confirm, 2 to report a problem. Ref PUR-8F2K."
+- SMS receipt: "AgriLink: {coop} bought 20 bags (1,000kg) RICE grade A @ Le 4.00/kg = Le 4,000. Deductions Le 0. Reply 1 to confirm, 2 to report a problem. Ref PUR-8F2K."
 - USSD _My Sales_: last 5 purchases with status.
 
 ## 9. Step-by-step implementation

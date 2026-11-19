@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
-import { StatusBadge } from "@agripay/ui/components/blocks";
+import { StatusBadge } from "@agrilink/ui/components/blocks";
 import {
   Table,
   TableBody,
@@ -8,8 +8,8 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@agripay/ui/components/table";
-import { formatLe } from "@agripay/validation";
+} from "@agrilink/ui/components/table";
+import { formatLe } from "@agrilink/validation";
 import { toneFor } from "@/components/finance/score-dial";
 import { DecisionButtons } from "@/components/lender/lender-client";
 import type { listLoans } from "@/server/credit/loans";
@@ -54,7 +54,7 @@ export async function LoansTable({ items, decisions }: { items: Item[]; decision
                 <TableCell>
                   <p>{l.farmer.fullName}</p>
                   <p className="text-muted-foreground text-xs">
-                    {l.farmer.agripayId} · {l.farmer.district.name}
+                    {l.farmer.agrilinkId} · {l.farmer.district.name}
                   </p>
                 </TableCell>
                 <TableCell>{l.product.name}</TableCell>

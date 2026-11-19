@@ -8,7 +8,7 @@ model Region {
 
 model District {
   id            String         @id @default(cuid())
-  code          String         @unique // 3-letter code used in AgriPay IDs, e.g. BOM
+  code          String         @unique // 3-letter code used in AgriLink IDs, e.g. BOM
   name          String
   regionId      String
   region        Region         @relation(fields: [regionId], references: [id])

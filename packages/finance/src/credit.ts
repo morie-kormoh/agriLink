@@ -13,7 +13,7 @@ export function money(v: Decimal.Value): string {
   return `Le ${i.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}${f === "00" ? "" : `.${f}`}`;
 }
 
-/** Fee and total for a simple flat-fee loan (the only pricing AgriPay supports: easy to explain). */
+/** Fee and total for a simple flat-fee loan (the only pricing AgriLink supports: easy to explain). */
 export function loanCost(principalLe: Decimal.Value, flatFeePct: Decimal.Value) {
   const principal = round2(new Decimal(principalLe));
   const fee = round2(principal.mul(flatFeePct).div(100));
@@ -228,7 +228,7 @@ export function disclosure(d: DisclosureInput, locale: "en" | "kri" = "en") {
           `${d.lenderName}: ${d.productName}`,
           `Yu go get input voucher fɔ ${money(c.principalLe)}.`,
           `Fi: ${money(c.feeLe)}. Ɔl wetin yu fɔ pe bak: ${money(c.totalLe)}.`,
-          `Wi go tek ap to ${pct}% pan ɛni sel we yu sel tru AgriPay te yu dɔn pe.`,
+          `Wi go tek ap to ${pct}% pan ɛni sel we yu sel tru AgriLink te yu dɔn pe.`,
           `Las de fɔ pe: ${due}.`,
           `If yu lɛt pas 14 de, yu skɔ go go dɔŋ. Nɔ ɛni ɔda chaj.`,
           `Yu kin kansl insay 24 awa if yu nɔ yuz di voucher yet.`,
@@ -237,9 +237,9 @@ export function disclosure(d: DisclosureInput, locale: "en" | "kri" = "en") {
           `${d.lenderName}: ${d.productName}`,
           `You receive an input voucher worth ${money(c.principalLe)} (valid ${d.voucherValidDays} days).`,
           `Fee: ${money(c.feeLe)}. Total to repay: ${money(c.totalLe)}.`,
-          `Repayment: up to ${pct}% of each sale paid through AgriPay until repaid. You always keep at least 30%.`,
+          `Repayment: up to ${pct}% of each sale paid through AgriLink until repaid. You always keep at least 30%.`,
           `Due date: ${due}.`,
-          `If you are more than 14 days late your AgriPay score goes down. There are no extra charges.`,
+          `If you are more than 14 days late your AgriLink score goes down. There are no extra charges.`,
           `You can cancel within 24 hours if you have not used the voucher.`,
         ];
   return { ...c, dueDate: d.dueDate.toISOString(), lines, text: lines.join("\n") };

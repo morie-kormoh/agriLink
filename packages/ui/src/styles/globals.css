@@ -7,75 +7,121 @@
 @custom-variant dark (&:is(.dark *));
 
 /*
- * AgriPay theme
- * primary = leaf green (agriculture), accent = harvest gold, plus semantic colours.
+ * AgriLink theme — "Gara & Paddy" (docs/ui/AgriLink_UI_UX_Design.md)
+ * Gara Indigo #1F2A6B (brand, navigation) · Ink #14183A (text) · Mist #F6F7FB (background)
+ * Field Green #1E7F45 (actions) · Paddy Green #2E9E5B (money in, fills only) · Harvest Gold #F2B33D (savings, fills only)
+ * Lagoon Teal #0F6E8C (information, dues) · Kola Red #C2362B (errors, late) · Slate #5A6080 (secondary text)
  */
 :root {
-  --radius: 0.625rem;
-  --background: oklch(0.99 0.004 120);
-  --foreground: oklch(0.2 0.02 150);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.2 0.02 150);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.2 0.02 150);
-  --primary: oklch(0.52 0.13 150);
-  --primary-foreground: oklch(0.99 0.01 150);
-  --secondary: oklch(0.96 0.02 140);
-  --secondary-foreground: oklch(0.28 0.05 150);
-  --muted: oklch(0.96 0.008 130);
-  --muted-foreground: oklch(0.5 0.02 150);
-  --accent: oklch(0.86 0.13 85);
-  --accent-foreground: oklch(0.3 0.06 70);
-  --destructive: oklch(0.58 0.22 27);
-  --success: oklch(0.6 0.14 150);
-  --warning: oklch(0.78 0.15 75);
-  --info: oklch(0.6 0.12 240);
-  --border: oklch(0.91 0.01 130);
-  --input: oklch(0.88 0.01 130);
-  --ring: oklch(0.6 0.13 150);
-  --chart-1: oklch(0.52 0.13 150);
-  --chart-2: oklch(0.78 0.15 75);
-  --chart-3: oklch(0.6 0.12 240);
-  --chart-4: oklch(0.65 0.15 30);
-  --chart-5: oklch(0.55 0.1 300);
-  --sidebar: oklch(0.27 0.05 155);
-  --sidebar-foreground: oklch(0.95 0.02 140);
-  --sidebar-accent: oklch(0.35 0.06 155);
-  --sidebar-accent-foreground: oklch(0.99 0 0);
-  --sidebar-border: oklch(0.33 0.05 155);
+  --radius: 0.75rem;
+  --background: #f6f7fb;
+  --foreground: #14183a;
+  --card: #ffffff;
+  --card-foreground: #14183a;
+  --popover: #ffffff;
+  --popover-foreground: #14183a;
+  --primary: #1e7f45;
+  --primary-foreground: #ffffff;
+  --secondary: #e8eaf5;
+  --secondary-foreground: #1f2a6b;
+  --muted: #eef0f6;
+  --muted-foreground: #5a6080;
+  --accent: #f2b33d;
+  --accent-foreground: #14183a;
+  --destructive: #c2362b;
+  --success: #1e7f45;
+  --warning: #f2b33d;
+  --info: #0f6e8c;
+  --border: #e3e5ef;
+  --input: #d5d8e6;
+  --ring: #0f6e8c;
+  --chart-1: #1f2a6b;
+  --chart-2: #f2b33d;
+  --chart-3: #0f6e8c;
+  --chart-4: #2e9e5b;
+  --chart-5: #6d4ab8;
+  --sidebar: #1f2a6b;
+  --sidebar-foreground: #e8eaf5;
+  --sidebar-accent: #2c3a8a;
+  --sidebar-accent-foreground: #ffffff;
+  --sidebar-border: #2a3680;
+
+  /* Brand */
+  --indigo: #1f2a6b;
+  --indigo-900: #141c4e;
+  --ink: #14183a;
+  --paddy: #2e9e5b;
+  --gold: #f2b33d;
+  --teal: #0f6e8c;
+  --kola: #c2362b;
+  --slate: #5a6080;
+
+  /* Split Ribbon: the only place these appear together */
+  --split-loan: #1f2a6b;
+  --split-savings: #f2b33d;
+  --split-dues: #0f6e8c;
+  --split-insurance: #6d4ab8;
+  --split-farmer: #2e9e5b;
+  --split-dealer: #5a6080;
+  --money-in: #1e7f45;
+  --money-out: #c2362b;
+
+  --shadow-float: 0 8px 24px rgb(31 42 107 / 0.18);
 }
 
 .dark {
-  --background: oklch(0.17 0.015 155);
-  --foreground: oklch(0.96 0.01 130);
-  --card: oklch(0.21 0.02 155);
-  --card-foreground: oklch(0.96 0.01 130);
-  --popover: oklch(0.21 0.02 155);
-  --popover-foreground: oklch(0.96 0.01 130);
-  --primary: oklch(0.68 0.14 150);
-  --primary-foreground: oklch(0.17 0.03 155);
-  --secondary: oklch(0.27 0.03 155);
-  --secondary-foreground: oklch(0.96 0.01 130);
-  --muted: oklch(0.26 0.02 155);
-  --muted-foreground: oklch(0.72 0.02 140);
-  --accent: oklch(0.8 0.13 85);
-  --accent-foreground: oklch(0.22 0.04 70);
-  --destructive: oklch(0.66 0.2 25);
-  --success: oklch(0.7 0.14 150);
-  --warning: oklch(0.82 0.14 75);
-  --info: oklch(0.7 0.12 240);
-  --border: oklch(1 0 0 / 12%);
-  --input: oklch(1 0 0 / 16%);
-  --ring: oklch(0.68 0.14 150);
-  --sidebar: oklch(0.2 0.03 155);
-  --sidebar-foreground: oklch(0.95 0.02 140);
-  --sidebar-accent: oklch(0.28 0.05 155);
-  --sidebar-accent-foreground: oklch(0.99 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
+  --background: #10132b;
+  --foreground: #eef0fa;
+  --card: #181c3a;
+  --card-foreground: #eef0fa;
+  --popover: #181c3a;
+  --popover-foreground: #eef0fa;
+  --primary: #3dbe76;
+  --primary-foreground: #0b1f13;
+  --secondary: #232852;
+  --secondary-foreground: #eef0fa;
+  --muted: #1f2447;
+  --muted-foreground: #a9aecb;
+  --accent: #f2b33d;
+  --accent-foreground: #14183a;
+  --destructive: #e05a4e;
+  --success: #3dbe76;
+  --warning: #f2b33d;
+  --info: #3aa6c8;
+  --border: rgb(255 255 255 / 0.1);
+  --input: rgb(255 255 255 / 0.16);
+  --ring: #3aa6c8;
+  --sidebar: #0c0f24;
+  --sidebar-foreground: #e8eaf5;
+  --sidebar-accent: #1f2a6b;
+  --sidebar-accent-foreground: #ffffff;
+  --sidebar-border: rgb(255 255 255 / 0.08);
+  --money-in: #3dbe76;
+  --money-out: #e05a4e;
 }
 
 @theme inline {
-  --font-sans: var(--font-sans, ui-sans-serif, system-ui, sans-serif);
+  --font-sans: "Atkinson Hyperlegible Next", ui-sans-serif, system-ui, sans-serif;
+  --font-display:
+    "Bricolage Grotesque Variable", "Atkinson Hyperlegible Next", ui-sans-serif, sans-serif;
+  --font-mono: "Atkinson Hyperlegible Mono", ui-monospace, monospace;
+  --color-indigo: var(--indigo);
+  --color-indigo-900: var(--indigo-900);
+  --color-ink: var(--ink);
+  --color-paddy: var(--paddy);
+  --color-gold: var(--gold);
+  --color-teal: var(--teal);
+  --color-kola: var(--kola);
+  --color-slate: var(--slate);
+  --color-split-loan: var(--split-loan);
+  --color-split-savings: var(--split-savings);
+  --color-split-dues: var(--split-dues);
+  --color-split-insurance: var(--split-insurance);
+  --color-split-farmer: var(--split-farmer);
+  --color-split-dealer: var(--split-dealer);
+  --color-money-in: var(--money-in);
+  --color-money-out: var(--money-out);
+  --shadow-float: var(--shadow-float);
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -111,6 +157,8 @@
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
+  /* Money cards (balance, voucher, receipt) */
+  --radius-money: 1.25rem;
 }
 
 @layer base {
@@ -119,6 +167,21 @@
   }
   body {
     @apply bg-background text-foreground antialiased;
+    font-feature-settings: "ss01";
+  }
+  h1,
+  h2 {
+    font-family: var(--font-display);
+    letter-spacing: -0.01em;
+  }
+  /* Money and tables: figures line up */
+  table,
+  .tabular-nums {
+    font-variant-numeric: tabular-nums;
+  }
+  :focus-visible {
+    outline: 3px solid var(--ring);
+    outline-offset: 2px;
   }
   /* Comfortable touch targets for field use on low-end phones */
   button,
@@ -131,5 +194,38 @@
   input[type="checkbox"],
   input[type="radio"] {
     @apply min-h-0;
+  }
+}
+
+@layer utilities {
+  .font-display {
+    font-family: var(--font-display);
+  }
+  /* Gara cloth motif: soft resist-dye circles (decorative, never behind table text) */
+  .gara {
+    background-image:
+      radial-gradient(circle at 20% 30%, rgb(255 255 255 / 0.045) 0 18px, transparent 19px),
+      radial-gradient(circle at 70% 70%, rgb(255 255 255 / 0.04) 0 26px, transparent 27px),
+      radial-gradient(circle, rgb(255 255 255 / 0.07) 1.5px, transparent 2.5px);
+    background-size:
+      120px 120px,
+      160px 160px,
+      18px 18px;
+  }
+  .gara-light {
+    background-image:
+      radial-gradient(circle at 20% 30%, rgb(31 42 107 / 0.06) 0 18px, transparent 19px),
+      radial-gradient(circle at 70% 70%, rgb(31 42 107 / 0.05) 0 26px, transparent 27px),
+      radial-gradient(circle, rgb(31 42 107 / 0.07) 1.5px, transparent 2.5px);
+    background-size:
+      120px 120px,
+      160px 160px,
+      18px 18px;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .motion-safe-only {
+      animation: none !important;
+      transition: none !important;
+    }
   }
 }

@@ -1,6 +1,6 @@
 import { afterAll, beforeAll, beforeEach, describe, expect, it } from "vitest";
-import { Prisma, prisma } from "@agripay/db";
-import type { Actor } from "@agripay/validation/permissions";
+import { Prisma, prisma } from "@agrilink/db";
+import type { Actor } from "@agrilink/validation/permissions";
 import { registerFarmer } from "@/server/farmers/service";
 import {
   addRecord,

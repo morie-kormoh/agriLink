@@ -101,7 +101,7 @@ SENTRY_DSN=
 ### Step 0.5 — Next.js web app
 
 1. `pnpm create next-app apps/web --ts --tailwind --app --src-dir --eslint`.
-2. Add `@agripay/db`, `@agripay/ui`, `@agripay/validation`, `@agripay/i18n` as workspace deps.
+2. Add `@agrilink/db`, `@agrilink/ui`, `@agrilink/validation`, `@agrilink/i18n` as workspace deps.
 3. Folder conventions:
    ```
    src/app/(public)/            landing, login

@@ -1,6 +1,6 @@
 import "server-only";
-import { prisma } from "@agripay/db";
-import { formatLe } from "@agripay/validation";
+import { prisma } from "@agrilink/db";
+import { formatLe } from "@agrilink/validation";
 import { notifyRepayment } from "./credit/loans";
 import { recordInputsFromRedemption } from "./credit/vouchers";
 import { on } from "./events";
@@ -47,7 +47,7 @@ on("split.succeeded", async (e) => {
       if (r)
         await sendSms(
           r.dealer.payoutMsisdn,
-          `AgriPay: ${formatLe(e.amountLe)} settled to your mobile money for voucher redemption ${r.ref}.`,
+          `AgriLink: ${formatLe(e.amountLe)} settled to your mobile money for voucher redemption ${r.ref}.`,
           "general",
         );
       return;

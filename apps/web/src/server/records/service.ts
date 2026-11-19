@@ -6,7 +6,7 @@ import {
   type RecordType,
   type Verification,
   prisma,
-} from "@agripay/db";
+} from "@agrilink/db";
 import {
   COST_TYPES,
   INCOME_TYPES,
@@ -15,8 +15,8 @@ import {
   currentSeason,
   formatLe,
   updateRecordSchema,
-} from "@agripay/validation";
-import { type Actor, can } from "@agripay/validation/permissions";
+} from "@agrilink/validation";
+import { type Actor, can } from "@agrilink/validation/permissions";
 import type { z } from "zod";
 import { audit } from "../audit";
 import { AppError, forbidden, notFound } from "../errors";
@@ -69,7 +69,7 @@ export async function addRecord(
 ) {
   const data = addRecordSchema.parse(input);
   const farmer = await loadFarmerFor(actor, farmerId, "record.create");
-  // Note: staff record sales through AgriPay as purchases (module 03); a manual SALE is a sale outside AgriPay.
+  // Note: staff record sales through AgriLink as purchases (module 03); a manual SALE is a sale outside AgriLink.
   if (data.cropId) {
     const crop = await prisma.crop.findUnique({ where: { id: data.cropId } });
     if (!crop) throw new AppError("VALIDATION", "Unknown crop.");
@@ -153,7 +153,7 @@ export async function listRecords(actor: Actor, farmerId: string, season?: strin
   return prisma.farmRecord.findMany({
     where: { farmerId, ...(season ? { season } : {}) },
     orderBy: [{ occurredAt: "desc" }, { createdAt: "desc" }],
-    include: { farmer: { select: { agripayId: true } } },
+    include: { farmer: { select: { agrilinkId: true } } },
   });
 }
 
@@ -377,7 +377,7 @@ export async function generateSeasonSummary(db: Db, farmerId: string, season: st
 export function summarySms(name: string, t: SeasonTotals) {
   const [year, kind] = t.season.split("-");
   const label = `${year} ${kind === "MAIN" ? "main" : "dry"} season`;
-  return `AgriPay ${label}: ${name}, you spent ${formatLe(t.totalCostLe)} and sold ${formatLe(t.totalSalesLe)}${Number(t.harvestKg) > 0 ? ` (${Number(t.harvestKg).toLocaleString("en")}kg)` : ""}. Net ${formatLe(t.netLe)}. Keep recording to grow your AgriPay score.`;
+  return `AgriLink ${label}: ${name}, you spent ${formatLe(t.totalCostLe)} and sold ${formatLe(t.totalSalesLe)}${Number(t.harvestKg) > 0 ? ` (${Number(t.harvestKg).toLocaleString("en")}kg)` : ""}. Net ${formatLe(t.netLe)}. Keep recording to grow your AgriLink score.`;
 }
 
 /** Co-op admin closes a season: summaries for every member with records, SMS once per farmer. */
@@ -422,7 +422,7 @@ export async function coopSeasonTable(actor: Actor, season: string) {
       status: { not: "INACTIVE" },
       records: { some: { season } },
     },
-    select: { id: true, agripayId: true, fullName: true, gender: true },
+    select: { id: true, agrilinkId: true, fullName: true, gender: true },
     orderBy: { fullName: "asc" },
   });
   const summaries = await prisma.seasonSummary.findMany({

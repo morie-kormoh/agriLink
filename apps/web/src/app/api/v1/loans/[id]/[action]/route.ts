@@ -4,7 +4,7 @@ import {
   manualRepaymentSchema,
   markDefaultSchema,
   restructureSchema,
-} from "@agripay/validation";
+} from "@agrilink/validation";
 import { v1 } from "@/server/api/v1";
 import {
   acceptOffer,

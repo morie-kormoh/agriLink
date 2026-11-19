@@ -1,5 +1,5 @@
-import { prisma } from "@agripay/db";
-import { can } from "@agripay/validation/permissions";
+import { prisma } from "@agrilink/db";
+import { can } from "@agrilink/validation/permissions";
 import { api } from "@/server/api";
 import { audit } from "@/server/audit";
 import { requireActor } from "@/server/auth/actor";
@@ -21,7 +21,7 @@ export const GET = api(async () => {
   if (!can(actor, "farmer.import")) throw forbidden();
   const farmers = await prisma.farmer.findMany({
     where: farmerScope(actor),
-    orderBy: { agripayId: "asc" },
+    orderBy: { agrilinkId: "asc" },
     include: {
       district: true,
       chiefdom: true,
@@ -34,7 +34,7 @@ export const GET = api(async () => {
     },
   });
   const header = [
-    "agripay_id",
+    "agrilink_id",
     "full_name",
     "gender",
     "date_of_birth",
@@ -53,7 +53,7 @@ export const GET = api(async () => {
   ];
   const lines = farmers.map((f) =>
     [
-      f.agripayId,
+      f.agrilinkId,
       f.fullName,
       f.gender,
       f.dateOfBirth?.toISOString().slice(0, 10),
@@ -83,7 +83,7 @@ export const GET = api(async () => {
   return new Response([header.join(","), ...lines].join("\n") + "\n", {
     headers: {
       "Content-Type": "text/csv; charset=utf-8",
-      "Content-Disposition": `attachment; filename="agripay-farmers-${new Date().toISOString().slice(0, 10)}.csv"`,
+      "Content-Disposition": `attachment; filename="agrilink-farmers-${new Date().toISOString().slice(0, 10)}.csv"`,
     },
   });
 });

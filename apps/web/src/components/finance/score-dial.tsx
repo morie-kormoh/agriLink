@@ -1,18 +1,12 @@
-import { cn } from "@agripay/ui/lib/utils";
+import { cn } from "@agrilink/ui/lib/utils";
+import { PassportDial } from "@agrilink/ui/components/passport-dial";
 
-const BAND_COLOR: Record<string, string> = {
-  BUILDING: "text-amber-500",
-  FAIR: "text-sky-500",
-  GOOD: "text-emerald-500",
-  STRONG: "text-emerald-700",
-};
-
-/** Radial score (0–100) with the band label underneath. Pure SVG, works without JavaScript. */
+/** Passport score dial: the 270° arc from docs/ui §4.5. Kept as a wrapper so existing pages need no change. */
 export function ScoreDial({
   score,
   band,
   bandLabel,
-  size = 168,
+  size = 180,
   caption,
 }: {
   score: number;
@@ -21,56 +15,8 @@ export function ScoreDial({
   size?: number;
   caption?: string;
 }) {
-  const r = 42;
-  const c = 2 * Math.PI * r;
-  const pct = Math.max(0, Math.min(100, score)) / 100;
   return (
-    <div className="flex flex-col items-center gap-1">
-      <svg
-        width={size}
-        height={size}
-        viewBox="0 0 100 100"
-        role="img"
-        aria-label={`${score} / 100, ${bandLabel}`}
-      >
-        <circle
-          cx="50"
-          cy="50"
-          r={r}
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="9"
-          className="text-muted"
-        />
-        <circle
-          cx="50"
-          cy="50"
-          r={r}
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="9"
-          strokeLinecap="round"
-          strokeDasharray={`${c * pct} ${c}`}
-          transform="rotate(-90 50 50)"
-          className={cn(BAND_COLOR[band] ?? "text-primary")}
-        />
-        <text
-          x="50"
-          y="52"
-          textAnchor="middle"
-          className="fill-foreground text-[26px] font-semibold tabular-nums"
-          dominantBaseline="middle"
-        >
-          {score}
-        </text>
-        {caption ? (
-          <text x="50" y="70" textAnchor="middle" className="fill-muted-foreground text-[7px]">
-            {caption}
-          </text>
-        ) : null}
-      </svg>
-      <span className={cn("text-sm font-semibold", BAND_COLOR[band])}>{bandLabel}</span>
-    </div>
+    <PassportDial score={score} band={band} bandLabel={bandLabel} size={size} caption={caption} />
   );
 }
 
@@ -86,7 +32,11 @@ export function Sparkline({ points, className }: { points: number[]; className?:
     )
     .join(" ");
   return (
-    <svg viewBox={`0 0 ${w} ${h}`} className={cn("text-primary h-10 w-40", className)} aria-hidden>
+    <svg
+      viewBox={`0 0 ${w} ${h}`}
+      className={cn("text-indigo h-10 w-40 dark:text-white", className)}
+      aria-hidden
+    >
       <path d={d} fill="none" stroke="currentColor" strokeWidth="2" strokeLinejoin="round" />
     </svg>
   );

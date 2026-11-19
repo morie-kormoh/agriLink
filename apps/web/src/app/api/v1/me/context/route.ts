@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
-import { prisma } from "@agripay/db";
-import { selectContextSchema } from "@agripay/validation";
+import { prisma } from "@agrilink/db";
+import { selectContextSchema } from "@agrilink/validation";
 import { api } from "@/server/api";
 import { readJson } from "@/server/api/v1";
 import { audit } from "@/server/audit";

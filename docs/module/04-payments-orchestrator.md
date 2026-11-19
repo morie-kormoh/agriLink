@@ -2,9 +2,9 @@
 
 ## 1. Purpose
 
-Move money **safely and traceably** between buyers, farmers, savings custodians, lenders, co-ops and agro-dealers over existing rails (Orange Money, Afrimoney, QMoney, SaPS/banks) and apply the **Smart Split waterfall** that makes AgriPay different from a wallet.
+Move money **safely and traceably** between buyers, farmers, savings custodians, lenders, co-ops and agro-dealers over existing rails (Orange Money, Afrimoney, QMoney, SaPS/banks) and apply the **Smart Split waterfall** that makes AgriLink different from a wallet.
 
-AgriPay **never holds customer funds**. It instructs licensed providers and keeps a **double-entry ledger** that mirrors what providers confirm.
+AgriLink **never holds customer funds**. It instructs licensed providers and keeps a **double-entry ledger** that mirrors what providers confirm.
 
 ## 2. Scope
 
@@ -204,7 +204,7 @@ purchase.approved
   → SMS receipt with breakdown
 ```
 
-Each split goes directly from payer to its destination. AgriPay never pools funds.
+Each split goes directly from payer to its destination. AgriLink never pools funds.
 
 ## 8. Failure handling
 

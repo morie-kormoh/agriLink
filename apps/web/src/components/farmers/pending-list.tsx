@@ -3,9 +3,9 @@
 import { useTranslations } from "next-intl";
 import { useLiveQuery } from "dexie-react-hooks";
 import { CloudOffIcon, RefreshCwIcon, Trash2Icon } from "lucide-react";
-import { Badge } from "@agripay/ui/components/badge";
-import { Button } from "@agripay/ui/components/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@agripay/ui/components/card";
+import { Badge } from "@agrilink/ui/components/badge";
+import { Button } from "@agrilink/ui/components/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@agrilink/ui/components/card";
 import { useSync } from "@/components/offline/sync-provider";
 import { offlineDb } from "@/lib/offline/db";
 
@@ -44,7 +44,7 @@ export function PendingList({ showSynced = false }: { showSynced?: boolean }) {
               <div className="min-w-0">
                 <p className="truncate font-medium">{r.fullName}</p>
                 <p className="text-muted-foreground truncate text-xs">
-                  {r.agripayId ?? r.phone} · {new Date(r.createdAt).toLocaleString("en-GB")}
+                  {r.agrilinkId ?? r.phone} · {new Date(r.createdAt).toLocaleString("en-GB")}
                 </p>
                 {r.error && r.status !== "synced" ? (
                   <p className="text-destructive text-xs">{r.error}</p>

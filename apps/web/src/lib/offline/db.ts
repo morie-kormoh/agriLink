@@ -1,5 +1,5 @@
 import Dexie, { type EntityTable } from "dexie";
-import type { RegisterFarmerInput } from "@agripay/validation";
+import type { RegisterFarmerInput } from "@agrilink/validation";
 
 export type PendingStatus = "pending" | "syncing" | "synced" | "error" | "invalid";
 
@@ -14,7 +14,7 @@ export interface PendingFarmer {
   nextAttemptAt: number;
   error?: string;
   fieldErrors?: Record<string, string[]>;
-  agripayId?: string;
+  agrilinkId?: string;
   farmerId?: string;
   duplicateOf?: string | null;
   warnings?: string[];
@@ -43,7 +43,7 @@ export interface CachedValue {
  *  pendingPhotos  – compressed photos uploaded after their record syncs
  *  cache          – reference data (districts, chiefdoms, crops) and sync metadata
  */
-export class AgriPayOfflineDB extends Dexie {
+export class AgriLinkOfflineDB extends Dexie {
   pendingFarmers!: EntityTable<PendingFarmer, "clientRef">;
   pendingPhotos!: EntityTable<PendingPhoto, "clientRef">;
   cache!: EntityTable<CachedValue, "key">;
@@ -58,9 +58,9 @@ export class AgriPayOfflineDB extends Dexie {
   }
 }
 
-let instance: AgriPayOfflineDB | null = null;
+let instance: AgriLinkOfflineDB | null = null;
 
-export function offlineDb(): AgriPayOfflineDB {
-  instance ??= new AgriPayOfflineDB();
+export function offlineDb(): AgriLinkOfflineDB {
+  instance ??= new AgriLinkOfflineDB();
   return instance;
 }

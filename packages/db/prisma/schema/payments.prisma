@@ -1,5 +1,5 @@
 // Module 04 — Payments Orchestrator & Ledger
-// AgriPay never holds customer funds: it instructs licensed providers and mirrors confirmed movements.
+// AgriLink never holds customer funds: it instructs licensed providers and mirrors confirmed movements.
 
 enum PaymentStatus {
   PENDING

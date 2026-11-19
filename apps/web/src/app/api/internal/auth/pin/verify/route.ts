@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { verifyPinSchema } from "@agripay/validation";
+import { verifyPinSchema } from "@agrilink/validation";
 import { api, requireInternalToken } from "@/server/api";
 import { verifyPinByPhone } from "@/server/auth/pin";
 

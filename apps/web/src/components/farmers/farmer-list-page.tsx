@@ -1,11 +1,11 @@
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 import { DownloadIcon, UserPlusIcon } from "lucide-react";
-import { prisma } from "@agripay/db";
-import { Button } from "@agripay/ui/components/button";
-import { PageHeader } from "@agripay/ui/components/blocks";
-import { farmerSearchSchema, formatSlPhone, isYouth } from "@agripay/validation";
-import { type Actor, hasPermission } from "@agripay/validation/permissions";
+import { prisma } from "@agrilink/db";
+import { Button } from "@agrilink/ui/components/button";
+import { PageHeader } from "@agrilink/ui/components/blocks";
+import { farmerSearchSchema, formatSlPhone, isYouth } from "@agrilink/validation";
+import { type Actor, hasPermission } from "@agrilink/validation/permissions";
 import { Pagination } from "@/components/pagination";
 import { formatDate } from "@/lib/format";
 import { searchFarmers } from "@/server/farmers/service";
@@ -45,7 +45,7 @@ export async function FarmerListPage({
 
   const rows: FarmerRow[] = result.items.map((f) => ({
     id: f.id,
-    agripayId: f.agripayId,
+    agrilinkId: f.agrilinkId,
     fullName: f.fullName,
     gender: f.gender,
     phone: formatSlPhone(f.phone),

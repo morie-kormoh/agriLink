@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
-import { Button } from "@agripay/ui/components/button";
+import { Button } from "@agrilink/ui/components/button";
 
 /** Server-rendered pager that keeps the other search params. */
 export async function Pagination({

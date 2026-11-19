@@ -4,7 +4,7 @@ import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { BanknoteIcon, Loader2Icon, MoreHorizontalIcon, SendIcon } from "lucide-react";
-import { Button } from "@agripay/ui/components/button";
+import { Button } from "@agrilink/ui/components/button";
 import {
   Dialog,
   DialogContent,
@@ -12,16 +12,16 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@agripay/ui/components/dialog";
+} from "@agrilink/ui/components/dialog";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@agripay/ui/components/dropdown-menu";
-import { Input } from "@agripay/ui/components/input";
-import { Label } from "@agripay/ui/components/label";
-import { toast } from "@agripay/ui/components/sonner";
+} from "@agrilink/ui/components/dropdown-menu";
+import { Input } from "@agrilink/ui/components/input";
+import { Label } from "@agrilink/ui/components/label";
+import { toast } from "@agrilink/ui/components/sonner";
 import {
   approveBatchAction,
   approvePurchaseAction,

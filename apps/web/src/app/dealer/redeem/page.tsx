@@ -1,5 +1,5 @@
 import { getTranslations } from "next-intl/server";
-import { PageHeader } from "@agripay/ui/components/blocks";
+import { PageHeader } from "@agrilink/ui/components/blocks";
 import { NeedProfile, RedeemFlow } from "@/components/dealer/dealer-client";
 import { requirePortal } from "@/server/auth/actor";
 import { dealerFor, listCatalogue } from "@/server/credit/dealers";

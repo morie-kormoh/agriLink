@@ -1,5 +1,5 @@
 import { getTranslations } from "next-intl/server";
-import { PageHeader, StatusBadge } from "@agripay/ui/components/blocks";
+import { PageHeader, StatusBadge } from "@agrilink/ui/components/blocks";
 import {
   Table,
   TableBody,
@@ -7,7 +7,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@agripay/ui/components/table";
+} from "@agrilink/ui/components/table";
 import { VerifyDealerButton } from "@/components/dealer/dealer-client";
 import { requirePortal } from "@/server/auth/actor";
 import { listDealersForAdmin } from "@/server/credit/dealers";

@@ -2,10 +2,10 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import { ArrowRightLeftIcon, CopyCheckIcon } from "lucide-react";
-import { EmptyState, PageHeader } from "@agripay/ui/components/blocks";
-import { Card, CardContent } from "@agripay/ui/components/card";
-import { formatSlPhone } from "@agripay/validation";
-import { hasPermission } from "@agripay/validation/permissions";
+import { EmptyState, PageHeader } from "@agrilink/ui/components/blocks";
+import { Card, CardContent } from "@agrilink/ui/components/card";
+import { formatSlPhone } from "@agrilink/validation";
+import { hasPermission } from "@agrilink/validation/permissions";
 import { DuplicateActions } from "@/components/farmers/duplicate-actions";
 import { formatDate } from "@/lib/format";
 import { requirePortal } from "@/server/auth/actor";
@@ -16,7 +16,7 @@ function Summary({
   href,
 }: {
   f: {
-    agripayId: string;
+    agrilinkId: string;
     fullName: string;
     phone: string;
     community: string;
@@ -28,7 +28,7 @@ function Summary({
 }) {
   const body = (
     <div className="min-w-0 space-y-0.5">
-      <p className="text-muted-foreground font-mono text-xs">{f.agripayId}</p>
+      <p className="text-muted-foreground font-mono text-xs">{f.agrilinkId}</p>
       <p className="truncate font-medium">{f.fullName}</p>
       <p className="text-muted-foreground truncate text-sm">
         {formatSlPhone(f.phone)} · {f.community}, {f.chiefdom.name}

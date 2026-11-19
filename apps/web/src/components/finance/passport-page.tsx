@@ -1,16 +1,16 @@
 import { getTranslations } from "next-intl/server";
 import { EyeIcon, LightbulbIcon, ShieldCheckIcon, ShieldOffIcon } from "lucide-react";
-import type { Factor } from "@agripay/finance";
+import type { Factor } from "@agrilink/finance";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@agripay/ui/components/card";
-import { PageHeader, StatusBadge } from "@agripay/ui/components/blocks";
-import { Progress } from "@agripay/ui/components/misc";
-import type { Actor } from "@agripay/validation/permissions";
+} from "@agrilink/ui/components/card";
+import { PageHeader, StatusBadge } from "@agrilink/ui/components/blocks";
+import { Progress } from "@agrilink/ui/components/misc";
+import type { Actor } from "@agrilink/validation/permissions";
 import { respondConsentAction, revokeConsentAction } from "@/app/actions/finance";
 import { getMyPassport } from "@/server/passport/service";
 import { PinConfirm } from "./pin-confirm";

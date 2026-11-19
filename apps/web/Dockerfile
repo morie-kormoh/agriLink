@@ -1,4 +1,4 @@
-# Build from the repo root:  docker build -f apps/web/Dockerfile -t agripay-web .
+# Build from the repo root:  docker build -f apps/web/Dockerfile -t agrilink-web .
 FROM node:22-slim AS base
 ENV PNPM_HOME=/pnpm PATH=/pnpm:$PATH NEXT_TELEMETRY_DISABLED=1
 RUN corepack enable
@@ -7,7 +7,7 @@ WORKDIR /repo
 FROM base AS build
 COPY . .
 RUN pnpm install --frozen-lockfile
-RUN pnpm --filter @agripay/web build
+RUN pnpm --filter @agrilink/web build
 
 FROM base AS runtime
 ENV NODE_ENV=production

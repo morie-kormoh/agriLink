@@ -1,15 +1,15 @@
 import "server-only";
-import type { Prisma } from "@agripay/db";
-import { type ConsentScope, type Tx, nextSequenceValue, prisma } from "@agripay/db";
-import { bandAtLeast } from "@agripay/finance";
+import type { Prisma } from "@agrilink/db";
+import { type ConsentScope, type Tx, nextSequenceValue, prisma } from "@agrilink/db";
+import { bandAtLeast } from "@agrilink/finance";
 import {
   maskPhone,
   requestConsentSchema,
   respondConsentSchema,
   revokeConsentSchema,
   type RequestConsentInput,
-} from "@agripay/validation";
-import { type Actor, can } from "@agripay/validation/permissions";
+} from "@agrilink/validation";
+import { type Actor, can } from "@agrilink/validation/permissions";
 import type { z } from "zod";
 import { audit } from "../audit";
 import { AppError, forbidden, notFound } from "../errors";
@@ -23,9 +23,9 @@ import { sendSms } from "../sms";
 
 export const REQUEST_TTL_DAYS = 30;
 const SCOPE_TEXT: Record<ConsentScope, string> = {
-  PASSPORT_SUMMARY: "your AgriPay score",
-  PASSPORT_DETAILED: "your AgriPay passport (score, sales, savings and repayments)",
-  RECORDS_FULL: "your AgriPay passport and all your farm records",
+  PASSPORT_SUMMARY: "your AgriLink score",
+  PASSPORT_DETAILED: "your AgriLink passport (score, sales, savings and repayments)",
+  RECORDS_FULL: "your AgriLink passport and all your farm records",
 };
 
 function addMonths(d: Date, months: number) {
@@ -38,7 +38,7 @@ async function nextRef(tx: Tx) {
   return `CON-${String(await nextSequenceValue(tx, "consent")).padStart(6, "0")}`;
 }
 
-/** A lender asks a farmer for consent. The farmer is found by AgriPay ID or exact phone only. */
+/** A lender asks a farmer for consent. The farmer is found by AgriLink ID or exact phone only. */
 export async function requestConsent(actor: Actor, input: RequestConsentInput) {
   if (!can(actor, "consent.request")) throw forbidden();
   const orgId = lenderOrgId(actor);
@@ -47,7 +47,7 @@ export async function requestConsent(actor: Actor, input: RequestConsentInput) {
   if (!farmer || farmer.status !== "ACTIVE")
     throw new AppError(
       "NOT_FOUND",
-      "No farmer found with that AgriPay ID or phone. For shared phones use the AgriPay ID.",
+      "No farmer found with that AgriLink ID or phone. For shared phones use the AgriLink ID.",
     );
   const existing = await prisma.consentRequest.findFirst({
     where: {
@@ -60,7 +60,7 @@ export async function requestConsent(actor: Actor, input: RequestConsentInput) {
   if (existing)
     return {
       request: existing,
-      farmer: { agripayId: farmer.agripayId, phone: maskPhone(farmer.phone) },
+      farmer: { agrilinkId: farmer.agrilinkId, phone: maskPhone(farmer.phone) },
       duplicate: true,
     };
   const org = await prisma.organization.findUniqueOrThrow({ where: { id: orgId } });
@@ -81,18 +81,18 @@ export async function requestConsent(actor: Actor, input: RequestConsentInput) {
       action: "consent.requested",
       entity: "ConsentRequest",
       entityId: r.id,
-      after: { ref: r.ref, farmer: farmer.agripayId, scope: data.scope, purpose: data.purpose },
+      after: { ref: r.ref, farmer: farmer.agrilinkId, scope: data.scope, purpose: data.purpose },
     });
     return r;
   });
   await sendSms(
     farmer.phone,
-    `AgriPay: ${org.name} wants to see ${SCOPE_TEXT[data.scope]} to ${data.purpose} for ${data.durationMonths} months. Open AgriPay to accept or decline. Ref ${request.ref}`,
+    `AgriLink: ${org.name} wants to see ${SCOPE_TEXT[data.scope]} to ${data.purpose} for ${data.durationMonths} months. Open AgriLink to accept or decline. Ref ${request.ref}`,
     "general",
   );
   return {
     request,
-    farmer: { agripayId: farmer.agripayId, phone: maskPhone(farmer.phone) },
+    farmer: { agrilinkId: farmer.agrilinkId, phone: maskPhone(farmer.phone) },
     duplicate: false,
   };
 }
@@ -242,7 +242,7 @@ export async function listLenderConsents(actor: Actor, status?: string) {
     },
     orderBy: { createdAt: "desc" },
     take: 300,
-    include: { farmer: { select: { id: true, agripayId: true, fullName: true } } },
+    include: { farmer: { select: { id: true, agrilinkId: true, fullName: true } } },
   });
 }
 
@@ -270,7 +270,7 @@ export async function listConsentedFarmers(
       farmer: {
         select: {
           id: true,
-          agripayId: true,
+          agrilinkId: true,
           fullName: true,
           district: { select: { name: true } },
           creditScores: {

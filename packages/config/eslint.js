@@ -1,4 +1,4 @@
-// Shared ESLint flat config for all AgriPay packages.
+// Shared ESLint flat config for all AgriLink packages.
 import js from "@eslint/js";
 import tseslint from "typescript-eslint";
 import reactHooks from "eslint-plugin-react-hooks";

@@ -1,5 +1,5 @@
 import "server-only";
-import { Prisma, nextSequenceValue, prisma } from "@agripay/db";
+import { Prisma, nextSequenceValue, prisma } from "@agrilink/db";
 import {
   type RecordPurchaseData,
   formatLe,
@@ -7,8 +7,8 @@ import {
   maskPhone,
   normalizeSlPhone,
   recordPurchaseSchema,
-} from "@agripay/validation";
-import { type Actor, can } from "@agripay/validation/permissions";
+} from "@agrilink/validation";
+import { type Actor, can } from "@agrilink/validation/permissions";
 import type { z } from "zod";
 import { audit } from "../audit";
 import { AppError, forbidden, notFound } from "../errors";
@@ -44,8 +44,8 @@ export function computePurchaseAmounts(
 // ---------------------------------------------------------------------------
 
 /**
- * Co-ops search their own members (name, phone, AgriPay ID).
- * Buyers can only find a farmer by an exact AgriPay ID or phone number — they never browse the registry.
+ * Co-ops search their own members (name, phone, AgriLink ID).
+ * Buyers can only find a farmer by an exact AgriLink ID or phone number — they never browse the registry.
  */
 export async function findFarmersForPurchase(actor: Actor, q: string) {
   if (!can(actor, "purchase.create")) throw forbidden();
@@ -61,12 +61,12 @@ export async function findFarmersForPurchase(actor: Actor, q: string) {
           cooperativeId: org.id,
           status: { not: "INACTIVE" },
           OR: [
-            { agripayId: { contains: id } },
+            { agrilinkId: { contains: id } },
             { fullName: { contains: query, mode: "insensitive" } },
             ...(phone ? [{ phone }] : []),
           ],
         }
-      : { status: { not: "INACTIVE" }, OR: [{ agripayId: id }, ...(phone ? [{ phone }] : [])] };
+      : { status: { not: "INACTIVE" }, OR: [{ agrilinkId: id }, ...(phone ? [{ phone }] : [])] };
 
   const farmers = await prisma.farmer.findMany({
     where,
@@ -76,7 +76,7 @@ export async function findFarmersForPurchase(actor: Actor, q: string) {
   });
   return farmers.map((f) => ({
     id: f.id,
-    agripayId: f.agripayId,
+    agrilinkId: f.agrilinkId,
     fullName: f.fullName,
     community: `${f.community}, ${f.chiefdom.name}`,
     phone: org.kind === "BUYER" ? maskPhone(f.phone) : f.phone,
@@ -261,7 +261,7 @@ export async function recordPurchase(
         entityId: p.id,
         after: {
           ref: p.ref,
-          farmer: farmer.agripayId,
+          farmer: farmer.agrilinkId,
           crop: crop.code,
           quantity: data.quantity,
           unit: data.unit,
@@ -279,7 +279,7 @@ export async function recordPurchase(
       : "";
     await sendSms(
       farmer.phone,
-      `AgriPay: ${org.name} bought ${data.quantity}${data.unit}${data.bags ? ` (${data.bags} bags)` : ""} ${crop.name}${data.grade ? ` grade ${data.grade}` : ""} @ ${formatLe(unitPrice)} = ${formatLe(amounts.grossLe.toString())}. ${deductionText}Net ${formatLe(amounts.netLe.toString())}. Reply 1 to confirm, 2 to report a problem. Ref ${purchase.ref}`,
+      `AgriLink: ${org.name} bought ${data.quantity}${data.unit}${data.bags ? ` (${data.bags} bags)` : ""} ${crop.name}${data.grade ? ` grade ${data.grade}` : ""} @ ${formatLe(unitPrice)} = ${formatLe(amounts.grossLe.toString())}. ${deductionText}Net ${formatLe(amounts.netLe.toString())}. Reply 1 to confirm, 2 to report a problem. Ref ${purchase.ref}`,
       "general",
     );
     await emit("purchase.recorded", { purchaseId: purchase.id });
@@ -334,7 +334,7 @@ export async function listPurchases(actor: Actor, input: z.input<typeof listPurc
       OR: [
         { ref: { contains: f.q.toUpperCase() } },
         { farmer: { fullName: { contains: f.q, mode: "insensitive" } } },
-        { farmer: { agripayId: { contains: f.q.toUpperCase() } } },
+        { farmer: { agrilinkId: { contains: f.q.toUpperCase() } } },
       ],
     });
   const where: Prisma.PurchaseWhereInput = { AND: and };
@@ -346,7 +346,7 @@ export async function listPurchases(actor: Actor, input: z.input<typeof listPurc
       skip: (f.page - 1) * f.pageSize,
       take: f.pageSize,
       include: {
-        farmer: { select: { id: true, fullName: true, agripayId: true } },
+        farmer: { select: { id: true, fullName: true, agrilinkId: true } },
         crop: { select: { name: true } },
         batch: { select: { ref: true } },
         buyerOrg: { select: { name: true } },
@@ -406,7 +406,7 @@ export async function cancelPurchase(actor: Actor, id: string, reason: string) {
   const farmer = await prisma.farmer.findUniqueOrThrow({ where: { id: p.farmerId } });
   await sendSms(
     farmer.phone,
-    `AgriPay: purchase ${p.ref} (${formatLe(p.netLe.toString())}) was cancelled. Reason: ${reason}`,
+    `AgriLink: purchase ${p.ref} (${formatLe(p.netLe.toString())}) was cancelled. Reason: ${reason}`,
     "general",
   );
   await emit("purchase.cancelled", { purchaseId: id });
@@ -477,7 +477,7 @@ export async function acknowledgePurchase(
   });
   await sendSms(
     purchase.farmer.phone,
-    `AgriPay: we received your report on ${purchase.ref}. Payment is on hold until your cooperative reviews it.`,
+    `AgriLink: we received your report on ${purchase.ref}. Payment is on hold until your cooperative reviews it.`,
     "general",
   );
   return { ref: purchase.ref, result: "DISPUTED" as const, frozen: freeze };
@@ -489,7 +489,7 @@ export async function listDisputes(actor: Actor) {
     where: { AND: [purchaseScope(actor), { disputedAt: { not: null }, disputeResolvedAt: null }] },
     orderBy: { disputedAt: "desc" },
     include: {
-      farmer: { select: { fullName: true, agripayId: true, phone: true } },
+      farmer: { select: { fullName: true, agrilinkId: true, phone: true } },
       crop: { select: { name: true } },
     },
   });
@@ -536,8 +536,8 @@ export async function resolveDispute(
   await sendSms(
     p.farmer.phone,
     outcome === "UPHOLD"
-      ? `AgriPay: your report on ${p.ref} was accepted. The purchase was cancelled. ${note}`
-      : `AgriPay: your report on ${p.ref} was reviewed: ${note}. Payment will continue.`,
+      ? `AgriLink: your report on ${p.ref} was accepted. The purchase was cancelled. ${note}`
+      : `AgriLink: your report on ${p.ref} was reviewed: ${note}. Payment will continue.`,
     "general",
   );
   if (outcome === "UPHOLD" && p.status === "DISPUTED")

@@ -1,6 +1,6 @@
 import { afterAll, beforeAll, beforeEach, describe, expect, it } from "vitest";
-import { Prisma, prisma } from "@agripay/db";
-import type { Actor } from "@agripay/validation/permissions";
+import { Prisma, prisma } from "@agrilink/db";
+import type { Actor } from "@agrilink/validation/permissions";
 import { mockAdapter } from "@/server/payments/adapters";
 import { balanceOf } from "@/server/payments/ledger";
 import {
@@ -146,12 +146,12 @@ describe("recording purchases", () => {
     ).rejects.toThrow(/Deductions/);
   });
 
-  it("buyers find farmers only by exact AgriPay ID or phone, and can buy from them", async () => {
+  it("buyers find farmers only by exact AgriLink ID or phone, and can buy from them", async () => {
     const { farmerId } = await coopSetup();
     const farmer = await prisma.farmer.findUniqueOrThrow({ where: { id: farmerId } });
     const { actor: buyerAdmin } = await makeOrgWithMember("BUYER", "BUYER_ADMIN");
     expect(await findFarmersForPurchase(buyerAdmin, "Aminata")).toHaveLength(0);
-    const hit = await findFarmersForPurchase(buyerAdmin, farmer.agripayId.toLowerCase());
+    const hit = await findFarmersForPurchase(buyerAdmin, farmer.agrilinkId.toLowerCase());
     expect(hit).toHaveLength(1);
     expect(hit[0]?.phone).toContain("***");
     await setPrice(buyerAdmin, { cropId: ref.cropId, priceLe: "4.50" });
@@ -188,7 +188,7 @@ describe("approval & payment (maker–checker)", () => {
     ).toBe("APPROVED");
 
     const farmer = await prisma.farmer.findUniqueOrThrow({ where: { id: farmerId } });
-    expect((await balanceOf(prisma, `FARMER:${farmer.agripayId}:WALLET`)).toFixed(2)).toBe(
+    expect((await balanceOf(prisma, `FARMER:${farmer.agrilinkId}:WALLET`)).toFixed(2)).toBe(
       "3920.00",
     );
     expect((await balanceOf(prisma, `ORG:${org.id}:DUES`)).toFixed(2)).toBe("80.00");

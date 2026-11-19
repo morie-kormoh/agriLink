@@ -1,5 +1,5 @@
 /**
- * AgriPay seed.
+ * AgriLink seed.
  *  - Reference data (always): regions, districts, chiefdoms, crops.
  *  - Demo data (skipped in production unless SEED_DEMO=1): platform admin, cooperatives,
  *    partner organisations, staff/agents and 60 demo farmers.
@@ -259,13 +259,13 @@ async function seedDemoFarmers(opts: {
     const dob = new Date(Date.UTC(year - age, (i * 3) % 12, 1 + (i % 27)));
 
     await prisma.$transaction(async (tx) => {
-      const agripayId = await nextFarmerId(tx, district.code);
+      const agrilinkId = await nextFarmerId(tx, district.code);
       const user = await tx.user.create({
         data: { phone, name: fullName, phoneVerified: true },
       });
       await tx.farmer.create({
         data: {
-          agripayId,
+          agrilinkId,
           userId: user.id,
           phone,
           fullName,
@@ -384,7 +384,7 @@ async function seedFinance(lenderId: string, dealerOrgId: string) {
         lenderOrgId: lenderId,
         name: "Rice & groundnut input loan",
         description:
-          "Seed and fertiliser for the main season, repaid from your harvest sales through AgriPay.",
+          "Seed and fertiliser for the main season, repaid from your harvest sales through AgriLink.",
         purpose: "INPUTS",
         minAmountLe: 300,
         firstCycleMaxLe: 1000,
@@ -403,8 +403,8 @@ async function seedFinance(lenderId: string, dealerOrgId: string) {
 }
 
 async function seedDemoData() {
-  const platform = await ensureOrg("PLATFORM", "AgriPay Salone");
-  const admin = await ensureUser("+23276000001", "AgriPay Admin");
+  const platform = await ensureOrg("PLATFORM", "AgriLink Salone");
+  const admin = await ensureUser("+23276000001", "AgriLink Admin");
   await ensureMember(admin.id, platform.id, "SUPER_ADMIN");
 
   const coopBom = await ensureOrg("COOPERATIVE", "Bombali Rice Farmers Cooperative", "BOM");

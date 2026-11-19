@@ -1,5 +1,5 @@
 import { getTranslations } from "next-intl/server";
-import { Badge } from "@agripay/ui/components/badge";
+import { Badge } from "@agrilink/ui/components/badge";
 
 type Tone = "success" | "warning" | "destructive" | "info" | "muted" | "secondary";
 

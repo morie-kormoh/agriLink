@@ -1,7 +1,7 @@
 import "server-only";
 import { unstable_cache } from "next/cache";
-import { prisma } from "@agripay/db";
-import type { Actor } from "@agripay/validation/permissions";
+import { prisma } from "@agrilink/db";
+import type { Actor } from "@agrilink/validation/permissions";
 
 export interface ReferenceData {
   districts: {

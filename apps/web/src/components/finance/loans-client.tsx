@@ -3,10 +3,10 @@
 import { useState, useTransition } from "react";
 import { useTranslations } from "next-intl";
 import { FileTextIcon, Loader2Icon } from "lucide-react";
-import { Button } from "@agripay/ui/components/button";
-import { Input } from "@agripay/ui/components/input";
-import { Label } from "@agripay/ui/components/label";
-import { toast } from "@agripay/ui/components/sonner";
+import { Button } from "@agrilink/ui/components/button";
+import { Input } from "@agrilink/ui/components/input";
+import { Label } from "@agrilink/ui/components/label";
+import { toast } from "@agrilink/ui/components/sonner";
 
 import { applyLoanAction, disclosureAction } from "@/app/actions/finance";
 import { PinConfirm } from "./pin-confirm";

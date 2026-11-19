@@ -37,7 +37,7 @@ enum LandTenure {
 
 model Farmer {
   id              String              @id @default(cuid())
-  agripayId       String              @unique // AP-BOM-000123
+  agrilinkId       String              @unique @map("agripayId") // AP-BOM-000123 (column keeps its original name)
   // A farmer has a login only when their phone isn't already used by someone else.
   userId          String?             @unique
   user            User?               @relation("FarmerUser", fields: [userId], references: [id])

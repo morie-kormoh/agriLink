@@ -1,7 +1,7 @@
 import { getTranslations } from "next-intl/server";
-import { prisma } from "@agripay/db";
-import { Card, CardContent } from "@agripay/ui/components/card";
-import { PageHeader, StatusBadge } from "@agripay/ui/components/blocks";
+import { prisma } from "@agrilink/db";
+import { Card, CardContent } from "@agrilink/ui/components/card";
+import { PageHeader, StatusBadge } from "@agrilink/ui/components/blocks";
 import { DealerProfileForm } from "@/components/dealer/dealer-client";
 import { requirePortal } from "@/server/auth/actor";
 import { dealerFor } from "@/server/credit/dealers";

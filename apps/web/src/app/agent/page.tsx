@@ -1,9 +1,9 @@
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 import { CalendarIcon, RefreshCwIcon, UserPlusIcon, UsersIcon } from "lucide-react";
-import { prisma } from "@agripay/db";
-import { Button } from "@agripay/ui/components/button";
-import { PageHeader, StatCard } from "@agripay/ui/components/blocks";
+import { prisma } from "@agrilink/db";
+import { Button } from "@agrilink/ui/components/button";
+import { PageHeader, StatCard } from "@agrilink/ui/components/blocks";
 import { PendingList } from "@/components/farmers/pending-list";
 import { requirePortal } from "@/server/auth/actor";
 

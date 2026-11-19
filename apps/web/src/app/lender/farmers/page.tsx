@@ -1,9 +1,9 @@
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 import { EyeIcon } from "lucide-react";
-import { Button } from "@agripay/ui/components/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@agripay/ui/components/card";
-import { PageHeader, StatusBadge } from "@agripay/ui/components/blocks";
+import { Button } from "@agrilink/ui/components/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@agrilink/ui/components/card";
+import { PageHeader, StatusBadge } from "@agrilink/ui/components/blocks";
 import {
   Table,
   TableBody,
@@ -11,8 +11,8 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@agripay/ui/components/table";
-import { hasPermission } from "@agripay/validation/permissions";
+} from "@agrilink/ui/components/table";
+import { hasPermission } from "@agrilink/validation/permissions";
 import { toneFor } from "@/components/finance/score-dial";
 import { ConsentRequestForm, OfferForm } from "@/components/lender/lender-client";
 import { requirePortal } from "@/server/auth/actor";
@@ -93,7 +93,7 @@ export default async function Page({
                     <TableCell>
                       <p className="font-medium">{r.farmer.fullName}</p>
                       <p className="text-muted-foreground text-xs">
-                        {r.farmer.agripayId} · {r.farmer.district.name}
+                        {r.farmer.agrilinkId} · {r.farmer.district.name}
                       </p>
                     </TableCell>
                     <TableCell>

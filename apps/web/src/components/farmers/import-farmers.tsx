@@ -5,16 +5,16 @@ import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import Papa from "papaparse";
 import { DownloadIcon, FileUpIcon, Loader2Icon, UploadIcon } from "lucide-react";
-import { Badge } from "@agripay/ui/components/badge";
-import { Button } from "@agripay/ui/components/button";
+import { Badge } from "@agrilink/ui/components/badge";
+import { Button } from "@agrilink/ui/components/button";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@agripay/ui/components/card";
-import { toast } from "@agripay/ui/components/sonner";
+} from "@agrilink/ui/components/card";
+import { toast } from "@agrilink/ui/components/sonner";
 import {
   Table,
   TableBody,
@@ -22,7 +22,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@agripay/ui/components/table";
+} from "@agrilink/ui/components/table";
 import { commitImportAction, previewImportAction } from "@/app/actions/farmers";
 
 type Preview = {

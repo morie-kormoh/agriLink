@@ -1,9 +1,9 @@
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 import { ArrowLeftIcon } from "lucide-react";
-import { prisma } from "@agripay/db";
-import { Card, CardContent, CardHeader, CardTitle } from "@agripay/ui/components/card";
-import { PageHeader, StatCard, StatusBadge } from "@agripay/ui/components/blocks";
+import { prisma } from "@agrilink/db";
+import { Card, CardContent, CardHeader, CardTitle } from "@agrilink/ui/components/card";
+import { PageHeader, StatCard, StatusBadge } from "@agrilink/ui/components/blocks";
 import {
   Table,
   TableBody,
@@ -11,9 +11,9 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@agripay/ui/components/table";
-import { formatLe } from "@agripay/validation";
-import { hasPermission } from "@agripay/validation/permissions";
+} from "@agrilink/ui/components/table";
+import { formatLe } from "@agrilink/validation";
+import { hasPermission } from "@agrilink/validation/permissions";
 import { AddMemberForm, ContributionForm, GroupActions } from "@/components/finance/groups-client";
 import { toneFor } from "@/components/finance/score-dial";
 import { requirePortal } from "@/server/auth/actor";
@@ -32,7 +32,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
         where: { cooperativeId: g.group.cooperativeId, status: "ACTIVE" },
         orderBy: { fullName: "asc" },
         take: 500,
-        select: { id: true, fullName: true, agripayId: true },
+        select: { id: true, fullName: true, agrilinkId: true },
       })
     : [];
   const shownPeriods = Array.from(
@@ -118,7 +118,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                   <TableCell>
                     <p className="font-medium">{m.farmer.fullName}</p>
                     <p className="text-muted-foreground text-xs">
-                      {m.farmer.agripayId}
+                      {m.farmer.agrilinkId}
                       {m.payoutOrder ? ` · #${m.payoutOrder}` : ""}
                       {m.guarantor ? ` · ${t("groups.guarantor")}` : ""}
                     </p>
@@ -161,7 +161,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                 groupId={g.group.id}
                 farmers={candidates
                   .filter((c) => !memberIds.has(c.id))
-                  .map((c) => ({ id: c.id, label: `${c.fullName} · ${c.agripayId}` }))}
+                  .map((c) => ({ id: c.id, label: `${c.fullName} · ${c.agrilinkId}` }))}
               />
             </CardContent>
           </Card>

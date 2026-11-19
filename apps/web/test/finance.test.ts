@@ -1,6 +1,6 @@
 import { afterAll, beforeAll, beforeEach, describe, expect, it } from "vitest";
-import { Prisma, prisma } from "@agripay/db";
-import type { Actor } from "@agripay/validation/permissions";
+import { Prisma, prisma } from "@agrilink/db";
+import type { Actor } from "@agrilink/validation/permissions";
 import { setPin } from "@/server/auth/pin";
 import { saveLoanProduct } from "@/server/credit/products";
 import { checkEligibility } from "@/server/credit/eligibility";
@@ -283,7 +283,7 @@ describe("module 07 — passport & consent", () => {
     await expect(getPassportForLender(w.officer, w.farmerId)).rejects.toThrow(/consent/);
     const farmer = await prisma.farmer.findUniqueOrThrow({ where: { id: w.farmerId } });
     const req = await requestConsent(w.officer, {
-      farmer: farmer.agripayId,
+      farmer: farmer.agrilinkId,
       scope: "PASSPORT_DETAILED",
       purpose: "assess a fertiliser loan",
       durationMonths: 12,
@@ -303,7 +303,7 @@ describe("module 07 — passport & consent", () => {
     expect(mine.accessLog).toHaveLength(1);
     expect(
       smsOutbox().filter(
-        (m) => m.to === w.phone && m.body.includes("viewed your AgriPay passport"),
+        (m) => m.to === w.phone && m.body.includes("viewed your AgriLink passport"),
       ),
     ).toHaveLength(1);
 
@@ -311,7 +311,7 @@ describe("module 07 — passport & consent", () => {
     await expect(getPassportForLender(w.officer, w.farmerId)).rejects.toThrow(/consent/);
 
     const req2 = await requestConsent(w.officer, {
-      farmer: farmer.agripayId,
+      farmer: farmer.agrilinkId,
       scope: "PASSPORT_SUMMARY",
       purpose: "monitoring",
       durationMonths: 1,
@@ -565,7 +565,7 @@ describe("module 08 — credit & input vouchers (full cycle)", () => {
     ).rejects.toThrow(/NO_CONSENT/);
     const farmer = await prisma.farmer.findUniqueOrThrow({ where: { id: w.farmerId } });
     const req = await requestConsent(w.officer, {
-      farmer: farmer.agripayId,
+      farmer: farmer.agrilinkId,
       scope: "PASSPORT_SUMMARY",
       purpose: "offer an input loan",
       durationMonths: 12,

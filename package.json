@@ -1,7 +1,7 @@
 {
-  "name": "agripay",
+  "name": "agrilink",
   "private": true,
-  "description": "AgriPay Salone \u2014 Empowering Farmers Through Digital Finance",
+  "description": "AgriLink Salone \u2014 Empowering Farmers Through Digital Finance",
   "packageManager": "pnpm@10.28.0",
   "engines": {
     "node": ">=22"
@@ -14,16 +14,16 @@
     "test": "turbo run test",
     "infra:up": "docker compose up -d",
     "infra:down": "docker compose down",
-    "db:generate": "pnpm --filter @agripay/db run generate",
-    "db:migrate": "pnpm --filter @agripay/db run migrate",
-    "db:deploy": "pnpm --filter @agripay/db run deploy",
-    "db:seed": "pnpm --filter @agripay/db run seed",
-    "db:studio": "pnpm --filter @agripay/db run studio",
+    "db:generate": "pnpm --filter @agrilink/db generate",
+    "db:migrate": "pnpm --filter @agrilink/db migrate",
+    "db:deploy": "pnpm --filter @agrilink/db deploy",
+    "db:seed": "pnpm --filter @agrilink/db seed",
+    "db:studio": "pnpm --filter @agrilink/db studio",
     "format": "prettier --write \"**/*.{ts,tsx,json,md,css}\"",
     "prepare": "husky || true"
   },
   "devDependencies": {
-    "@agripay/config": "workspace:*",
+    "@agrilink/config": "workspace:*",
     "husky": "^9.1.7",
     "lint-staged": "^16.2.0",
     "prettier": "^3.6.2",
@@ -37,6 +37,21 @@
     ],
     "*.{json,md,css}": [
       "prettier --write"
+    ]
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "@prisma/engines",
+      "prisma",
+      "esbuild",
+      "sharp",
+      "@node-rs/argon2",
+      "msgpackr-extract",
+      "unrs-resolver"
+    ],
+    "ignoredBuiltDependencies": [
+      "@parcel/watcher",
+      "@swc/core"
     ]
   }
 }

@@ -1,4 +1,4 @@
-import { closeSeasonSchema } from "@agripay/validation";
+import { closeSeasonSchema } from "@agrilink/validation";
 import { v1 } from "@/server/api/v1";
 import { closeSeason } from "@/server/records/service";
 

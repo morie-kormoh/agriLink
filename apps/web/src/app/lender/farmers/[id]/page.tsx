@@ -1,10 +1,10 @@
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 import { ArrowLeftIcon } from "lucide-react";
-import type { Factor } from "@agripay/finance";
-import { Card, CardContent, CardHeader, CardTitle } from "@agripay/ui/components/card";
-import { Field, PageHeader } from "@agripay/ui/components/blocks";
-import { Progress } from "@agripay/ui/components/misc";
+import type { Factor } from "@agrilink/finance";
+import { Card, CardContent, CardHeader, CardTitle } from "@agrilink/ui/components/card";
+import { Field, PageHeader } from "@agrilink/ui/components/blocks";
+import { Progress } from "@agrilink/ui/components/misc";
 import {
   Table,
   TableBody,
@@ -12,8 +12,8 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@agripay/ui/components/table";
-import { formatLe } from "@agripay/validation";
+} from "@agrilink/ui/components/table";
+import { formatLe } from "@agrilink/validation";
 import { ScoreDial } from "@/components/finance/score-dial";
 import { requirePortal } from "@/server/auth/actor";
 import { notFoundOn404 } from "@/server/page-helpers";
@@ -52,7 +52,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
         </Link>
         <PageHeader
           title={p.farmer.fullName}
-          description={`${p.farmer.agripayId} · ${p.farmer.district}${p.farmer.cooperative ? ` · ${p.farmer.cooperative}` : ""}`}
+          description={`${p.farmer.agrilinkId} · ${p.farmer.district}${p.farmer.cooperative ? ` · ${p.farmer.cooperative}` : ""}`}
         />
         <p className="text-muted-foreground mb-4 rounded-lg border border-dashed p-2 text-xs">
           {mark}

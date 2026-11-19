@@ -10,7 +10,7 @@ async function signIn(page: Page, phone: string, national: string) {
 }
 
 /**
- * Modules 06–08 through the real UI (needs `pnpm db:seed` + `pnpm --filter @agripay/web seed:demo`):
+ * Modules 06–08 through the real UI (needs `pnpm db:seed` + `pnpm --filter @agrilink/web seed:demo`):
  * lender approves the demo farmer's application → dealer redeems part of the voucher with the farmer's SMS code
  * → the farmer sees savings, passport and the voucher balance, and pauses Harvest Lock with their PIN.
  */
@@ -38,7 +38,7 @@ test("input loan: approve → redeem at dealer with farmer code → farmer sees 
   });
   test.skip(
     !loan,
-    "Run `pnpm --filter @agripay/web seed:demo` first (creates the demo loan application).",
+    "Run `pnpm --filter @agrilink/web seed:demo` first (creates the demo loan application).",
   );
 
   if (loan!.status === "APPLIED") {
@@ -95,7 +95,7 @@ test("input loan: approve → redeem at dealer with farmer code → farmer sees 
 });
 
 test("lender cannot open a passport without consent", async ({ page }) => {
-  const other = await prisma.farmer.findFirstOrThrow({ where: { agripayId: "AP-KEN-000001" } });
+  const other = await prisma.farmer.findFirstOrThrow({ where: { agrilinkId: "AP-KEN-000001" } });
   await signIn(page, "+23276000031", "076 000 031");
   const res = await page.goto(`/lender/farmers/${other.id}`);
   expect(page.url()).toContain(`/lender/farmers/${other.id}`);

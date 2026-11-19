@@ -1,12 +1,12 @@
 import "server-only";
-import { type Db, Prisma } from "@agripay/db";
+import { type Db, Prisma } from "@agrilink/db";
 import {
   type Eligibility,
   affordability,
   eligibility,
   graduationLimit,
   type Affordability,
-} from "@agripay/finance";
+} from "@agrilink/finance";
 import { hasConsent } from "../passport/service";
 import { currentScore } from "../passport/service";
 import { getActivePrice } from "../trade/settings";
@@ -33,7 +33,7 @@ const ACTIVE = [
 ] as const;
 
 /**
- * Load everything the responsible-lending rules need and evaluate them (pure rules in @agripay/finance).
+ * Load everything the responsible-lending rules need and evaluate them (pure rules in @agrilink/finance).
  * `consentRequired`: lender-originated offers need prior consent; a farmer's own application grants it.
  */
 export async function checkEligibility(

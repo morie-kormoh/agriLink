@@ -1,5 +1,5 @@
 {
-  "name": "@agripay/validation",
+  "name": "@agrilink/validation",
   "version": "0.1.0",
   "private": true,
   "type": "module",
@@ -13,12 +13,12 @@
     "test": "vitest run"
   },
   "dependencies": {
-    "@agripay/db": "workspace:*",
+    "@agrilink/db": "workspace:*",
     "decimal.js": "^10.6.0",
     "zod": "^4.1.0"
   },
   "devDependencies": {
-    "@agripay/config": "workspace:*",
+    "@agrilink/config": "workspace:*",
     "@types/node": "^22.18.0",
     "eslint": "^9.36.0",
     "typescript": "~5.9.3",

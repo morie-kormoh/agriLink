@@ -1,4 +1,4 @@
-import { openGoalSchema, openHarvestLockSchema } from "@agripay/validation";
+import { openGoalSchema, openHarvestLockSchema } from "@agrilink/validation";
 import { v1 } from "@/server/api/v1";
 import { notFound } from "@/server/errors";
 import { openGoalSavings, openHarvestLock } from "@/server/savings/service";

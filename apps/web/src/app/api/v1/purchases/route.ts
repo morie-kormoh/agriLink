@@ -1,4 +1,4 @@
-import { listPurchasesSchema, recordPurchaseSchema } from "@agripay/validation";
+import { listPurchasesSchema, recordPurchaseSchema } from "@agrilink/validation";
 import { page, queryObject, v1 } from "@/server/api/v1";
 import { listPurchases, recordPurchase } from "@/server/trade/purchases";
 

@@ -4,8 +4,8 @@ import { useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { useLocale, useTranslations } from "next-intl";
 import { LanguagesIcon } from "lucide-react";
-import { LOCALES, LOCALE_LABELS } from "@agripay/i18n";
-import { Select, SelectContent, SelectItem, SelectTrigger } from "@agripay/ui/components/select";
+import { LOCALES, LOCALE_LABELS } from "@agrilink/i18n";
+import { Select, SelectContent, SelectItem, SelectTrigger } from "@agrilink/ui/components/select";
 import { setLocaleAction } from "@/app/actions/auth";
 
 export function LanguageSwitcher({ className }: { className?: string }) {

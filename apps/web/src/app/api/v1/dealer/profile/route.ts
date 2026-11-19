@@ -1,4 +1,4 @@
-import { dealerProfileSchema } from "@agripay/validation";
+import { dealerProfileSchema } from "@agrilink/validation";
 import { v1 } from "@/server/api/v1";
 import { dealerFor, saveDealerProfile } from "@/server/credit/dealers";
 

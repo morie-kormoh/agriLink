@@ -1,7 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { inviteMemberSchema } from "@agripay/validation";
+import { inviteMemberSchema } from "@agrilink/validation";
 import { requireActor } from "@/server/auth/actor";
 import { deactivateMembership, inviteMember, revokeInvitation } from "@/server/auth/invitations";
 import { type ActionResult, toActionError } from "@/server/errors";

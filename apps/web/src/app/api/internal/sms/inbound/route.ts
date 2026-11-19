@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
-import { phoneSL } from "@agripay/validation";
+import { phoneSL } from "@agrilink/validation";
 import { api, requireInternalToken } from "@/server/api";
 import { AppError } from "@/server/errors";
 import { sendSms } from "@/server/sms";
@@ -22,14 +22,14 @@ export const POST = api(async (request: Request) => {
       reason: m[2]?.trim() || null,
     });
     if (r.result === "CONFIRMED")
-      await sendSms(from, `AgriPay: thank you, purchase ${r.ref} confirmed.`, "general");
+      await sendSms(from, `AgriLink: thank you, purchase ${r.ref} confirmed.`, "general");
     return NextResponse.json({
       handledAs: r.result === "CONFIRMED" ? "PURCHASE_ACK" : "PURCHASE_DISPUTE",
       ref: r.ref,
     });
   } catch (e) {
     if (e instanceof AppError) {
-      await sendSms(from, `AgriPay: ${e.message}`, "general");
+      await sendSms(from, `AgriLink: ${e.message}`, "general");
       return NextResponse.json({ handledAs: "PURCHASE_ACK_FAILED", error: e.message });
     }
     throw e;

@@ -1,9 +1,9 @@
-/* AgriPay service worker — offline shell for field agents (module 02).
+/* AgriLink service worker — offline shell for field agents (module 02).
  *  - Static assets (/_next/static, icons): cache-first (they are content-hashed).
  *  - Page navigations: network-first, falling back to the last cached copy, then /offline.
  *  - API calls are never cached here (registrations queue in IndexedDB instead).
  */
-const VERSION = "agripay-v1";
+const VERSION = "agrilink-v2";
 const STATIC_CACHE = `${VERSION}-static`;
 const PAGE_CACHE = `${VERSION}-pages`;
 const PRECACHE_PAGES = ["/offline", "/agent", "/agent/farmers/new", "/agent/farmers", "/agent/sync"];

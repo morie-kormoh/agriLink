@@ -1,10 +1,10 @@
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 import { ArrowLeftIcon } from "lucide-react";
-import { prisma } from "@agripay/db";
-import { PageHeader } from "@agripay/ui/components/blocks";
-import { currentSeason, seasonCode } from "@agripay/validation";
-import { type Actor, hasPermission } from "@agripay/validation/permissions";
+import { prisma } from "@agrilink/db";
+import { PageHeader } from "@agrilink/ui/components/blocks";
+import { currentSeason, seasonCode } from "@agrilink/validation";
+import { type Actor, hasPermission } from "@agrilink/validation/permissions";
 import {
   EDIT_WINDOW_MS,
   getSeasonOverview,

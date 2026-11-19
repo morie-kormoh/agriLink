@@ -1,12 +1,12 @@
 import "server-only";
-import { type Db, Prisma, type Tx, nextSequenceValue, prisma } from "@agripay/db";
+import { type Db, Prisma, type Tx, nextSequenceValue, prisma } from "@agrilink/db";
 import {
   arrearsTransition,
   disclosure,
   graduationLimit,
   loanCost,
   loanDueDate,
-} from "@agripay/finance";
+} from "@agrilink/finance";
 import {
   acceptLoanSchema,
   applyLoanSchema,
@@ -18,8 +18,8 @@ import {
   markDefaultSchema,
   restructureSchema,
   type ApplyLoanInput,
-} from "@agripay/validation";
-import { type Actor, can } from "@agripay/validation/permissions";
+} from "@agrilink/validation";
+import { type Actor, can } from "@agrilink/validation/permissions";
 import type { z } from "zod";
 import { audit } from "../audit";
 import { AppError, forbidden, notFound } from "../errors";
@@ -206,7 +206,7 @@ export async function applyForLoan(actor: Actor, input: ApplyLoanInput) {
   const farmer = await prisma.farmer.findUniqueOrThrow({ where: { id: farmerId } });
   await sendSms(
     farmer.phone,
-    `AgriPay: your application ${loan.ref} for ${formatLe(data.amountLe)} with ${product.lenderOrg.name} was received. We will SMS you when it is approved.`,
+    `AgriLink: your application ${loan.ref} for ${formatLe(data.amountLe)} with ${product.lenderOrg.name} was received. We will SMS you when it is approved.`,
     "general",
   );
   return loan;
@@ -265,7 +265,7 @@ export async function makeOffer(actor: Actor, input: z.input<typeof makeOfferSch
   const farmer = await prisma.farmer.findUniqueOrThrow({ where: { id: data.farmerId } });
   await sendSms(
     farmer.phone,
-    `AgriPay: ${product.lenderOrg.name} offers you an input loan of ${formatLe(data.amountLe)}. Open AgriPay > Loans to read the terms and accept. Ref ${loan.ref}`,
+    `AgriLink: ${product.lenderOrg.name} offers you an input loan of ${formatLe(data.amountLe)}. Open AgriLink > Loans to read the terms and accept. Ref ${loan.ref}`,
     "general",
   );
   return loan;
@@ -424,7 +424,7 @@ export async function declineLoan(
   if (loan.status !== "OFFERED") {
     await sendSms(
       loan.farmer.phone,
-      `AgriPay: ${loan.product.lenderOrg.name} could not approve loan ${loan.ref}. Keep selling and saving through AgriPay to raise your score.`,
+      `AgriLink: ${loan.product.lenderOrg.name} could not approve loan ${loan.ref}. Keep selling and saving through AgriLink to raise your score.`,
       "general",
     );
   }
@@ -519,7 +519,7 @@ export async function recordManualRepayment(
     });
     await postJournal(tx, [
       {
-        accountCode: accountCodes.farmerWallet(loan.farmer.agripayId),
+        accountCode: accountCodes.farmerWallet(loan.farmer.agrilinkId),
         ownerType: "FARMER",
         ownerId: loan.farmerId,
         name: `${loan.farmer.fullName} wallet`,
@@ -584,7 +584,7 @@ export async function notifyRepayment(e: {
     include: { farmer: true, product: true },
   });
   if (!loan) return;
-  let msg = `AgriPay: ${formatLe(e.amountLe)} paid to your loan ${loan.ref}. Remaining ${formatLe(e.outstandingLe)}.`;
+  let msg = `AgriLink: ${formatLe(e.amountLe)} paid to your loan ${loan.ref}. Remaining ${formatLe(e.outstandingLe)}.`;
   if (e.fullyRepaid) {
     const onTime = await prisma.loan.count({
       where: {
@@ -678,7 +678,7 @@ export async function proposeRestructure(
   });
   await sendSms(
     loan.farmer.phone,
-    `AgriPay: ${loan.product.lenderOrg.name} offers to move the due date of loan ${loan.ref} to ${data.dueDate.toLocaleDateString("en-GB", { timeZone: "UTC" })}. No extra fee. Open AgriPay > Loans to accept.`,
+    `AgriLink: ${loan.product.lenderOrg.name} offers to move the due date of loan ${loan.ref} to ${data.dueDate.toLocaleDateString("en-GB", { timeZone: "UTC" })}. No extra fee. Open AgriLink > Loans to accept.`,
     "general",
   );
 }
@@ -756,7 +756,7 @@ export async function runArrearsJob(now = new Date()) {
       late++;
       await sendSms(
         l.farmer.phone,
-        `AgriPay: loan ${l.ref} is ${t.daysPastDue} days past due. ${formatLe(outstanding.toFixed(2))} is still owed. Sell through AgriPay or pay by mobile money to repay. Call your co-op if you need help.`,
+        `AgriLink: loan ${l.ref} is ${t.daysPastDue} days past due. ${formatLe(outstanding.toFixed(2))} is still owed. Sell through AgriLink or pay by mobile money to repay. Call your co-op if you need help.`,
         "general",
       );
       await emit("score.stale", { farmerId: l.farmerId });
@@ -770,8 +770,8 @@ export async function runArrearsJob(now = new Date()) {
       await sendSms(
         l.farmer.phone,
         dueSoon
-          ? `AgriPay reminder: loan ${l.ref} is due on ${l.dueDate!.toLocaleDateString("en-GB", { timeZone: "UTC" })}. ${formatLe(outstanding.toFixed(2))} left to repay.`
-          : `AgriPay reminder: loan ${l.ref} still has ${formatLe(outstanding.toFixed(2))} to repay. Call your co-op if you need help.`,
+          ? `AgriLink reminder: loan ${l.ref} is due on ${l.dueDate!.toLocaleDateString("en-GB", { timeZone: "UTC" })}. ${formatLe(outstanding.toFixed(2))} left to repay.`
+          : `AgriLink reminder: loan ${l.ref} still has ${formatLe(outstanding.toFixed(2))} to repay. Call your co-op if you need help.`,
         "general",
       );
     }
@@ -807,7 +807,7 @@ export async function listLoans(
         farmer: {
           select: {
             id: true,
-            agripayId: true,
+            agrilinkId: true,
             fullName: true,
             gender: true,
             district: { select: { name: true } },
@@ -833,7 +833,7 @@ export async function getLoan(actor: Actor, id: string) {
       farmer: {
         select: {
           id: true,
-          agripayId: true,
+          agrilinkId: true,
           fullName: true,
           phone: true,
           district: { select: { name: true } },

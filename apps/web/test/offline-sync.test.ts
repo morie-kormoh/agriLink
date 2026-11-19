@@ -1,13 +1,13 @@
 import "fake-indexeddb/auto";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { AgriPayOfflineDB } from "@/lib/offline/db";
+import { AgriLinkOfflineDB } from "@/lib/offline/db";
 import { backoffFor, enqueueFarmer, syncPending } from "@/lib/offline/sync";
 
 const OWNER = "agent-1";
-let db: AgriPayOfflineDB;
+let db: AgriLinkOfflineDB;
 
 beforeEach(async () => {
-  db = new AgriPayOfflineDB();
+  db = new AgriLinkOfflineDB();
   await db.pendingFarmers.clear();
   await db.pendingPhotos.clear();
   await db.cache.clear();
@@ -27,7 +27,7 @@ function jsonResponse(body: unknown, status = 200) {
 }
 
 describe("offline queue", () => {
-  it("syncs pending records and stores the AgriPay ID", async () => {
+  it("syncs pending records and stores the AgriLink ID", async () => {
     const ref = await enqueueFarmer(payload("Aminata") as never, OWNER, null, db);
     const fetchImpl = vi.fn(async (_url: string | URL | Request, init?: RequestInit) => {
       const { records } = JSON.parse(String(init?.body)) as { records: { clientRef: string }[] };
@@ -36,7 +36,7 @@ describe("offline queue", () => {
           clientRef: r.clientRef,
           status: "created",
           farmerId: "f1",
-          agripayId: "AP-BOM-000001",
+          agrilinkId: "AP-BOM-000001",
           duplicateOf: null,
           warnings: [],
         })),
@@ -49,7 +49,7 @@ describe("offline queue", () => {
     });
     expect(summary).toEqual({ ok: 1, failed: 0, skipped: false });
     const rec = await db.pendingFarmers.get(ref);
-    expect(rec).toMatchObject({ status: "synced", agripayId: "AP-BOM-000001", farmerId: "f1" });
+    expect(rec).toMatchObject({ status: "synced", agrilinkId: "AP-BOM-000001", farmerId: "f1" });
     // payload carries clientRef so the server can dedupe retries
     expect(JSON.parse(String(fetchImpl.mock.calls[0]?.[1]?.body)).records[0].clientRef).toBe(ref);
   });
@@ -115,7 +115,7 @@ describe("offline queue", () => {
           clientRef: r.clientRef,
           status: "created",
           farmerId: "x",
-          agripayId: "AP-X",
+          agrilinkId: "AP-X",
           duplicateOf: null,
           warnings: [],
         })),

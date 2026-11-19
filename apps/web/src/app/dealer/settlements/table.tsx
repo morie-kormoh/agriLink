@@ -1,6 +1,6 @@
 import { getTranslations } from "next-intl/server";
-import { formatVoucherCode } from "@agripay/finance";
-import { StatusBadge } from "@agripay/ui/components/blocks";
+import { formatVoucherCode } from "@agrilink/finance";
+import { StatusBadge } from "@agrilink/ui/components/blocks";
 import {
   Table,
   TableBody,
@@ -8,8 +8,8 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@agripay/ui/components/table";
-import { formatLe } from "@agripay/validation";
+} from "@agrilink/ui/components/table";
+import { formatLe } from "@agrilink/validation";
 import type { dealerRedemptions } from "@/server/credit/dealers";
 
 type Items = Awaited<ReturnType<typeof dealerRedemptions>>["items"];

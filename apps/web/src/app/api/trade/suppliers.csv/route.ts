@@ -1,4 +1,4 @@
-import { prisma } from "@agripay/db";
+import { prisma } from "@agrilink/db";
 import { api } from "@/server/api";
 import { audit } from "@/server/audit";
 import { requireActor } from "@/server/auth/actor";
@@ -17,7 +17,7 @@ export const GET = api(async () => {
   const { actor } = await requireActor(["BUYER_ADMIN", "BUYER_STAFF", "COOP_ADMIN"]);
   const rows = await supplierReport(actor);
   const header = [
-    "agripay_id",
+    "agrilink_id",
     "full_name",
     "district",
     "chiefdom",
@@ -31,7 +31,7 @@ export const GET = api(async () => {
   ];
   const lines = rows.map((r) =>
     [
-      r.agripayId,
+      r.agrilinkId,
       r.fullName,
       r.district,
       r.chiefdom,
@@ -56,7 +56,7 @@ export const GET = api(async () => {
   return new Response(`${header.join(",")}\n${lines.join("\n")}\n`, {
     headers: {
       "Content-Type": "text/csv; charset=utf-8",
-      "Content-Disposition": `attachment; filename="agripay-suppliers-${new Date().toISOString().slice(0, 10)}.csv"`,
+      "Content-Disposition": `attachment; filename="agrilink-suppliers-${new Date().toISOString().slice(0, 10)}.csv"`,
     },
   });
 });

@@ -1,7 +1,7 @@
-import { type Role, prisma } from "@agripay/db";
-import type { RegisterFarmerData } from "@agripay/validation";
-import { registerFarmerSchema } from "@agripay/validation";
-import type { Actor } from "@agripay/validation/permissions";
+import { type Role, prisma } from "@agrilink/db";
+import type { RegisterFarmerData } from "@agrilink/validation";
+import { registerFarmerSchema } from "@agrilink/validation";
+import type { Actor } from "@agrilink/validation/permissions";
 import { clearSmsOutbox } from "@/server/sms";
 import { resetMemoryRateLimits } from "@/server/rate-limit";
 

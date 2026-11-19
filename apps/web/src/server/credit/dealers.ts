@@ -1,13 +1,13 @@
 import "server-only";
-import { Prisma, prisma } from "@agripay/db";
+import { Prisma, prisma } from "@agrilink/db";
 import {
   dealerItemSchema,
   dealerProfileSchema,
   normalizeSlPhone,
   type DealerItemInput,
   type DealerProfileInput,
-} from "@agripay/validation";
-import { type Actor, can } from "@agripay/validation/permissions";
+} from "@agrilink/validation";
+import { type Actor, can } from "@agrilink/validation/permissions";
 import { audit } from "../audit";
 import { AppError, forbidden, notFound } from "../errors";
 
@@ -117,7 +117,7 @@ export async function dealerRedemptions(actor: Actor) {
     orderBy: { createdAt: "desc" },
     take: 200,
     include: {
-      voucher: { select: { code: true, farmer: { select: { fullName: true, agripayId: true } } } },
+      voucher: { select: { code: true, farmer: { select: { fullName: true, agrilinkId: true } } } },
     },
   });
   const payments = await prisma.payment.findMany({

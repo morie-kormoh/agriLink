@@ -1,11 +1,11 @@
 import "server-only";
-import { type Db, Prisma } from "@agripay/db";
+import { type Db, Prisma } from "@agrilink/db";
 import {
   type GroupFrequency,
   type ScoreInputs,
   periodNumber,
   totalPeriods,
-} from "@agripay/finance";
+} from "@agrilink/finance";
 import { seasonFor } from "../records/service";
 
 const YEAR = 365 * 86_400_000;
@@ -63,7 +63,7 @@ export async function buildScoreInputs(
     seasons.set(r.season, s);
   }
 
-  // Verified sales = purchases actually paid through AgriPay.
+  // Verified sales = purchases actually paid through AgriLink.
   const recent = paidSales.filter((p) => p.recordedAt >= since);
   const salesLe = recent.reduce((s, p) => s.plus(p.netLe), new Prisma.Decimal(0));
   const saleMonths = new Set(recent.map((p) => monthKey(p.recordedAt))).size;

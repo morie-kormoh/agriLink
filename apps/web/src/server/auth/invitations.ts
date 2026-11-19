@@ -1,7 +1,7 @@
 import "server-only";
-import { type Role, prisma } from "@agripay/db";
-import { formatSlPhone } from "@agripay/validation";
-import { type Actor, INVITABLE_ROLES } from "@agripay/validation/permissions";
+import { type Role, prisma } from "@agrilink/db";
+import { formatSlPhone } from "@agrilink/validation";
+import { type Actor, INVITABLE_ROLES } from "@agrilink/validation/permissions";
 import { audit } from "../audit";
 import { randomToken, sha256 } from "../crypto";
 import { env } from "../env";
@@ -69,7 +69,7 @@ export async function inviteMember(
   const url = `${env().APP_URL}/invite/${token}`;
   await sendSms(
     input.phone,
-    `AgriPay: you've been invited to join ${org.name}. Open ${url} to accept (valid 7 days).`,
+    `AgriLink: you've been invited to join ${org.name}. Open ${url} to accept (valid 7 days).`,
     "invite",
   );
   return { invitationId: invitation.id, url };

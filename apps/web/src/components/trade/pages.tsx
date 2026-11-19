@@ -1,10 +1,11 @@
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 import { ArrowLeftIcon, CheckCircle2Icon, ShieldAlertIcon } from "lucide-react";
-import { prisma } from "@agripay/db";
-import { Badge } from "@agripay/ui/components/badge";
-import { EmptyState, Field, PageHeader } from "@agripay/ui/components/blocks";
-import { Card, CardContent, CardHeader, CardTitle } from "@agripay/ui/components/card";
+import { prisma } from "@agrilink/db";
+import { Badge } from "@agrilink/ui/components/badge";
+import { EmptyState, Field, PageHeader } from "@agrilink/ui/components/blocks";
+import { Card, CardContent, CardHeader, CardTitle } from "@agrilink/ui/components/card";
+import { SplitRibbon } from "@agrilink/ui/components/split-ribbon";
 import {
   Table,
   TableBody,
@@ -12,9 +13,9 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@agripay/ui/components/table";
-import { formatSlPhone } from "@agripay/validation";
-import { type Actor, hasPermission } from "@agripay/validation/permissions";
+} from "@agrilink/ui/components/table";
+import { formatSlPhone } from "@agrilink/validation";
+import { type Actor, hasPermission } from "@agrilink/validation/permissions";
 import { Pagination } from "@/components/pagination";
 import { formatDateTime, formatLe } from "@/lib/format";
 import { getPayment, listPayments } from "@/server/payments/service";
@@ -25,6 +26,18 @@ import { PricesManager } from "./prices-manager";
 import { PurchaseForm } from "./purchase-form";
 import { CollectionPointsManager, TradeSettingsForm } from "./settings-forms";
 import { PaymentStatus } from "./status-badges";
+
+const SPLIT_KINDS = [
+  "LOAN_REPAYMENT",
+  "SAVINGS",
+  "COOP_DUES",
+  "INSURANCE_PREMIUM",
+  "DEALER_SETTLEMENT",
+];
+async function splitLabels() {
+  const t = await getTranslations();
+  return Object.fromEntries(SPLIT_KINDS.map((k) => [k, t(`splitShort.${k}`)]));
+}
 
 export async function RecordPurchasePage({
   actor,
@@ -111,7 +124,7 @@ export async function DisputesPage({ actor }: { actor: Actor }) {
                     <p className="font-medium">
                       {p.farmer.fullName}{" "}
                       <span className="text-muted-foreground font-mono text-xs">
-                        {p.farmer.agripayId}
+                        {p.farmer.agrilinkId}
                       </span>
                     </p>
                     <p className="text-muted-foreground text-sm">
@@ -184,6 +197,7 @@ export async function PaymentsPage({
   searchParams: Record<string, string | string[] | undefined>;
 }) {
   const t = await getTranslations();
+  const shortLabels = await splitLabels();
   const page = Math.max(1, Number(searchParams.page ?? 1) || 1);
   const status = typeof searchParams.status === "string" ? searchParams.status : undefined;
   const r = await listPayments(actor, { page, status });
@@ -239,12 +253,19 @@ export async function PaymentsPage({
                   <TableCell className="text-right tabular-nums">
                     {formatLe(p.grossLe.toString())}
                   </TableCell>
-                  <TableCell className="text-xs">
-                    {p.splits.map((s) => (
-                      <span key={s.id} className="mr-2 inline-block">
-                        {t(`splitType.${s.type}`)} {formatLe(s.amountLe.toString())}
-                      </span>
-                    ))}
+                  <TableCell className="min-w-56">
+                    <SplitRibbon
+                      size="sm"
+                      grossLe={p.grossLe.toString()}
+                      splits={p.splits.map((s) => ({
+                        type: s.type,
+                        amountLe: s.amountLe.toString(),
+                      }))}
+                      labels={shortLabels}
+                      farmerLabel={
+                        p.purchase?.farmer.fullName.split(" ")[0] ?? t("splitShort.FARMER_WALLET")
+                      }
+                    />
                   </TableCell>
                   <TableCell>
                     <PaymentStatus status={p.status} />
@@ -300,7 +321,7 @@ export async function PaymentDetailPage({
               <dl className="grid gap-3">
                 <Field label="Ref">{p.purchase.ref}</Field>
                 <Field label={t("trade.farmer")}>
-                  {p.purchase.farmer.fullName} · {p.purchase.farmer.agripayId}
+                  {p.purchase.farmer.fullName} · {p.purchase.farmer.agrilinkId}
                 </Field>
                 <Field label={t("trade.crop")}>
                   {p.purchase.quantity.toString()} {p.purchase.unit} {p.purchase.crop.name}
@@ -319,9 +340,17 @@ export async function PaymentDetailPage({
             <CardTitle>{t("trade.preview")}</CardTitle>
           </CardHeader>
           <CardContent>
+            <SplitRibbon
+              className="mb-5"
+              size="lg"
+              grossLe={p.grossLe.toString()}
+              splits={p.splits.map((s) => ({ type: s.type, amountLe: s.amountLe.toString() }))}
+              labels={await splitLabels()}
+              farmerLabel={p.purchase?.farmer.fullName ?? t("splitShort.FARMER_WALLET")}
+            />
             <ul className="space-y-3">
               {p.splits.map((s) => (
-                <li key={s.id} className="rounded-md border p-3">
+                <li key={s.id} className="rounded-xl border p-3">
                   <div className="flex flex-wrap items-center justify-between gap-2">
                     <p className="font-medium">
                       {s.order}. {t(`splitType.${s.type}`)} · {formatLe(s.amountLe.toString())}

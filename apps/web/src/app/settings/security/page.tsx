@@ -1,15 +1,15 @@
 import { getTranslations } from "next-intl/server";
 import { MonitorSmartphoneIcon } from "lucide-react";
-import { prisma } from "@agripay/db";
-import { Badge } from "@agripay/ui/components/badge";
-import { PageHeader } from "@agripay/ui/components/blocks";
+import { prisma } from "@agrilink/db";
+import { Badge } from "@agrilink/ui/components/badge";
+import { PageHeader } from "@agrilink/ui/components/blocks";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@agripay/ui/components/card";
+} from "@agrilink/ui/components/card";
 import { formatDateTime } from "@/lib/format";
 import { getCurrentUser } from "@/server/auth/actor";
 import { listActiveSessions } from "@/server/auth/session";

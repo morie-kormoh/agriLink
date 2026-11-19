@@ -15,26 +15,28 @@ import {
   UserRoundIcon,
   XIcon,
 } from "lucide-react";
-import { Badge } from "@agripay/ui/components/badge";
-import { Button } from "@agripay/ui/components/button";
-import { Card, CardContent, CardFooter } from "@agripay/ui/components/card";
-import { Input } from "@agripay/ui/components/input";
-import { Label } from "@agripay/ui/components/label";
-import { Alert, AlertDescription } from "@agripay/ui/components/misc";
+import { Badge } from "@agrilink/ui/components/badge";
+import { Button } from "@agrilink/ui/components/button";
+import { Card, CardContent, CardFooter } from "@agrilink/ui/components/card";
+import { Input } from "@agrilink/ui/components/input";
+import { Label } from "@agrilink/ui/components/label";
+import { Alert, AlertDescription } from "@agrilink/ui/components/misc";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@agripay/ui/components/select";
-import { toast } from "@agripay/ui/components/sonner";
-import { DEDUCTION_TYPES, Decimal, formatLe } from "@agripay/validation";
+} from "@agrilink/ui/components/select";
+import { toast } from "@agrilink/ui/components/sonner";
+import { SplitRibbon, type RibbonSplit } from "@agrilink/ui/components/split-ribbon";
+import { previewWaterfallAction } from "@/app/actions/trade";
+import { DEDUCTION_TYPES, Decimal, formatLe } from "@agrilink/validation";
 import { findFarmersAction, recordPurchaseAction } from "@/app/actions/trade";
 
 type FarmerHit = {
   id: string;
-  agripayId: string;
+  agrilinkId: string;
   fullName: string;
   community: string;
   phone: string;
@@ -100,6 +102,30 @@ export function PurchaseForm({
       return null;
     }
   }, [quantity, effectivePrice, deductions]);
+
+  // Live Split Ribbon (docs/ui §6.2): what this farmer would receive, from the real waterfall rules.
+  // Skipped quietly when offline — the totals above still work.
+  const [ribbon, setRibbon] = useState<{ splits: RibbonSplit[]; floor: boolean } | null>(null);
+  const netStr = totals && totals.net.gt(0) ? totals.net.toFixed(2) : "";
+  useEffect(() => {
+    if (!farmer || !netStr || (typeof navigator !== "undefined" && !navigator.onLine)) {
+      setRibbon(null);
+      return;
+    }
+    let live = true;
+    const h = setTimeout(async () => {
+      try {
+        const r = await previewWaterfallAction(farmer.id, netStr);
+        if (live && r.ok) setRibbon({ splits: r.data.splits, floor: r.data.floorApplied });
+      } catch {
+        if (live) setRibbon(null);
+      }
+    }, 350);
+    return () => {
+      live = false;
+      clearTimeout(h);
+    };
+  }, [farmer, netStr]);
 
   useEffect(() => {
     if (farmer || q.trim().length < 2) {
@@ -175,7 +201,7 @@ export function PurchaseForm({
                   <div className="min-w-0">
                     <p className="truncate font-medium">{farmer.fullName}</p>
                     <p className="text-muted-foreground truncate text-xs">
-                      {farmer.agripayId} · {farmer.community} · {farmer.phone}
+                      {farmer.agrilinkId} · {farmer.community} · {farmer.phone}
                     </p>
                   </div>
                 </div>
@@ -210,7 +236,7 @@ export function PurchaseForm({
                           type="button"
                           role="option"
                           aria-selected={false}
-                          className="hover:bg-accent/40 flex w-full items-center justify-between gap-2 px-3 py-2.5 text-left text-sm"
+                          className="hover:bg-secondary flex w-full items-center justify-between gap-2 px-3 py-2.5 text-left text-sm"
                           onClick={() => {
                             setFarmer(h);
                             setHits([]);
@@ -219,7 +245,7 @@ export function PurchaseForm({
                           <span className="min-w-0">
                             <span className="block truncate font-medium">{h.fullName}</span>
                             <span className="text-muted-foreground block truncate text-xs">
-                              {h.agripayId} · {h.community}
+                              {h.agrilinkId} · {h.community}
                             </span>
                           </span>
                           {!h.hasWallet ? <Badge variant="warning">no wallet</Badge> : null}
@@ -433,7 +459,7 @@ export function PurchaseForm({
           ) : null}
 
           {/* Totals */}
-          <div className="bg-secondary/40 grid grid-cols-3 gap-3 rounded-lg border p-4 text-center">
+          <div className="bg-secondary/50 grid grid-cols-3 gap-3 rounded-xl border p-4 text-center">
             <div>
               <p className="text-muted-foreground text-xs">{t("trade.gross")}</p>
               <p className="font-semibold tabular-nums">
@@ -448,11 +474,30 @@ export function PurchaseForm({
             </div>
             <div>
               <p className="text-muted-foreground text-xs">{t("trade.net")}</p>
-              <p className="text-primary text-lg font-bold tabular-nums">
+              <p className="font-display text-primary text-xl font-bold tabular-nums">
                 {totals ? formatLe(totals.net.toString()) : "—"}
               </p>
             </div>
           </div>
+          {ribbon && farmer ? (
+            <div className="rounded-xl border p-4">
+              <p className="text-muted-foreground mb-2 text-sm">{t("trade.preview")}</p>
+              <SplitRibbon
+                size="md"
+                grossLe={netStr}
+                splits={ribbon.splits}
+                labels={{
+                  LOAN_REPAYMENT: t("splitShort.LOAN_REPAYMENT"),
+                  SAVINGS: t("splitShort.SAVINGS"),
+                  COOP_DUES: t("splitShort.COOP_DUES"),
+                  INSURANCE_PREMIUM: t("splitShort.INSURANCE_PREMIUM"),
+                }}
+                farmerLabel={farmer.fullName.split(" ")[0] ?? ""}
+                floorApplied={ribbon.floor}
+                floorNote={t("home.floor")}
+              />
+            </div>
+          ) : null}
           {error ? <p className="text-destructive text-sm">{error}</p> : null}
         </CardContent>
         <CardFooter className="flex flex-wrap justify-end gap-2 border-t">

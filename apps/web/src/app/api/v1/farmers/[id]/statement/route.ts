@@ -6,7 +6,7 @@ export const GET = v1<{ id: string }>(async ({ current, params }) => {
   const s = await farmerStatement(current.actor, params.id);
   return {
     data: {
-      agripayId: s.farmer.agripayId,
+      agrilinkId: s.farmer.agrilinkId,
       totalReceivedLe: s.totalReceivedLe,
       payments: s.payments,
       entries: s.entries,

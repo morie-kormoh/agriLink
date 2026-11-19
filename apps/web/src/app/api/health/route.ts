@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { prisma } from "@agripay/db";
+import { prisma } from "@agrilink/db";
 
 export const dynamic = "force-dynamic";
 

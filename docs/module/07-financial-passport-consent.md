@@ -108,8 +108,8 @@ model PassportAccessLog {
 
 ## 9. USSD / SMS touchpoints
 
-- USSD _My AgriPay Score_: "Score 62 (Good). Tip: Keep saving monthly to add points."
-- USSD _Requests_: "Rokel Community Bank wants to see your AgriPay passport to assess a fertiliser loan for 12 months. 1 Accept 2 Decline" → PIN.
+- USSD _My AgriLink Score_: "Score 62 (Good). Tip: Keep saving monthly to add points."
+- USSD _Requests_: "Rokel Community Bank wants to see your AgriLink passport to assess a fertiliser loan for 12 months. 1 Accept 2 Decline" → PIN.
 - SMS when the score changes band, and when a lender views the passport.
 
 ## 10. Step-by-step implementation

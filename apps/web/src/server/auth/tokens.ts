@@ -1,5 +1,5 @@
 import "server-only";
-import { prisma } from "@agripay/db";
+import { prisma } from "@agrilink/db";
 import { audit } from "../audit";
 import { hmac, randomToken, safeEqual, sha256 } from "../crypto";
 import { AppError } from "../errors";

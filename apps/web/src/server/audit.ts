@@ -1,7 +1,7 @@
 import "server-only";
-import { type Db, Prisma, type Tx, prisma } from "@agripay/db";
-import { maskPhone } from "@agripay/validation";
-import type { Actor } from "@agripay/validation/permissions";
+import { type Db, Prisma, type Tx, prisma } from "@agrilink/db";
+import { maskPhone } from "@agrilink/validation";
+import type { Actor } from "@agrilink/validation/permissions";
 import { sha256 } from "./crypto";
 
 export interface AuditEntry {

@@ -2,7 +2,7 @@
 
 ## 1. Purpose
 
-Give the AgriPay operations team control over the platform and give regulators, partners and farmers confidence: **immutable audit trail**, data-protection tooling, KYC review, support/complaints handling, configuration management, security and backups.
+Give the AgriLink operations team control over the platform and give regulators, partners and farmers confidence: **immutable audit trail**, data-protection tooling, KYC review, support/complaints handling, configuration management, security and backups.
 
 ## 2. Scope
 

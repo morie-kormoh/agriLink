@@ -182,7 +182,7 @@ Helpers: `getActor()` (server-only) returns `{ userId, role, orgId, scope }` or 
 
 ## 9. USSD / SMS touchpoints
 
-- First dial: "Welcome to AgriPay. Create a 4-digit PIN".
+- First dial: "Welcome to AgriLink. Create a 4-digit PIN".
 - PIN prompt before sensitive actions.
 - SMS: OTP codes, invitation links, "Your PIN was changed" security alert.
 

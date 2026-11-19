@@ -1,25 +1,25 @@
 import { notFound } from "next/navigation";
 import { PiggyBankIcon, SproutIcon, UsersIcon, WalletIcon } from "lucide-react";
-import { Badge } from "@agripay/ui/components/badge";
-import { EmptyState, Field, PageHeader, StatCard } from "@agripay/ui/components/blocks";
-import { Button } from "@agripay/ui/components/button";
+import { Badge } from "@agrilink/ui/components/badge";
+import { EmptyState, Field, PageHeader, StatCard } from "@agrilink/ui/components/blocks";
+import { Button } from "@agrilink/ui/components/button";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@agripay/ui/components/card";
-import { Input } from "@agripay/ui/components/input";
-import { Label } from "@agripay/ui/components/label";
+} from "@agrilink/ui/components/card";
+import { Input } from "@agrilink/ui/components/input";
+import { Label } from "@agrilink/ui/components/label";
 import {
   Alert,
   AlertDescription,
   AlertTitle,
   Progress,
   Skeleton,
-} from "@agripay/ui/components/misc";
-import { Stepper } from "@agripay/ui/components/stepper";
+} from "@agrilink/ui/components/misc";
+import { Stepper } from "@agrilink/ui/components/stepper";
 import {
   Table,
   TableBody,
@@ -27,7 +27,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@agripay/ui/components/table";
+} from "@agrilink/ui/components/table";
 import { formatLe } from "@/lib/format";
 import { UiDemoClient } from "./ui-demo-client";
 
@@ -37,7 +37,7 @@ export default function UiKitPage() {
   return (
     <main className="mx-auto max-w-5xl space-y-10 p-4 sm:p-8">
       <PageHeader
-        title="AgriPay UI kit"
+        title="AgriLink UI kit"
         description="shadcn/ui + Radix + Tailwind v4 + Lucide — check at 360px width too."
       />
 
@@ -109,7 +109,7 @@ export default function UiKitPage() {
             <Progress value={62} />
             <Skeleton className="h-6 w-1/2" />
             <dl className="grid grid-cols-2 gap-3">
-              <Field label="AgriPay ID">AP-BOM-000123</Field>
+              <Field label="AgriLink ID">AP-BOM-000123</Field>
               <Field label="KYC tier">T2</Field>
             </dl>
           </CardContent>

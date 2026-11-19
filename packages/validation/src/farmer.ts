@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { Gender, LandTenure, MobileMoneyProvider } from "@agripay/db/enums";
+import { Gender, LandTenure, MobileMoneyProvider } from "@agrilink/db/enums";
 import { phoneSL } from "./phone";
 import { seasonCode } from "./common";
 

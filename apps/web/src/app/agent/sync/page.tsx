@@ -1,5 +1,5 @@
 import { getTranslations } from "next-intl/server";
-import { PageHeader } from "@agripay/ui/components/blocks";
+import { PageHeader } from "@agrilink/ui/components/blocks";
 import { SyncPanel } from "@/components/offline/sync-panel";
 
 export default async function AgentSyncPage() {

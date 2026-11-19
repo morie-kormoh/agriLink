@@ -6,7 +6,7 @@ loadEnv({ path: path.resolve(import.meta.dirname, "../../.env"), quiet: true });
 
 /**
  * End-to-end tests run against a dev server using the main (seeded) database.
- * Run: pnpm --filter @agripay/web test:e2e   (seed first: pnpm db:seed)
+ * Run: pnpm --filter @agrilink/web test:e2e   (seed first: pnpm db:seed)
  * Set PW_CHROME_PATH to use an installed Chrome instead of `npx playwright install chromium`.
  */
 export default defineConfig({

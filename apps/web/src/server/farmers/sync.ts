@@ -1,6 +1,6 @@
 import "server-only";
-import { registerFarmerSchema } from "@agripay/validation";
-import type { Actor } from "@agripay/validation/permissions";
+import { registerFarmerSchema } from "@agrilink/validation";
+import type { Actor } from "@agrilink/validation/permissions";
 import { AppError } from "../errors";
 import { channelForActor, registerFarmer } from "./service";
 
@@ -9,7 +9,7 @@ export type SyncRecordResult =
       clientRef: string;
       status: "created" | "exists";
       farmerId: string;
-      agripayId: string;
+      agrilinkId: string;
       fullName: string;
       duplicateOf: string | null;
       warnings: string[];
@@ -57,9 +57,9 @@ export async function syncFarmers(actor: Actor, records: unknown[]): Promise<Syn
         clientRef,
         status: r.created ? "created" : "exists",
         farmerId: r.farmer.id,
-        agripayId: r.farmer.agripayId,
+        agrilinkId: r.farmer.agrilinkId,
         fullName: r.farmer.fullName,
-        duplicateOf: r.duplicateOf?.agripayId ?? null,
+        duplicateOf: r.duplicateOf?.agrilinkId ?? null,
         warnings: r.warnings,
       });
     } catch (e) {

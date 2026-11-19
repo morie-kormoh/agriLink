@@ -23,13 +23,13 @@ export function createPrismaClient(connectionString = process.env.DATABASE_URL):
 
 // One client per process, created lazily on first use (so importing this module never
 // requires DATABASE_URL — e.g. during `next build`) and reused across hot reloads.
-const globalForPrisma = globalThis as unknown as { __agripayPrisma?: PrismaClient };
+const globalForPrisma = globalThis as unknown as { __agrilinkPrisma?: PrismaClient };
 
 function getPrisma(): PrismaClient {
-  if (!globalForPrisma.__agripayPrisma) {
-    globalForPrisma.__agripayPrisma = createPrismaClient();
+  if (!globalForPrisma.__agrilinkPrisma) {
+    globalForPrisma.__agrilinkPrisma = createPrismaClient();
   }
-  return globalForPrisma.__agripayPrisma;
+  return globalForPrisma.__agrilinkPrisma;
 }
 
 export const prisma: PrismaClient = new Proxy({} as PrismaClient, {

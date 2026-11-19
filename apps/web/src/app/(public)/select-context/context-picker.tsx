@@ -13,8 +13,8 @@ import {
   TractorIcon,
   UserRoundIcon,
 } from "lucide-react";
-import { toast } from "@agripay/ui/components/sonner";
-import { cn } from "@agripay/ui/lib/utils";
+import { toast } from "@agrilink/ui/components/sonner";
+import { cn } from "@agrilink/ui/lib/utils";
 import { selectContextAction } from "@/app/actions/auth";
 
 const ICONS: Record<string, React.ComponentType<{ className?: string }>> = {

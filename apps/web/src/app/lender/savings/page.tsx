@@ -5,8 +5,8 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@agripay/ui/components/card";
-import { PageHeader, StatCard, StatusBadge } from "@agripay/ui/components/blocks";
+} from "@agrilink/ui/components/card";
+import { PageHeader, StatCard, StatusBadge } from "@agrilink/ui/components/blocks";
 import {
   Table,
   TableBody,
@@ -14,9 +14,9 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@agripay/ui/components/table";
-import { formatLe } from "@agripay/validation";
-import { hasPermission } from "@agripay/validation/permissions";
+} from "@agrilink/ui/components/table";
+import { formatLe } from "@agrilink/validation";
+import { hasPermission } from "@agrilink/validation/permissions";
 import {
   ReconcileSavingsForm,
   SavingsProductForm,
@@ -88,7 +88,7 @@ export default async function Page() {
                   <TableCell className="font-mono text-xs">{a.ref}</TableCell>
                   <TableCell>
                     {a.farmer?.fullName}
-                    <p className="text-muted-foreground text-xs">{a.farmer?.agripayId}</p>
+                    <p className="text-muted-foreground text-xs">{a.farmer?.agrilinkId}</p>
                   </TableCell>
                   <TableCell>{a.product.name}</TableCell>
                   <TableCell className="text-right tabular-nums">

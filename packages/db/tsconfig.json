@@ -1,5 +1,5 @@
 {
-  "extends": "@agripay/config/tsconfig/node.json",
+  "extends": "@agrilink/config/tsconfig/node.json",
   "compilerOptions": {
     "types": ["node"]
   },
